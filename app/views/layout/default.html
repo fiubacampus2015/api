@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es" ng-app="app">
+<head>
+    <title>brainstorming</title>
+
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="description" content="Campus - Facultad de Ingenieria Universidad de Buenos Aires" />
+    <meta name="keywords" content="campus, fiuba, nuevo" />
+
+    <link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" 
+      rel="stylesheet" type="text/css" />
+    <!--[if lte IE 8]><script src="js/html5shiv.js"></script><![endif]-->
+    <!--[if lte IE 8]><link rel="stylesheet" href="css/ie8.css" /><![endif]-->
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="/js/app/app.js"></script>
+  
+  <script>
+    angular.module("app").constant("CSRF_TOKEN", '');
+  </script>
+
+<script>
+ 
+</script>
+</head>
+    <body data-spy="scroll" data-target=".navbar-home" ng-app="app">
+
+        {% block content %}{% endblock %}
+        
+    </body>
+</html>
