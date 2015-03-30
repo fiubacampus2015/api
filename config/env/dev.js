@@ -15,5 +15,5 @@ if (fs.existsSync(envFile)) {
 }
 
 module.exports = {
-  db: process.env.MONGOHQ_URL || 'mongodb://localhost:27017/campus'
+  db: process.env.MONGOLAB_URI || 'mongodb://localhost:27017/campus'
 };
