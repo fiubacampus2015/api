@@ -1,5 +1,20 @@
+var mongoose  = require('mongoose'),
+Token = mongoose.model('Token');
 
+exports.requiresLogin = function(req, res, next) {
+  Token
+  .findById(req.params.token)
+  .populate('_user')
+  .exec(function (err, token) {
+    if(err)
+      return res.status(401).json(err);
+      req.user = token._user;
+      next();
+  });
+};
 /*
+
+
  *  Generic require login routing middleware
  */
 
@@ -7,7 +22,7 @@ exports.requiresLogin = function (req, res, next) {
   if (req.isAuthenticated()) return next()
   if (req.method == 'GET') req.session.returnTo = req.originalUrl
   res.redirect('/login')
-}
+};
 
 /*
  *  User authorization routing middleware
@@ -21,7 +36,7 @@ exports.user = {
     }
     next()
   }
-}
+};
 
 /*
  *  Article authorization routing middleware
