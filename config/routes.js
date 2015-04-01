@@ -1,23 +1,19 @@
 var users = require('../app/controllers/users');
 var auth = require('./middlewares/authorization');
 
-var articleAuth = [auth.requiresLogin, auth.article.hasAuthorization];
-var commentAuth = [auth.requiresLogin, auth.comment.hasAuthorization];
+var authentication = [auth.requiresLogin];
+
 
 module.exports = function (app, passport) {
 
-  // routes
-  app.get('/login', users.login);
-  app.get('/signup', users.signup);
-  app.get('/logout', users.logout);
-  app.post('/users', users.create);
-  app.post('/users/session',
-    passport.authenticate('local', {
-      failureRedirect: '/login',
-      failureFlash: 'Invalid email or password.'
-    }), users.session);
-  app.get('/users/:userId', users.show);
+  app.post('/apit/users', users.post);
+
+  app.post('/api/users/authenticate', users.authenticate);
+
+  app.get('/api/:token/users/:userId', authentication, users.get);
+
   app.param('userId', users.load);
+  
 
   app.use(function (err, req, res, next) {
 

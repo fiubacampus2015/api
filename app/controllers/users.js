@@ -7,9 +7,37 @@ var mongoose = require('mongoose');
 var User = mongoose.model('User');
 var utils = require('../../lib/utils');
 
-/**
- * Load
- */
+exports.post = function(req, res) {
+  var user = new User(req.body.user);
+  user.save(function(err){
+    if(err) return res.status(200).json(err);
+    res.status(201).json(user);
+  });
+};
+
+exports.get = function(req, res){
+  res.status(200).json(req.profile);  
+};
+
+exports.authenticate = function(req, res, next){
+  
+  User.findOne({ email: req.body.username, password: req.body.password }, function (err, user) {
+      if(!user || !user.authenticate(req.body.password)) {
+        return res.json(401, {error: "Error durante el login"});
+      }
+      else {
+        var token = new Token({
+          value:jwt.encode(user, config.token.secret),
+          _user: user
+        });
+
+        token.save(function(err){
+          if(err) return next(err);
+          res.json(201, {token: token._id, id: user.id, photo: user.photo});
+        });
+      }
+  });
+};
 
 exports.load = function (req, res, next, id) {
   var options = {
@@ -21,82 +49,4 @@ exports.load = function (req, res, next, id) {
     req.profile = user;
     next();
   });
-};
-
-exports.create = function (req, res) {
-  var user = new User(req.body);
-  user.provider = 'local';
-  user.save(function (err) {
-    if (err) {
-      res.status(200).json(err);
-    } else {
-      res.status(201).json(user);
-    }      
-  });
-};
-
-/**
- *  Show profile
- */
-
-exports.show = function (req, res) {
-  var user = req.profile;
-  res.render('users/show' , {
-    title: user.name,
-    user: user
-  });
-};
-
-exports.signin = function (req, res) {};
-
-/**
- * Auth callback
- */
-
-exports.authCallback = login;
-
-/**
- * Show login form
- */
-
-exports.login = function (req, res) {
-  res.render('users/login', {
-    title: 'Login'
-  });
-};
-
-/**
- * Show sign up form
- */
-
-exports.signup = function (req, res) {
-  res.render('users/signup', {
-    title: 'Sign up',
-    user: new User()
-  });
-};
-
-/**
- * Logout
- */
-
-exports.logout = function (req, res) {
-  req.logout();
-  res.redirect('/login');
-};
-
-/**
- * Session
- */
-
-exports.session = login;
-
-/**
- * Login
- */
-
-function login (req, res) {
-  var redirectTo = req.session.returnTo ? req.session.returnTo : '/';
-  delete req.session.returnTo;
-  res.redirect(redirectTo);
 };
