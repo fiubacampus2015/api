@@ -8,7 +8,7 @@ exports.config = {
   /**
    * Array of application names.
    */
-  app_name : ['fiubacampus'],
+  app_name : ['fiubacampus', 'fiubacampus-staging'],
   /**
    * Your New Relic license key.
    */
