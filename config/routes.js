@@ -6,14 +6,13 @@ var authentication = [auth.requiresLogin];
 
 module.exports = function (app, passport) {
 
-  app.post('/apit/users', users.post);
+  app.post('/api/users', users.post);
 
   app.post('/api/users/authenticate', users.authenticate);
 
   app.get('/api/:token/users/:userId', authentication, users.get);
 
   app.param('userId', users.load);
-  
 
   app.use(function (err, req, res, next) {
 

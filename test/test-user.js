@@ -5,9 +5,13 @@ var mongoose = require('mongoose')
   , context = describe
   , User = mongoose.model('User')
 
-var cookies, count
+var cookies, 
+  count, 
+  valid_token, 
+  user_id;
 
 describe('Users', function () {
+  
   describe('POST /users', function () {
     describe('Invalid parameters', function () {
       before(function (done) {
@@ -19,7 +23,7 @@ describe('Users', function () {
 
       it('no email - should respond with errors', function (done) {
         request(app)
-        .post('/users')
+        .post('/api/users')
         .field('name', 'Foo bar')
         .field('username', 'foobar')
         .field('email', '')
@@ -32,7 +36,7 @@ describe('Users', function () {
 
       it('no name - should respond with errors', function (done) {
         request(app)
-        .post('/users')
+        .post('/api/users')
         .field('name', '')
         .field('username', 'foobar')
         .field('email', 'foobar@example.com')
@@ -59,17 +63,18 @@ describe('Users', function () {
         })
       })
 
-      it('should redirect to /articles', function (done) {
+      it('should response 201', function (done) {
         request(app)
-        .post('/users')
-        .field('name', 'Foo bar')
+        .post('/api/users')
+        .field('name', 'foobar')
         .field('username', 'foobar')
         .field('email', 'foobar@example.com')
         .field('password', 'foobar')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(201)
+        .expect(201)        
         .end(done)
       })
+      
 
       it('should insert a record to the database', function (done) {
         User.count(function (err, cnt) {
@@ -87,6 +92,58 @@ describe('Users', function () {
         })
       })
     })
+  });
+
+  describe('POST /api/users/authenticate', function () {
+
+      it('authenticate with invalid token should response ', function (done) {
+        request(app)
+        .post('/api/users/authenticate')
+        .field('username', '')
+        .field('password', 'foobar')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(function(res){
+          if (!('errors' in res.body)) return "missing errors";
+        })
+        .expect(401)
+        .end(done)
+      })
+
+      it('should have a record in to the database', function (done) {
+        User.find({},function (err, users) {
+          done()
+        })
+      })
+
+
+      it('authenticate ok', function (done) {
+        request(app)
+        .post('/api/users/authenticate')
+        .field('username', 'foobar')
+        .field('password', 'foobar')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(function(res){
+          if (!('token' in res.body)) return "no token";
+          if (!('id' in res.body)) return "no id";
+          valid_token = res.body.token;
+          user_id = res.body.id;
+        })
+        .expect(200)
+        .end(done)
+      })
+  })
+
+  describe('GET /api/:token/users/:userId', function () {
+
+      it('get with invalid token', function (done) {
+        request(app)
+        .get('/api/' + valid_token + '/users/' + user_id)
+        .expect(function(res){
+          if (!('_id' in res.body)) return "no _id";
+        })
+        .expect(200)
+        .end(done)
+      })
   })
 
   after(function (done) {
