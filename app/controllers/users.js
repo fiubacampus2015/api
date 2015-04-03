@@ -38,6 +38,7 @@ exports.putPersonal = function(req, res){
 
 
 exports.authenticate = function(req, res, next){
+
   User.findOne({ username: req.body.username }, function (err, user) {
       if(!user || !user.authenticate(req.body.password)) {
         return res.status(401).json({
@@ -45,15 +46,21 @@ exports.authenticate = function(req, res, next){
                 });
       }
       else {
-        var token = new Token({
-          value:jwt.encode(user, config.TOKEN_SECRET),
-          _user: user
-        });
+        Token.findOne({_user: user}, function(err, token){
+          if(!err && token) {
+            token.value = jwt.encode(user, config.TOKEN_SECRET)
+          } else { 
+            var token = new Token({
+              value:jwt.encode(user, config.TOKEN_SECRET),
+              _user: user
+            });
+          }
 
-        token.save(function(err){
-          if(err) return next(err);
-          res.status(200).json({token: token._id, id: user.id, photo: user.photo});
-        });
+          token.save(function(err){
+            if(err) return next(err);
+            res.status(200).json({token: token._id, id: user.id, photo: user.photo});
+          });
+        })
       }
   });
 };
