@@ -23,6 +23,20 @@ exports.get = function(req, res){
   res.status(200).json(req.profile);  
 };
 
+exports.putPersonal = function(req, res){
+  var user = req.profile,
+    personal = req.body.personal
+
+  Object.keys(personal).forEach(function(key){
+    user.personal[key] = personal[key];  
+  });
+  user.save(function(err){
+    if(err) return res.status(400).json(err);
+    res.status(200).json(user);
+  });
+};
+
+
 exports.authenticate = function(req, res, next){
   User.findOne({ username: req.body.username }, function (err, user) {
       if(!user || !user.authenticate(req.body.password)) {
@@ -44,6 +58,7 @@ exports.authenticate = function(req, res, next){
   });
 };
 
+// For params :userId
 exports.load = function (req, res, next, id) {
   var options = {
     criteria: { _id : id }

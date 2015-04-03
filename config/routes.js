@@ -1,8 +1,6 @@
-var users = require('../app/controllers/users');
-var auth = require('./middlewares/authorization');
-
-var authentication = [auth.requiresLogin];
-
+var users = require('../app/controllers/users'),
+  auth = require('./middlewares/authorization'),
+  authentication = [auth.requiresLogin];
 
 module.exports = function (app, passport) {
 
@@ -11,6 +9,8 @@ module.exports = function (app, passport) {
   app.post('/api/users/authenticate', users.authenticate);
 
   app.get('/api/:token/users/:userId', authentication, users.get);
+
+  app.put('/api/:token/users/:userId/personal', authentication, users.putPersonal);
 
   app.param('userId', users.load);
 

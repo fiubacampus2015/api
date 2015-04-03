@@ -10,7 +10,17 @@ var UserSchema = new Schema({
   provider: { type: String, default: '' },
   hashed_password: { type: String, default: '' },
   salt: { type: String, default: '' },
-  authToken: { type: String, default: '' }
+  personal: {
+    photo: { type: String, default:'' },
+    comments: { type: String, default:'' },
+    phones: {
+      mobile: { type: String, default:'' },
+      other: { type: String, default:'' }
+    },
+    nacionality: { type: String, default:'' },
+    city: { type: String, default:'' },
+    cv: {}
+  }
 });
 
 var oAuthTypes = [

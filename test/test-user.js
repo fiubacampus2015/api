@@ -131,20 +131,50 @@ describe('Users', function () {
         .expect(200)
         .end(done)
       })
-  })
+  });
 
   describe('GET /api/:token/users/:userId', function () {
 
       it('get with invalid token', function (done) {
         request(app)
         .get('/api/' + valid_token + '/users/' + user_id)
+        .expect(200)
         .expect(function(res){
           if (!('_id' in res.body)) return "no _id";
-        })
-        .expect(200)
+        })        
         .end(done)
       })
-  })
+  });
+
+  describe('PUT /apu/:token/users/:userId', function(){
+
+      it('add user personal comments', function(done){
+        request(app)
+        .put('/api/' + valid_token + '/users/' + user_id + '/personal')
+        .set('Content-Type', 'application/json')
+        .send({
+          personal: {
+            comments: "esto es un comentario",
+            phones: {
+              mobile: "123",
+              other: "456"
+            },
+            nacionality: "argentina",
+            city: "buenos aires"
+          }          
+        })        
+        .expect(200)
+        .expect(function(res){
+          if (!('personal' in res.body)) return "no return";
+          if(res.body.personal.comments != "esto es un comentario") return "comments return not equals to request"
+          if(res.body.personal.phones.mobile != "123") return "phones.mobile return not equals to request"
+          if(res.body.personal.phones.other != "456") return "phones.other return not equals to request"
+          if(res.body.personal.nacionality != "argentina") return "nacionality return not equals to request"
+          if(res.body.personal.city != "buenos aires") return "city return not equals to request"
+        })
+        .end(done)
+      });
+  });
 
   after(function (done) {
     require('./helper').clearDb(done)
