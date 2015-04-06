@@ -10,6 +10,18 @@ var mongoose = require('mongoose'),
   config = require('../../config/config'),
   utils = require('../../lib/utils');
 
+exports.search = function(req, res) {
+  var criteria = {};
+  
+  Object.keys(req.query).forEach(function(key){
+    criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i")
+  });
+
+  User.findOne(criteria, function(err, users) {
+      return res.status(200).send(users);
+  });
+};
+
 exports.post = function(req, res) {
   var user = new User(req.body);
   user.provider = 'local';
@@ -35,7 +47,6 @@ exports.putPersonal = function(req, res){
     res.status(200).json(user);
   });
 };
-
 
 exports.authenticate = function(req, res, next){
 

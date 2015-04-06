@@ -96,7 +96,7 @@ describe('Users', function () {
 
   describe('POST /api/users/authenticate', function () {
 
-      it('authenticate with invalid token should response ', function (done) {
+      it('authenticate with invalid token should response', function (done) {
         request(app)
         .post('/api/users/authenticate')
         .field('username', '')
@@ -175,6 +175,41 @@ describe('Users', function () {
         .end(done)
       });
   });
+
+  describe('GET /apu/:token/people', function(){
+
+    it('test search people by name', function(done){
+      doRequest('/people?name=bar', done);
+    });
+
+    it('test search people by city', function(done){
+      doRequest('/people?personal.city=aires', done);
+    });
+
+    it('test search people by email', function(done){
+      doRequest('/people?email=@example.com', done);
+    });
+
+    it('test search people by phone', function(done){
+      doRequest('/people?personal.phones.mobile=123', done);
+    });
+
+  });
+
+  var doRequest = function (query, done) {
+
+    var url = '/api/'
+      .concat(valid_token)
+      .concat(query)
+
+    request(app)
+      .get(url)
+      .expect(200)
+      .expect(function(res){
+        if(!res.body._id) return "no result!"
+      })
+      .end(done)
+  }
 
   after(function (done) {
     require('./helper').clearDb(done)
