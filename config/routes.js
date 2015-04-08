@@ -1,5 +1,6 @@
 var users = require('../app/controllers/users'),
   auth = require('./middlewares/authorization'),
+  mailer = require('./mailer'),
   authentication = [auth.requiresLogin];
 
 module.exports = function (app, passport) {
@@ -13,6 +14,8 @@ module.exports = function (app, passport) {
   app.put('/api/:token/users/:userId/personal', authentication, users.putPersonal);
 
   app.get('/api/:token/people', authentication, users.search);
+
+  app.get('/api/send', mailer.send);
 
   app.get('/app/download', function(req, res, next){
     res.render('index', {});
