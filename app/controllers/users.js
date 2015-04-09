@@ -22,12 +22,18 @@ exports.search = function(req, res) {
   });
 };
 
-exports.post = function(req, res) {
+exports.showConfirm = function(req, res){
+  res.render('confirm', { status:req.confirm });
+}
+
+exports.post = function(req, res, next) {
   var user = new User(req.body);
+  user.confirmation = jwt.encode(user.email, config.TOKEN_SECRET);
   user.provider = 'local';
   user.save(function(err){
     if(err) return res.status(200).json(err);
-    res.status(201).json(user);
+    req.profile = user;
+    next()
   });
 };
 
@@ -78,10 +84,7 @@ exports.authenticate = function(req, res, next){
 
 // For params :userId
 exports.load = function (req, res, next, id) {
-  var options = {
-    criteria: { _id : id }
-  };
-  User.load(options, function (err, user) {
+  User.load({ _id : id }, function (err, user) {
     if (err) return next(err);
     if (!user) return next(new Error('Failed to load User ' + id));
     req.profile = user;

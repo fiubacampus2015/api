@@ -1,4 +1,5 @@
 var mongoose  = require('mongoose'),
+mailer = require('../mailer'),
 Token = mongoose.model('Token');
 
 exports.requiresLogin = function(req, res, next) {
@@ -12,6 +13,37 @@ exports.requiresLogin = function(req, res, next) {
       next();
   });
 };
+
+exports.sendConfirmation = function(req, res){
+  mailer.sendConfirmation(req.profile.email, 
+    "http://" 
+    + req.headers.host 
+    + "/api/users/"
+    + req.profile._id
+    + "confirm/" 
+    + req.profile.confirmation
+    , function(err, result) {
+      console.log(result);
+      if(err)
+        return res.status(200).json(err);
+
+      res.status(201).json({
+        user:req.profile,
+        confirmation: req.profile.confirmation
+      });
+    });
+}
+
+exports.confirm = function(req, res, next) {
+  req.confirm = {};
+  console.log("email", req.profile.email)
+  if(req.profile.confirmation === req.params.confirmation) {
+    req.confirm.status = "confirmed";
+    return next();
+  }
+
+  next(new Error('Error confirmation'));
+}
 /*
 
 

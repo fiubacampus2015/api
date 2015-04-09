@@ -8,7 +8,8 @@ var mongoose = require('mongoose')
 var cookies, 
   count, 
   valid_token, 
-  user_id;
+  user_id,
+  confirmation;
 
 describe('Users', function () {
   
@@ -39,7 +40,7 @@ describe('Users', function () {
         .post('/api/users')
         .field('name', '')
         .field('username', 'foobar')
-        .field('email', 'foobar@example.com')
+        .field('email', 'alexispetalas@gmail.com')
         .field('password', 'foobar')
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect(200)
@@ -63,18 +64,40 @@ describe('Users', function () {
         })
       })
 
-      it('should response 201', function (done) {
+      it('should response , with confirmation', function (done) {
         request(app)
         .post('/api/users')
         .field('name', 'foobar')
         .field('username', 'foobar')
-        .field('email', 'foobar@example.com')
+        .field('email', 'alexispetalas@gmail.com')
         .field('password', 'foobar')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(201)        
+        .expect(201)
+        .expect(function(res){
+          console.log("response: 201", res.body.user)
+          if (!('user' in res.body)) return "missing user";
+          if (!('confirmation' in res.body)) return "missing confirmation";
+          confirmation = res.body.confirmation;
+          user_id = res.body.user._id
+        })        
         .end(done)
       })
-      
+
+     /* it('should confirm a email', function (done) {
+        console.log("get: ", '/api/users/' + user_id + "/confirm/" + confirmation);
+        request(app)
+        .get('/api/users/' + user_id + "/confirm/" + confirmation)
+        .expect(200)
+        .expect(function(res){
+          console.log("response confirmacion: ", res)
+          if (!('confirmed' in res.body)) {
+            console.log(res)
+            return "confirm error!!" 
+          };
+        })        
+        .end(done)
+      })
+      */
 
       it('should insert a record to the database', function (done) {
         User.count(function (err, cnt) {
@@ -87,7 +110,7 @@ describe('Users', function () {
         User.findOne({ username: 'foobar' }).exec(function (err, user) {
           should.not.exist(err)
           user.should.be.an.instanceOf(User)
-          user.email.should.equal('foobar@example.com')
+          user.email.should.equal('alexispetalas@gmail.com')
           done()
         })
       })
@@ -176,7 +199,7 @@ describe('Users', function () {
       });
   });
 
-  describe('GET /apu/:token/people', function(){
+  describe('GET /api/:token/people', function(){
 
     it('test search people by name', function(done){
       doRequest('/people?name=bar', done);
@@ -187,7 +210,7 @@ describe('Users', function () {
     });
 
     it('test search people by email', function(done){
-      doRequest('/people?email=@example.com', done);
+      doRequest('/people?email=@gmail.com', done);
     });
 
     it('test search people by phone', function(done){

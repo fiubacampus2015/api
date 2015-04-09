@@ -10,6 +10,8 @@ var UserSchema = new Schema({
   provider: { type: String, default: '' },
   hashed_password: { type: String, default: '' },
   salt: { type: String, default: '' },
+  confirmation: { type: String, default: '' },
+  confirmed:{ type: Boolean, default: false },
   personal: {
     photo: { type: String, default:'' },
     comments: { type: String, default:'' },
@@ -92,7 +94,7 @@ UserSchema.pre('save', function(next) {
 UserSchema.methods = {
 
   authenticate: function (plainText) {
-    return this.encryptPassword(plainText) === this.hashed_password;
+    return /*this.confirmed && */this.encryptPassword(plainText) === this.hashed_password;
   },
 
   makeSalt: function () {
