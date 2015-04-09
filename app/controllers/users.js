@@ -22,8 +22,13 @@ exports.search = function(req, res) {
   });
 };
 
-exports.showConfirm = function(req, res){
-  res.render('confirm', { status:req.confirm });
+exports.showConfirm = function(req, res, next){
+  var user = req.profile;
+  user.confirmed = true;
+  user.save(function(err){
+    if(err) return next(err);
+    res.render('confirm', { status:req.confirm.status });
+  });  
 }
 
 exports.post = function(req, res, next) {
@@ -37,8 +42,9 @@ exports.post = function(req, res, next) {
   });
 };
 
-exports.get = function(req, res){
-  res.status(200).json(req.profile);  
+exports.get = function(req, res) {
+
+    res.status(200).json(req.profile);
 };
 
 exports.putPersonal = function(req, res){

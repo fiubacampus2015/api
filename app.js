@@ -10,7 +10,6 @@ var port = process.env.PORT || 3000;
 
 var connect = function () {
   var options = { server: { socketOptions: { keepAlive: 1 } } };
-  console.log(config.db)
   mongoose.connect(config.db, options);
 };
 connect();

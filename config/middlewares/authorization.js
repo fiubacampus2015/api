@@ -20,10 +20,9 @@ exports.sendConfirmation = function(req, res){
     + req.headers.host 
     + "/api/users/"
     + req.profile._id
-    + "confirm/" 
+    + "/confirm/" 
     + req.profile.confirmation
     , function(err, result) {
-      console.log(result);
       if(err)
         return res.status(200).json(err);
 
@@ -36,7 +35,6 @@ exports.sendConfirmation = function(req, res){
 
 exports.confirm = function(req, res, next) {
   req.confirm = {};
-  console.log("email", req.profile.email)
   if(req.profile.confirmation === req.params.confirmation) {
     req.confirm.status = "confirmed";
     return next();
