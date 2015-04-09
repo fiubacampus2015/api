@@ -6,8 +6,8 @@ exports.sendConfirmation = function(to, link, callback) {
   mailer.send(
   { host:           "smtp.mandrillapp.com"
   , port:           25
-  , to:             "alexispetalas@gmail.com"
-  , from:           "you@yourdomain.com"
+  , to:             to
+  , from:           "noreply@campus.fi.uba.com.ar"
   , subject:        "Mandrill knows Javascript!"
   , body:           link
   , authentication: "login"
