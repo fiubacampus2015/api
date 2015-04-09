@@ -1,6 +1,7 @@
 var mongoose  = require('mongoose'),
 mailer = require('../mailer'),
-Token = mongoose.model('Token');
+Token = mongoose.model('Token'),
+config = require('../config');
 
 exports.requiresLogin = function(req, res, next) {
   Token
@@ -16,8 +17,7 @@ exports.requiresLogin = function(req, res, next) {
 
 exports.sendConfirmation = function(req, res){
   mailer.sendConfirmation(req.profile.email, 
-    "http://" 
-    + req.headers.host 
+    config.HEROKU_HOST
     + "/api/users/"
     + req.profile._id
     + "/confirm/" 
