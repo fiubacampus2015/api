@@ -234,7 +234,5 @@ describe('Users', function () {
       .end(done)
   }
 
-  after(function (done) {
-    require('./helper').clearDb(done)
-  })
+  
 })
