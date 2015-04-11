@@ -43,7 +43,6 @@ exports.post = function(req, res, next) {
 };
 
 exports.get = function(req, res) {
-
     res.status(200).json(req.profile);
 };
 
@@ -62,7 +61,7 @@ exports.putPersonal = function(req, res){
 
 exports.authenticate = function(req, res, next){
 
-  User.findOne({ username: req.body.username }, function (err, user) {
+  User.findOne({ email: req.body.email }, function (err, user) {
       if(!user || !user.authenticate(req.body.password)) {
         return res.status(401).json({
                       errors:["Error durante el login"]

@@ -70,7 +70,7 @@ describe('Users', function () {
         .post('/api/users')
         .field('name', 'foobar')
         .field('username', 'foobar')
-        .field('email', 'alexispetalas@gmail.com')
+        .field('email', 'foo@bar.com')
         .field('password', 'foobar')
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect(201)
@@ -103,7 +103,7 @@ describe('Users', function () {
         User.findOne({ username: 'foobar' }).exec(function (err, user) {
           should.not.exist(err)
           user.should.be.an.instanceOf(User)
-          user.email.should.equal('alexispetalas@gmail.com')
+          user.email.should.equal('foo@bar.com')
           done()
         })
       })
@@ -135,7 +135,7 @@ describe('Users', function () {
       it('authenticate ok', function (done) {
         request(app)
         .post('/api/users/authenticate')
-        .field('username', 'foobar')
+        .field('email', 'foo@bar.com')
         .field('password', 'foobar')
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect(function(res){
@@ -203,7 +203,7 @@ describe('Users', function () {
     });
 
     it('test search people by email', function(done){
-      doRequest('/people?email=@gmail.com', done);
+      doRequest('/people?email=@bar.com', done);
     });
 
     it('test search people by phone', function(done){
