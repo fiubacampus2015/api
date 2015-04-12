@@ -90,7 +90,7 @@ exports.authenticate = function(req, res, next){
 
           token.save(function(err){
             if(err) return next(err);
-            res.status(200).json({token: token._id, id: user.id, photo: user.photo});
+            res.status(200).json({token: token._id, id: user.id, photo: user.photo, confirmed: user.confirmed});
           });
         })
       }

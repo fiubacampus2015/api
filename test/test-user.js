@@ -120,6 +120,7 @@ describe('Users', function () {
         .expect('Content-Type', 'application/json; charset=utf-8')
         .expect(function(res){
           if (!('errors' in res.body)) return "missing errors";
+
         })
         .expect(401)
         .end(done)
@@ -141,6 +142,7 @@ describe('Users', function () {
         .expect(function(res){
           if (!('token' in res.body)) return "no token";
           if (!('id' in res.body)) return "no id";
+          if (!('confirmed' in res.body)) return "no confirmed";
           valid_token = res.body.token;
           user_id = res.body.id;
         })
