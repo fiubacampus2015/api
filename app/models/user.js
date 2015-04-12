@@ -19,15 +19,17 @@ var UserSchema = new Schema({
       mobile: { type: String, default:'' },
       other: { type: String, default:'' }
     },
+    birthday: Date,
+    gender: { type: String, default:''},
     nacionality: { type: String, default:'' },
     city: { type: String, default:'' },
     cv: {}
   },
   education: {
-    carreras:[{
-      nombre: String, default:'',
-      orientacion: String, default:'',
-      inicio: Date
+    careers:[{
+      title: String, default:'',
+      branch: String, default:'',
+      initdate: Date
     }]
   }
 });
