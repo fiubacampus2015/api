@@ -43,19 +43,29 @@ exports.post = function(req, res, next) {
 };
 
 exports.get = function(req, res) {
+
     res.status(200).json(req.profile);
 };
 
 exports.putPersonal = function(req, res){
   var user = req.profile,
-    personal = req.body.personal
+    personal = req.body.personal;
 
   Object.keys(personal).forEach(function(key){
-    user.personal[key] = personal[key];  
+    user.personal[key] = personal[key];
   });
+
   user.save(function(err){
     if(err) return res.status(400).json(err);
     res.status(200).json(user);
+  });
+};
+
+var map = function(model, json) {
+  Object.keys(model).forEach(function(key){
+    if( model[key] instanceof Object )
+      map(model[key], json)
+    model[key] = json[key];
   });
 };
 

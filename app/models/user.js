@@ -22,6 +22,13 @@ var UserSchema = new Schema({
     nacionality: { type: String, default:'' },
     city: { type: String, default:'' },
     cv: {}
+  },
+  education: {
+    carreras:[{
+      nombre: String, default:'',
+      orientacion: String, default:'',
+      inicio: Date
+    }]
   }
 });
 
@@ -122,9 +129,9 @@ UserSchema.statics = {
 
   
   load: function (options, cb) {
-    options.select = options.select || 'name username email confirmation';
-    this.findOne(options.criteria)
-      .select(options.select)
+    //options.select = options.select || 'name username email confirmation personal';
+    this.findOne(options)
+      //.select(options.select)
       .exec(cb);
   }
 }

@@ -156,6 +156,7 @@ describe('Users', function () {
         .get('/api/' + valid_token + '/users/' + user_id)
         .expect(200)
         .expect(function(res){
+          //console.log(res.body);
           if (!('_id' in res.body)) return "no _id";
         })        
         .end(done)
@@ -190,6 +191,29 @@ describe('Users', function () {
         })
         .end(done)
       });
+      
+      /*it('add user education info', function(done){
+        request(app)
+        .put('/api/' + valid_token + '/users/' + user_id + '/personal')
+        .set('Content-Type', 'application/json')
+        .send({
+          personal: {
+            education: {
+              carreras: [{
+                nombre: 'ing. informatica',
+                orientacion: 'gestion',
+                inicio: new Date()
+              }]
+            }
+          }          
+        })        
+        .expect(200)
+        .expect(function(res){
+          //console.log(res.body)
+          if (!('carreras' in res.body)) return "no return";          
+        })
+        .end(done)
+      });*/
   });
 
   describe('GET /api/:token/people', function(){
