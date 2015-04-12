@@ -156,8 +156,8 @@ describe('Users', function () {
         .get('/api/' + valid_token + '/users/' + user_id)
         .expect(200)
         .expect(function(res){
-          //console.log(res.body);
           if (!('_id' in res.body)) return "no _id";
+          if(res.body._id != user_id) return "no equals id";
         })        
         .end(done)
       })
@@ -167,9 +167,10 @@ describe('Users', function () {
 
       it('add user personal comments', function(done){
         request(app)
-        .put('/api/' + valid_token + '/users/' + user_id + '/personal')
+        .put('/api/' + valid_token + '/users/' + user_id)
         .set('Content-Type', 'application/json')
         .send({
+          name: "otro",
           personal: {
             comments: "esto es un comentario",
             phones: {
@@ -183,6 +184,7 @@ describe('Users', function () {
         .expect(200)
         .expect(function(res){
           if (!('personal' in res.body)) return "no return";
+          if(res.body.name != "otro") return "name no change"
           if(res.body.personal.comments != "esto es un comentario") return "comments return not equals to request"
           if(res.body.personal.phones.mobile != "123") return "phones.mobile return not equals to request"
           if(res.body.personal.phones.other != "456") return "phones.other return not equals to request"
@@ -219,7 +221,7 @@ describe('Users', function () {
   describe('GET /api/:token/people', function(){
 
     it('test search people by name', function(done){
-      doRequest('/people?name=bar', done);
+      doRequest('/people?name=otro', done);
     });
 
     it('test search people by city', function(done){

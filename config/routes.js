@@ -12,7 +12,7 @@ module.exports = function (app, passport) {
 
   app.get('/api/:token/users/:userId', authentication, users.get);
 
-  app.put('/api/:token/users/:userId/personal', authentication, users.putPersonal);
+  app.put('/api/:token/users/:userId', authentication, users.put);
 
   app.get('/api/:token/people', authentication, users.search);
 

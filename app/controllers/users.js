@@ -47,12 +47,12 @@ exports.get = function(req, res) {
     res.status(200).json(req.profile);
 };
 
-exports.putPersonal = function(req, res){
+exports.put = function(req, res){
   var user = req.profile,
-    personal = req.body.personal;
+    userReq = req.body;
 
-  Object.keys(personal).forEach(function(key){
-    user.personal[key] = personal[key];
+  Object.keys(userReq).forEach(function(key){
+    user[key] = userReq[key];
   });
 
   user.save(function(err){
