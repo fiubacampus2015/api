@@ -50,7 +50,6 @@ exports.get = function(req, res) {
 exports.put = function(req, res){
   var user = req.profile,
     userReq = req.body;
-
   Object.keys(userReq).forEach(function(key){
     user[key] = userReq[key];
   });
@@ -90,7 +89,7 @@ exports.authenticate = function(req, res, next){
 
           token.save(function(err){
             if(err) return next(err);
-            res.status(200).json({token: token._id, id: user.id, photo: user.photo});
+            res.status(200).json({token: token._id, id: user.id, photo: user.photo, name: user.name, surname: user.username});
           });
         })
       }
