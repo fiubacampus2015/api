@@ -36,7 +36,7 @@ exports.post = function(req, res, next) {
   user.confirmation = jwt.encode(user.email, config.TOKEN_SECRET);
   user.provider = 'local';
   user.save(function(err){
-    if(err) return res.status(200).json(err);
+    if(err) return res.status(400).json(err);
     req.profile = user;
     next()
   });

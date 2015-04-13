@@ -31,7 +31,7 @@ describe('Users', function () {
         .field('email', '')
         .field('password', 'foobar')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(200)
+        .expect(400)
         .expect(/Email cannot be blank/)
         .end(done)
       })
@@ -44,7 +44,7 @@ describe('Users', function () {
         .field('email', 'alexispetalas@gmail.com')
         .field('password', 'foobar')
         .expect('Content-Type', 'application/json; charset=utf-8')
-        .expect(200)
+        .expect(400)
         .expect(/Name cannot be blank/)
         .end(done)
       })
@@ -83,12 +83,29 @@ describe('Users', function () {
         .end(done)
       })
 
+      
+
      it('should confirm a email', function (done) {
         request(app)
         .get('/api/users/' + user_id + "/confirm/" + confirmation)
         .expect('Content-Type', /html/)
         .expect(200)
         .expect(/confirmed/)
+        .end(done)
+      })
+
+     it('should error repeat mail', function (done) {
+        request(app)
+        .post('/api/users')
+        .field('name', 'otrofoobar')
+        .field('username', 'otrofoobar')
+        .field('email', 'foo@bar.com')
+        .field('password', 'otrofoobar')
+        .expect('Content-Type', 'application/json; charset=utf-8')
+        .expect(400)
+        .expect(function(res){
+          if (!('errors' in res.body)) return "missing errors";
+        })        
         .end(done)
       })
 
