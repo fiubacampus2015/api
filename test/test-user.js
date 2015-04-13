@@ -213,28 +213,47 @@ describe('Users', function () {
         .end(done)
       });
       
-      /*it('add user education info', function(done){
+      it('add user jobs info', function(done){
         request(app)
-        .put('/api/' + valid_token + '/users/' + user_id + '/personal')
+        .put('/api/' + valid_token + '/users/' + user_id)
         .set('Content-Type', 'application/json')
         .send({
-          personal: {
-            education: {
-              carreras: [{
-                nombre: 'ing. informatica',
-                orientacion: 'gestion',
-                inicio: new Date()
-              }]
-            }
-          }          
+          job:{
+            companies:[{
+              initdate: new Date(),
+              enddate: new Date(),
+              place: 'aca'
+            }]
+          },
         })        
         .expect(200)
         .expect(function(res){
-          //console.log(res.body)
-          if (!('carreras' in res.body)) return "no return";          
+          if (!('job' in res.body)) return "no return";          
+          if (!res.body.job.companies.length == 1) return "no jobs return";
         })
         .end(done)
-      });*/
+      });
+
+      it('add user education info', function(done){
+        request(app)
+        .put('/api/' + valid_token + '/users/' + user_id)
+        .set('Content-Type', 'application/json')
+        .send({
+          education:{
+             careers:[{
+              title: 'ing.',
+              branch: 'gestion',  
+              initdate: new Date
+            }]
+          },
+        })        
+        .expect(200)
+        .expect(function(res){
+          if (!('education' in res.body)) return "no return";     
+          if (!res.body.education.careers.length == 1) return "no education return"; 
+        })
+        .end(done)
+      });
   });
 
   describe('GET /api/:token/people', function(){

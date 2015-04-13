@@ -26,15 +26,15 @@ var UserSchema = new Schema({
   },
   job:{
     companies:[{
-      initdate: Date,
-      enddate: Date,
-      place: String, default:''
+      initdate: { type:Date},
+      enddate: { type:Date},
+      place: { type: String, default:'' }  
     }]
   },
   education: {
     careers:[{
-      title: String, default:'',
-      branch: String, default:'',
+      title: { type: String, default:'' },
+      branch: { type: String, default:'' },  
       initdate: Date
     }]
   }
