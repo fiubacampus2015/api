@@ -22,8 +22,14 @@ var UserSchema = new Schema({
     birthday: Date,
     gender: { type: String, default:''},
     nacionality: { type: String, default:'' },
-    city: { type: String, default:'' },
-    cv: {}
+    city: { type: String, default:'' }  
+  },
+  job:{
+    companies:[{
+      initdate: Date,
+      enddate: Date,
+      place: String, default:''
+    }]
   },
   education: {
     careers:[{
