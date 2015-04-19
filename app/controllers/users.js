@@ -50,7 +50,6 @@ exports.get = function(req, res) {
 exports.put = function(req, res){
   var user = req.profile,
     userReq = req.body;
-
   Object.keys(userReq).forEach(function(key){
     user[key] = userReq[key];
   });
@@ -73,28 +72,29 @@ exports.authenticate = function(req, res, next){
 
   User.findOne({ email: req.body.email }, function (err, user) {
       if(!user || !user.authenticate(req.body.password)) {
+
         return res.status(401).json({
                       errors:["Error durante el login"]
                 });
       }
       else {
         Token.findOne({_user: user}, function(err, token){
+
           if(!err && token) {
-            token.value = jwt.encode(user, config.TOKEN_SECRET)
+            token.value = jwt.encode(user.username, config.TOKEN_SECRET)
           } else { 
             var token = new Token({
-              value:jwt.encode(user, config.TOKEN_SECRET),
+              value:jwt.encode(user.username, config.TOKEN_SECRET),
               _user: user
             });
           }
 
           token.save(function(err){
             if(err) return next(err);
-
               res.status(200).json({
                 token: token._id, 
+                photo: user.personal.photo, 
                 id: user.id, 
-                photo: user.photo, 
                 name: user.name, 
                 surname: user.username, 
                 confirmed: user.confirmed});
