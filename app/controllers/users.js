@@ -79,12 +79,11 @@ exports.authenticate = function(req, res, next){
       }
       else {
         Token.findOne({_user: user}, function(err, token){
-
           if(!err && token) {
-            token.value = jwt.encode(user.username, config.TOKEN_SECRET)
+            token.value = jwt.encode(user.hashed_password, config.TOKEN_SECRET)
           } else { 
             var token = new Token({
-              value:jwt.encode(user.username, config.TOKEN_SECRET),
+              value:jwt.encode(user.hashed_password, config.TOKEN_SECRET),
               _user: user
             });
           }
