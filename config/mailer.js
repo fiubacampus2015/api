@@ -14,7 +14,7 @@ exports.sendConfirmation = function(to, link, callback) {
   , to:             to
   , from:           "noreply@campus.fi.uba.com.ar"
   , subject:        "campus 2015, finalizar registro"
-  , body:           currentTemplate
+  , html:           currentTemplate
   , authentication: "login"
   , username:       "app35427088@heroku.com"
   , password:       "qwbuII_mpMyq_pKV8AtEgw"
