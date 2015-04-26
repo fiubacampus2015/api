@@ -31,7 +31,7 @@ exports.search = function(req, res) {
     criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i")
   });
 
-  User.find(criteria, "_id name username email personal" ,function(err, users) {
+  User.find(criteria,{_id: 1, name: 1, username: 1,email :1 ,personal :1 }, function(err, users) {
       return res.status(200).send(users);
   });
 };
