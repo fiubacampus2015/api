@@ -17,7 +17,7 @@ exports.search = function(req, res) {
     criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i")
   });
 
-  User.findOne(criteria, function(err, users) {
+  User.find(criteria,{name: 1, username: 1,'personal.photo': 1}, function(err, users) {
       return res.status(200).send(users);
   });
 };
@@ -102,6 +102,8 @@ exports.authenticate = function(req, res, next){
       }
   });
 };
+
+
 
 // For params :userId
 exports.load = function (req, res, next, id) {

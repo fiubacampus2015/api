@@ -16,9 +16,12 @@ module.exports = function (app, passport) {
 
   app.get('/api/:token/people', authentication, users.search);
 
+  app.get('/api/:token/users', authentication, users.search);
+
   app.get('/app/download', function(req, res, next){
     res.render('index', {});
   });
+
 
   app.param('userId', users.load);
 

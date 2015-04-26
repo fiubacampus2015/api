@@ -34,10 +34,15 @@ var UserSchema = new Schema({
   education: {
     careers:[{
       title: { type: String, default:'' },
-      branch: { type: String, default:'' },  
+      branch: { type: String, default:'' },
       initdate: Date
     }]
-  }
+  },
+  contacts:[{
+    _user:{ type: Schema.Types.ObjectId, ref:'User' },
+    state: {type: String, default:''},  
+    date: { type: Date, default: Date.now }
+  }]
 });
 
 var oAuthTypes = [
