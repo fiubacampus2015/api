@@ -38,11 +38,7 @@ var UserSchema = new Schema({
       initdate: Date
     }]
   },
-  contacts:[{
-    _user:{ type: Schema.Types.ObjectId, ref:'User' },
-    state: {type: String, default:''},  
-    date: { type: Date, default: Date.now }
-  }]
+  contacts:[{ type: Schema.Types.ObjectId, ref:'User' }]
 });
 
 var oAuthTypes = [
@@ -146,6 +142,14 @@ UserSchema.statics = {
     this.findOne(options)
       //.select(options.select)
       .exec(cb);
+  },
+  friends: function(options, friendsOptions, cb) {
+    this.findOne(options).populate({
+      path: 'contacts',
+      match: friendsOptions,
+      select: '_id name email personal',
+      options: { sort: 'name' }
+    }).exec(cb);
   }
 }
 

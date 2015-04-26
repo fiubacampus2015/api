@@ -10,6 +10,20 @@ var mongoose = require('mongoose'),
   config = require('../../config/config'),
   utils = require('../../lib/utils');
 
+exports.friends = function(req, res) {
+
+  User.friends({ 
+    _id : req.params.user 
+  },{
+    name: new RegExp('.*' + req.query.name + '.*', "i")
+  }, function (err, user) {
+    if (err) return next(err);
+    if (!user) return next(new Error('Failed to load User ' + id));
+
+    return res.status(200).json(user.contacts);
+  });
+}
+
 exports.search = function(req, res) {
   var criteria = {};
   
@@ -17,7 +31,7 @@ exports.search = function(req, res) {
     criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i")
   });
 
-  User.find(criteria,{name: 1, username: 1,'personal.photo': 1}, function(err, users) {
+  User.find(criteria, "_id name username email personal" ,function(err, users) {
       return res.status(200).send(users);
   });
 };

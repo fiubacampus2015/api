@@ -13,6 +13,10 @@ var cookies,
   confirmation;
 
 describe('Users', function () {
+
+  before(function (done) {
+     require('./helper').clearDb(done)
+  }); 
   
   describe('POST /users', function () {
     describe('Invalid parameters', function () {
@@ -274,27 +278,66 @@ describe('Users', function () {
       doRequest('/people?personal.phones.mobile=123', done);
     });
 
+    it('test search people by education', function(done){
+      doRequest('/people?education.careers.title=ing', done);
+    });
+
+  });
+
+  describe('GET friends', function(){
+    before(function (done) {
+        var friend = new User({name:'pepe', email:'asdasd', username:'asdasd', password: 'asdasd'})
+        var frienddos = new User({name:'andres', email:'hjkhji', username:'ghjghj', password: 'ghjghj'})
+        frienddos.save(function(err){
+          friend.save(function(err){
+            User.findOne({_id: user_id }, function(err, user) {
+              user.contacts.push(friend)
+              user.contacts.push(frienddos)
+              user.save(function(err){
+                done();
+              })
+            });  
+          });
+        });
+    });
+
+    it('test search friends by name', function(done){
+      doRequest('/users/' + user_id + '/friends?name=', done);
+    });
+
+    it('test search first my friends', function(done){
+      var url = '/api/'
+      .concat(valid_token)
+      .concat("/people");
+      request(app)
+        .get(url)
+        .expect(200)
+        .expect(function(res){
+          console.log("people", res.body)
+        })
+        .end(done)
+    });
   });
 
   var doRequest = function (query, done) {
 
     var url = '/api/'
       .concat(valid_token)
-      .concat(query)
+      .concat(query);
 
     request(app)
       .get(url)
       .expect(200)
       .expect(function(res){
-        if(!res.body._id) return "no result!"
+        console.log()
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
-  }
+  };
+
 
   
-    after(function (done) {
+  after(function (done) {
      require('./helper').clearDb(done)
-   }) 
-  
-  
+  }); 
 })
