@@ -90,6 +90,7 @@ describe('Users', function () {
       
 
      it('should confirm a email', function (done) {
+      console.log('/api/users/' + user_id + "/confirm/" + confirmation)
         request(app)
         .get('/api/users/' + user_id + "/confirm/" + confirmation)
         .expect('Content-Type', /html/)
@@ -313,7 +314,7 @@ describe('Users', function () {
         .get(url)
         .expect(200)
         .expect(function(res){
-          console.log("people", res.body)
+          if(res.body[0].name !== 'andres') return "no friends first!!"
         })
         .end(done)
     });
@@ -329,7 +330,6 @@ describe('Users', function () {
       .get(url)
       .expect(200)
       .expect(function(res){
-        console.log()
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)

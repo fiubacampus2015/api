@@ -143,11 +143,13 @@ UserSchema.statics = {
       //.select(options.select)
       .exec(cb);
   },
-  friends: function(options, friendsOptions, cb) {
+  friends: function(options, friendsOptions, select ,cb) {
+    //friendsOptions.select = friendsOptions.select || '_id name email personal';
+    console.log("select ", select)
     this.findOne(options).populate({
       path: 'contacts',
       match: friendsOptions,
-      select: '_id name email personal',
+      select: select || '_id name email personal',
       options: { sort: 'name' }
     }).exec(cb);
   }

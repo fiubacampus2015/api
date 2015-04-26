@@ -26,12 +26,12 @@ exports.friends = function(req, res) {
 
 exports.search = function(req, res) {
   var criteria = {};
-  
+
   Object.keys(req.query).forEach(function(key){
-    criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i")
+    criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   });
 
-  User.find(criteria,{_id: 1, name: 1, username: 1,email :1 ,personal :1 }, function(err, users) {
+  User.find(criteria,"_id name username email personal").exec(function(err, users) {
       return res.status(200).send(users);
   });
 };
