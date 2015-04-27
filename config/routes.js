@@ -16,6 +16,8 @@ module.exports = function (app, passport) {
 
   app.get('/api/:token/users/:user/friends', authentication, users.friends);
 
+  app.put('/api/:token/users/:userId/:friendId', authentication, users.addFriend);
+
   app.get('/api/:token/people', authentication, users.search);
 
   app.get('/api/:token/users', authentication, users.search);

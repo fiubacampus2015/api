@@ -19,7 +19,6 @@ exports.friends = function(req, res) {
   }, function (err, user) {
     if (err) return next(err);
     if (!user) return next(new Error('Failed to load User ' + id));
-
     return res.status(200).json(user.contacts);
   });
 }
@@ -28,12 +27,32 @@ exports.search = function(req, res) {
   var criteria = {};
 
   Object.keys(req.query).forEach(function(key){
-    criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
+    //Cambiar esto es temporal para pruebas
+    if (key == 'contacts')
+      criteria[key] = req.query[key];
+    else
+      criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   });
 
-  User.find(criteria,"_id name username email personal").exec(function(err, users) {
+  User.find(criteria,"_id name username email personal contacts").exec(function(err, users) {
       return res.status(200).send(users);
   });
+};
+
+exports.addFriend = function(req, res) {
+  var user = req.profile;
+
+  User.findOne({_id: req.params.friendId }, function(err, friend) {
+    if(err ||!friend)
+        return res.status(401).json({
+          errors:["Error al buscar un contacto"]
+        });
+      friend.contacts.push(user)
+      friend.save(function(err){
+        if(err) return res.status(400).json(err);
+        res.status(200).json(user);
+    })
+  }); 
 };
 
 exports.showConfirm = function(req, res, next){
