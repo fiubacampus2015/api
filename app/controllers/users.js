@@ -31,7 +31,7 @@ exports.search = function(req, res) {
     if (key == 'contacts')
       criteria[key] = req.query[key];
     else
-      criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
+      criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
   });
 
   User.find(criteria,"_id name username email personal contacts").exec(function(err, users) {
