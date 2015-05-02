@@ -1,5 +1,6 @@
-var mongoose = require('mongoose');
-var crypto = require('crypto');
+var mongoose = require('mongoose'),
+  Message = mongoose.model('Message'),
+  crypto = require('crypto');
 
 var Schema = mongoose.Schema;
 
@@ -38,7 +39,8 @@ var UserSchema = new Schema({
       initdate: Date
     }]
   },
-  contacts:[{ type: Schema.Types.ObjectId, ref:'User' }]
+  contacts:[{ type: Schema.Types.ObjectId, ref:'User' }],
+  wall: [{ type: Schema.Types.ObjectId, ref:'Message' }] 
 });
 
 var oAuthTypes = [
@@ -145,13 +147,20 @@ UserSchema.statics = {
   },
   friends: function(options, friendsOptions, select ,cb) {
     //friendsOptions.select = friendsOptions.select || '_id name email personal';
-    console.log("select ", select)
     this.findOne(options).populate({
       path: 'contacts',
       match: friendsOptions,
       select: select || '_id name email personal',
       options: { sort: 'name' }
-    }).exec(cb);
+    })
+    .exec(cb);
+  },
+  wall: function(options, wallOptions, select, cb) {
+    this.findOne(options).populate({
+      path: 'wall',
+      select: select || '_id content user'
+    })
+    .exec(cb);
   }
 }
 

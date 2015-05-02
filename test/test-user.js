@@ -90,7 +90,6 @@ describe('Users', function () {
       
 
      it('should confirm a email', function (done) {
-      console.log('/api/users/' + user_id + "/confirm/" + confirmation)
         request(app)
         .get('/api/users/' + user_id + "/confirm/" + confirmation)
         .expect('Content-Type', /html/)
@@ -268,11 +267,11 @@ describe('Users', function () {
     });
 
     it('test search people by city', function(done){
-      doRequest('/people?personal.city=aires', done);
+      doRequest('/people?personal.city=buenos', done);
     });
 
     it('test search people by email', function(done){
-      doRequest('/people?email=@bar.com', done);
+      doRequest('/people?email=foo@bar.com', done);
     });
 
     it('test search people by phone', function(done){
@@ -304,20 +303,7 @@ describe('Users', function () {
 
     it('test search friends by name', function(done){
       doRequest('/users/' + user_id + '/friends?name=', done);
-    });
-
-    it('test search first my friends', function(done){
-      var url = '/api/'
-      .concat(valid_token)
-      .concat("/people");
-      request(app)
-        .get(url)
-        .expect(200)
-        .expect(function(res){
-          if(res.body[0].name !== 'andres') return "no friends first!!"
-        })
-        .end(done)
-    });
+    });   
   });
 
   var doRequest = function (query, done) {
@@ -335,8 +321,32 @@ describe('Users', function () {
       .end(done)
   };
 
+  describe('POST /api/:token/users/userId/wall', function(){
 
-  
+    it('write add message into friends wall', function(done) {
+       request(app)
+      .post('/api/' + valid_token + '/users/' + user_id +'/wall')
+      .set('Content-Type', 'application/json')
+      .send({
+        content: "hola capo"        
+      })
+      .expect(201)
+      .expect(function(res){
+        
+      })
+      .end(done)
+    });
+    it('GET friends wall', function(done) {
+      request(app)
+      .get('/api/' + valid_token + '/users/' + user_id +'/wall')
+      .expect(200)
+      .expect(function(res){
+           if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+      })
+      .end(done)
+    });
+  });
+
   after(function (done) {
      require('./helper').clearDb(done)
   }); 

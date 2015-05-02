@@ -7,8 +7,30 @@ var mongoose = require('mongoose'),
   jwt   = require('jwt-simple'),
   User = mongoose.model('User'),
   Token = mongoose.model('Token'),
+  Message = mongoose.model('Message')
   config = require('../../config/config'),
   utils = require('../../lib/utils');
+
+exports.wallGet = function(req, res) {
+  User.wall({
+    _id : req.params.user 
+  },{},'_id content user', function(err, user) {
+      res.status(200).json(user.wall);   
+  }); 
+}
+
+exports.wallPost = function(req, res) {
+  var user = req.profile;
+  var message = new Message(req.body);
+  message.user = req.user;
+  message.save(function(err){
+    user.wall.push(message);
+    user.save(function(err){
+      if(err) return res.status(400).json(err);
+      res.status(201).json(user.wall);
+    });  
+  })  
+}
 
 exports.friends = function(req, res) {
 
@@ -28,11 +50,11 @@ exports.search = function(req, res) {
 
   Object.keys(req.query).forEach(function(key){
     //Cambiar esto es temporal para pruebas
-    if (key == 'contacts')
-      criteria[key] = req.query[key];
-    else
-      criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
+    criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
   });
+
+  console.log(criteria)
+
 
   User.find(criteria,"_id name username email personal contacts").exec(function(err, users) {
       return res.status(200).send(users);

@@ -22,6 +22,10 @@ module.exports = function (app, passport) {
 
   app.get('/api/:token/users', authentication, users.search);
 
+  app.get('/api/:token/users/:user/wall', authentication, users.wallGet);
+
+  app.post('/api/:token/users/:userId/wall', authentication, users.wallPost); 
+
   app.get('/app/download', function(req, res, next){
     res.render('index', {});
   });
