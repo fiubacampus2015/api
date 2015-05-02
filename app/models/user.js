@@ -161,6 +161,17 @@ UserSchema.statics = {
       select: select || '_id content user'
     })
     .exec(cb);
+  },
+  complete: function(options, select, cb) {
+    this.findOne(options).populate({
+      path: 'contacts',
+      select: select || '_id name email personal'
+    })
+    .populate({
+      path: 'wall',
+      select: '_id content user'
+    })
+    .exec(cb);
   }
 }
 

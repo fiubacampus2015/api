@@ -20,16 +20,19 @@ exports.wallGet = function(req, res) {
 }
 
 exports.wallPost = function(req, res) {
-  var user = req.profile;
-  var message = new Message(req.body);
-  message.user = req.user;
-  message.save(function(err){
-    user.wall.push(message);
-    user.save(function(err){
-      if(err) return res.status(400).json(err);
-      res.status(201).json(user.wall);
-    });  
-  })  
+  User.complete({ 
+    _id : req.params.user 
+  }, '' ,function(err, user){
+    var message = new Message(req.body);
+    message.user = req.user;
+    message.save(function(err){
+      user.wall.push(message);
+      user.save(function(err){
+        if(err) return res.status(400).json(err);
+        res.status(201).json(user.wall);
+      });  
+    });
+  });
 }
 
 exports.friends = function(req, res) {
@@ -52,9 +55,6 @@ exports.search = function(req, res) {
     //Cambiar esto es temporal para pruebas
     criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
   });
-
-  console.log(criteria)
-
 
   User.find(criteria,"_id name username email personal contacts").exec(function(err, users) {
       return res.status(200).send(users);
