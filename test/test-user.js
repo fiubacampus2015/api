@@ -291,8 +291,14 @@ describe('Users', function () {
         frienddos.save(function(err){
           friend.save(function(err){
             User.findOne({_id: user_id }, function(err, user) {
-              user.contacts.push(friend)
-              user.contacts.push(frienddos)
+              user.contacts.push({
+                status: 'ok',
+                user: friend
+              })
+              user.contacts.push({
+                status: 'pending',
+                user: frienddos
+              })
               user.save(function(err){
                 done();
               })
@@ -301,8 +307,23 @@ describe('Users', function () {
         });
     });
 
-    it('test search friends by name', function(done){
-      doRequest('/users/' + user_id + '/friends?name=', done);
+    it('test search friends by name status ok', function(done){
+      doRequest('/users/' + user_id + '/friends?name=pepe', done);
+    });
+
+    it('test search friends by name status pending not result', function(done) {
+
+      var url = '/api/'
+      .concat(valid_token)
+      .concat('/users/' + user_id + '/friends?name=andres');
+
+    request(app)
+      .get(url)
+      .expect(200)
+      .expect(function(res){
+        console.log(res.body)          
+      })
+      .end(done)
     });   
   });
 

@@ -36,15 +36,14 @@ exports.wallPost = function(req, res) {
 }
 
 exports.friends = function(req, res) {
-
   User.friends({ 
     _id : req.params.user 
   },{
     name: new RegExp('.*' + req.query.name + '.*', "i")
-  }, function (err, user) {
+  }, function (err, friends) {
     if (err) return next(err);
-    if (!user) return next(new Error('Failed to load User ' + id));
-    return res.status(200).json(user.contacts);
+    if (!friends) return next(new Error('Failed to load User ' + id));
+    return res.status(200).json(friends);
   });
 }
 

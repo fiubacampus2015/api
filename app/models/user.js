@@ -39,7 +39,10 @@ var UserSchema = new Schema({
       initdate: Date
     }]
   },
-  contacts:[{ type: Schema.Types.ObjectId, ref:'User' }],
+  contacts:[{
+    status: { type: String, default: '' },
+    user: { type: Schema.Types.ObjectId, ref:'User' } 
+  }],
   wall: [{ type: Schema.Types.ObjectId, ref:'Message' }] 
 });
 
@@ -148,7 +151,7 @@ UserSchema.statics = {
   friends: function(options, friendsOptions, select ,cb) {
     //friendsOptions.select = friendsOptions.select || '_id name email personal';
     this.findOne(options).populate({
-      path: 'contacts',
+      path: 'contacts.user',
       match: friendsOptions,
       select: select || '_id name email personal',
       options: { sort: 'name' }
