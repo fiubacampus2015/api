@@ -7,7 +7,8 @@ var mongoose = require('mongoose'),
   jwt   = require('jwt-simple'),
   User = mongoose.model('User'),
   Token = mongoose.model('Token'),
-  Message = mongoose.model('Message')
+  Message = mongoose.model('Message'),
+  Relationship = mongoose.model('Relationship')
   config = require('../../config/config'),
   utils = require('../../lib/utils');
 
@@ -21,7 +22,7 @@ exports.wallGet = function(req, res) {
 
 exports.wallPost = function(req, res) {
   User.complete({ 
-    _id : req.params.user 
+    _id : req.params.user
   }, '' ,function(err, user){
     var message = new Message(req.body);
     message.user = req.user;
@@ -37,9 +38,9 @@ exports.wallPost = function(req, res) {
 
 exports.friends = function(req, res) {
   User.friends({ 
-    _id : req.params.user 
+    _id: req.params.user,
   },{
-    name: new RegExp('.*' + req.query.name + '.*', "i")
+    //name: new RegExp('.*' + req.query.name + '.*', "i")
   }, function (err, friends) {
     if (err) return next(err);
     if (!friends) return next(new Error('Failed to load User ' + id));
@@ -66,6 +67,15 @@ exports.search = function(req, res) {
 exports.addFriend = function(req, res) {
   var user = req.profile;
 
+  var relationship = new Relationship({
+    me: req.profile.id,
+    other:req.params.friendId,
+    status: 'ok',
+    type: 'friends'
+  }).save(function(err) {
+    console.log("SAVE Relationship with error: ", err)
+  });
+
   User.findOne({_id: req.params.friendId }, function(err, friend) {
     if(err ||!friend)
         return res.status(401).json({
@@ -77,6 +87,9 @@ exports.addFriend = function(req, res) {
         res.status(200).json(user);
     })
   }); 
+
+
+
 };
 
 exports.showConfirm = function(req, res, next){
