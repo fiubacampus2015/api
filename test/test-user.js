@@ -285,46 +285,85 @@ describe('Users', function () {
   });
 
   describe('GET friends', function(){
+    var friend_id,
+      friend_id_dos;
+
     before(function (done) {
-        var friend = new User({name:'pepe', email:'asdasd', username:'asdasd', password: 'asdasd'})
-        var frienddos = new User({name:'andres', email:'hjkhji', username:'ghjghj', password: 'ghjghj'})
-        frienddos.save(function(err){
-          friend.save(function(err){
-            User.findOne({_id: user_id }, function(err, user) {
-              user.contacts.push({
-                status: 'ok',
-                user: friend
-              })
-              user.contacts.push({
-                status: 'pending',
-                user: frienddos
-              })
-              user.save(function(err){
-                done();
-              })
-            });  
+        // guardo un amigo para relacionarme
+        var friend = new User({name:'pepe', email:'pepelo', username:'foo', password: 'bar'});
+        friend.save(function(err){
+          console.log("id: ", friend._id);
+          friend_id = friend._id;
+          var frienddos = new User({name:'andres', email:'andrelo', username:'foo', password: 'bar'});
+          frienddos.save(function(err){
+            console.log("id: ", frienddos._id);
+            friend_id_dos = frienddos._id;
+            done();
           });
-        });
+        });        
+    });
+
+    it('be my friend', function(done){
+      var url = '/api/'
+      .concat(valid_token)
+      .concat('/users/' + user_id + '/' + friend_id);
+
+      request(app)
+        .put(url)
+        .expect(200)
+        .expect(function(res){
+        })
+        .end(done)
+
+    });
+
+    it('you be my friend too ', function(done){
+      var url = '/api/'
+      .concat(valid_token)
+      .concat('/users/' + user_id + '/' + friend_id_dos);
+
+      request(app)
+        .put(url)
+        .expect(200)
+        .expect(function(res){
+        })
+        .end(done)
+
     });
 
     it('test search friends by name status ok', function(done){
-      doRequest('/users/' + user_id + '/friends?name=pepe', done);
+      
+      var url = '/api/'
+        .concat(valid_token)
+        .concat('/users/' + user_id + '/friends?name=pepe');
+
+      request(app)
+        .get(url)
+        .expect(200)
+        .expect(function(res){
+          console.log("search result frind pepe: ", res.body)
+          if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+        })
+        .end(done) 
     });
 
     it('test search friends by name status pending not result', function(done) {
 
       var url = '/api/'
-      .concat(valid_token)
-      .concat('/users/' + user_id + '/friends?name=andres');
+        .concat(valid_token)
+        .concat('/users/' + user_id + '/friends?name=andres&status=ok');
 
-    request(app)
-      .get(url)
-      .expect(200)
-      .expect(function(res){
-        console.log(res.body)          
-      })
-      .end(done)
-    });   
+      request(app)
+        .get(url)
+        .set('Content-Type', 'application/json')
+        .expect(200)
+        .expect(function(res){
+          console.log(res.body)
+          if(res.body && res.body.length > 0) return "result!"
+          
+        })
+        .end(done)
+      });   
   });
 
   var doRequest = function (query, done) {
