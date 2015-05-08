@@ -36,37 +36,18 @@ exports.wallPost = function(req, res) {
   });
 }
 
-exports.friends = function(req, res) {
+exports.friends = function(req, res, next) {
   var criteria = {};
   Object.keys(req.query).forEach(function(key){
       criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
   });
 
-  Relationship.
-    getOthers({
-      me:req.params.user,
-      status: req.params.status || 'ok',
-      type: req.params.type || 'friends'
-    }, criteria, '_id name email personal', function(err, friends) {
+  Relationship.getFriends(req.params.user, criteria, 
+    function(err, friends) {
       if (err) return next(err);
       if (!friends) return next(new Error('Failed to load User ' + id));
-
-      var response = [];
-      friends.forEach(function(fri) {
-        if(fri.other) response.push(fri.other);
-      });
-      return res.status(200).json(response);
-    });
-
-  /*User.friends({ 
-    _id: req.params.user,
-  },{
-    //name: new RegExp('.*' + req.query.name + '.*', "i")
-  }, function (err, friends) {
-    if (err) return next(err);
-    if (!friends) return next(new Error('Failed to load User ' + id));
-    return res.status(200).json(friends);
-  });*/
+      return res.status(200).json(friends);
+  }); 
 }
 
 exports.search = function(req, res) {
@@ -88,28 +69,15 @@ exports.search = function(req, res) {
 exports.addFriend = function(req, res) {
   var user = req.profile;
 
-  console.log("req:", req.params)
   var relationship = new Relationship({
     me: req.profile.id,
     other:req.params.friendId,
-    status: 'ok',
+    status: 'ok', //TODO: cambiar a pending
     type: 'friends'
   }).save(function(err) {
     if(err) return res.status(400).json(err);
     res.status(200).json(user);
   });
-/*
-  User.findOne({_id: req.params.friendId }, function(err, friend) {
-    if(err ||!friend)
-        return res.status(401).json({
-          errors:["Error al buscar un contacto"]
-        });
-      friend.contacts.push(user)
-      friend.save(function(err){
-        if(err) return res.status(400).json(err);
-        res.status(200).json(user);
-    })
-  });*/
 };
 
 exports.showConfirm = function(req, res, next){

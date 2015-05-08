@@ -19,6 +19,21 @@ RelationShipSchema.statics = {
 		    match: otheroptions,
 		    select: select || '_id name email personal'
 		  }).exec(cb);
+	},
+	getFriends: function(user_id, criteria, cb) {
+		this.getOthers({
+			  me:user_id,
+			  status: 'ok',
+			  type: 'friends'
+			}, criteria, '_id name email personal', function(err, friends) {
+				if (err) return cb(err);
+				var response = [];
+				friends.forEach(function(fri) {
+					if(fri.other) response.push(fri.other);
+				});
+
+				cb(null, response);
+		});
 	}
 }
 

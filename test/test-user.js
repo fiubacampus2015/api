@@ -292,11 +292,9 @@ describe('Users', function () {
         // guardo un amigo para relacionarme
         var friend = new User({name:'pepe', email:'pepelo', username:'foo', password: 'bar'});
         friend.save(function(err){
-          console.log("id: ", friend._id);
           friend_id = friend._id;
           var frienddos = new User({name:'andres', email:'andrelo', username:'foo', password: 'bar'});
           frienddos.save(function(err){
-            console.log("id: ", frienddos._id);
             friend_id_dos = frienddos._id;
             done();
           });
@@ -341,7 +339,6 @@ describe('Users', function () {
         .get(url)
         .expect(200)
         .expect(function(res){
-          console.log("search result frind pepe: ", res.body)
           if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
         })
         .end(done) 
@@ -351,16 +348,14 @@ describe('Users', function () {
 
       var url = '/api/'
         .concat(valid_token)
-        .concat('/users/' + user_id + '/friends?name=andres&status=ok');
+        .concat('/users/' + user_id + '/friends?name=andres');
 
       request(app)
         .get(url)
         .set('Content-Type', 'application/json')
         .expect(200)
         .expect(function(res){
-          console.log(res.body)
-          if(res.body && res.body.length > 0) return "result!"
-          
+          if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
         })
         .end(done)
       });   
@@ -396,9 +391,22 @@ describe('Users', function () {
       })
       .end(done)
     });
+
     it('GET friends wall', function(done) {
       request(app)
       .get('/api/' + valid_token + '/users/' + user_id +'/wall')
+      .expect(200)
+      .expect(function(res){
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+      })
+      .end(done)
+    });
+  });
+
+  describe('GET people with friends', function(done) {
+    it('get people order by friends', function(done) {
+      request(app)
+      .get('/api/' + valid_token + '/people')
       .expect(200)
       .expect(function(res){
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
