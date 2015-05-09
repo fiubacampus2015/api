@@ -61,14 +61,16 @@ exports.search = function(req, res) {
       if (err) return next(err);
       var friends_id = [];
       friends.forEach(function(f) {
+        f["friend"] = true;
         friends_id.push(f._id);
       });
-      User.find(criteria,"_id name username email personal contacts")
+      User.find(criteria,"_id name username email personal")
         .where("_id")
         .nin(friends_id)
         .exec(function(err, users) {
           if(!err) {
             users.forEach(function(u) {
+              u["friend"] = false;
               friends.push(u);
             });  
           } else {

@@ -410,6 +410,7 @@ describe('Users', function () {
       .expect(200)
       .expect(function(res){
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+        if(res.body[0].friend == false) return "no amigos primero!"
       })
       .end(done)
     });
