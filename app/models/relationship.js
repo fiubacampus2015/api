@@ -35,6 +35,28 @@ RelationShipSchema.statics = {
 				cb(null, response);
 		});
 	},
+	getPending: function(user_id, criteria, cb) {
+		this.getOthers({
+			  me:user_id,
+			  status: 'pending',
+			  type: 'friends'
+			}, criteria, '_id name email personal', function(err, friends) {
+				if (err) return cb(err);
+				var response = [];
+				friends.forEach(function(fri) {
+					if(fri.other) response.push(fri.other);
+				});
+
+				cb(null, response);
+		});
+	},
+	getPendingRelationShip: function(user_id, other_id, cb) {
+		this.findOne({
+			me: user_id,
+			other:other_id,
+			status: 'pending'
+		}).exec(cb);
+	},
 	getFriendsId: function(user_id, cb) {
 		this.getFriends(user_id, "_id", cb);
 	}

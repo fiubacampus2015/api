@@ -312,7 +312,20 @@ describe('Users', function () {
         .expect(function(res){
         })
         .end(done)
+    });
 
+    it('you confirm me ', function(done){
+
+      var url = '/api/'
+      .concat(valid_token)
+      .concat('/users/' + friend_id + '/' + user_id + '/confirm');
+
+      request(app)
+        .put(url)
+        .expect(200)
+        .expect(function(res) {
+        })
+        .end(done)
     });
 
     it('you be my friend too ', function(done){
@@ -349,6 +362,22 @@ describe('Users', function () {
       var url = '/api/'
         .concat(valid_token)
         .concat('/users/' + user_id + '/friends?name=andres');
+
+      request(app)
+        .get(url)
+        .set('Content-Type', 'application/json')
+        .expect(200)
+        .expect(function(res){
+          if(!res.body || typeof(res.body) !== 'object' || res.body.length > 0) return "result for friend pending"
+        })
+        .end(done)
+      });
+
+      it('test search friends by name status pending not result', function(done) {
+
+      var url = '/api/'
+        .concat(valid_token)
+        .concat('/users/' + user_id + '/friends/pending');
 
       request(app)
         .get(url)

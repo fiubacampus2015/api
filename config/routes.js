@@ -16,7 +16,11 @@ module.exports = function (app, passport) {
 
   app.get('/api/:token/users/:user/friends', authentication, users.friends);
 
+  app.get('/api/:token/users/:user/friends/pending', authentication, users.pending);
+
   app.put('/api/:token/users/:userId/:friendId', authentication, users.addFriend);
+
+  app.put('/api/:token/users/:userId/:friendId/confirm', authentication, users.confirmFriend);
 
   app.get('/api/:token/people', authentication, users.search);
 

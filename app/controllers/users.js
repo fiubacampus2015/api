@@ -18,7 +18,7 @@ exports.wallGet = function(req, res) {
   },{},'_id content user', function(err, user) {
       res.status(200).json(user.wall);   
   }); 
-}
+};
 
 exports.wallPost = function(req, res) {
   User.complete({ 
@@ -34,7 +34,18 @@ exports.wallPost = function(req, res) {
       });  
     });
   });
-}
+};
+
+exports.confirmFriend = function(req, res, next) {
+  Relationship.getPendingRelationShip(req.params.friendId, req.profile.id, 
+    function(err, relationship) {
+      relationship.status = 'ok';
+      relationship.save(function(err) {
+        if(err) return res.status(400).json(err);
+        res.status(200).json(relationship);  
+    });    
+  });
+};
 
 exports.friends = function(req, res, next) {
   var criteria = {};
@@ -42,7 +53,20 @@ exports.friends = function(req, res, next) {
       criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
   });
 
-  Relationship.getFriends(req.params.user, criteria, 
+  Relationship.getFriends(req.params.user, criteria,
+    function(err, friends) {
+      if (err) return next(err);
+      return res.status(200).json(friends);
+  }); 
+};
+
+exports.pending = function(req, res, next) {
+  var criteria = {};
+  Object.keys(req.query).forEach(function(key){
+      criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
+  });
+
+  Relationship.getPending(req.params.user, criteria,
     function(err, friends) {
       if (err) return next(err);
       return res.status(200).json(friends);
@@ -87,7 +111,7 @@ exports.addFriend = function(req, res) {
   var relationship = new Relationship({
     me: req.profile.id,
     other:req.params.friendId,
-    status: 'ok', //TODO: cambiar a pending
+    status: 'pending', //TODO: cambiar a pending
     type: 'friends'
   }).save(function(err) {
     if(err) return res.status(400).json(err);
