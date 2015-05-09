@@ -39,10 +39,7 @@ var UserSchema = new Schema({
       initdate: Date
     }]
   },
-  contacts:[{
-    status: { type: String, default: '' },
-    user: { type: Schema.Types.ObjectId, ref:'User' } 
-  }],
+  friend: { type: Boolean, default:false },
   wall: [{ type: Schema.Types.ObjectId, ref:'Message' }] 
 });
 
