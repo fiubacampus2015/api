@@ -34,6 +34,9 @@ RelationShipSchema.statics = {
 
 				cb(null, response);
 		});
+	},
+	getFriendsId: function(user_id, cb) {
+		this.getFriends(user_id, "_id", cb);
 	}
 }
 

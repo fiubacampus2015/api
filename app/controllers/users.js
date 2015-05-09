@@ -45,25 +45,38 @@ exports.friends = function(req, res, next) {
   Relationship.getFriends(req.params.user, criteria, 
     function(err, friends) {
       if (err) return next(err);
-      if (!friends) return next(new Error('Failed to load User ' + id));
       return res.status(200).json(friends);
   }); 
 }
 
 exports.search = function(req, res) {
+
   var criteria = {};
 
   Object.keys(req.query).forEach(function(key){
-    if (key == 'contacts') {
-      criteria[key] = req.query[key];
-    } else {
       criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
-    }
   });
-
-  User.find(criteria,"_id name username email personal contacts").exec(function(err, users) {
-      return res.status(200).send(users);
-  });
+  Relationship.getFriends(req.user._id, criteria,
+    function(err, friends) {
+      if (err) return next(err);
+      var friends_id = [];
+      friends.forEach(function(f) {
+        friends_id.push(f._id);
+      });
+      User.find(criteria,"_id name username email personal contacts")
+        .where("_id")
+        .nin(friends_id)
+        .exec(function(err, users) {
+          if(!err) {
+            users.forEach(function(u) {
+              friends.push(u);
+            });  
+          } else {
+            console.log("error", err);
+          }
+          return res.status(200).send(friends);
+      });
+  });  
 };
 
 exports.addFriend = function(req, res) {
