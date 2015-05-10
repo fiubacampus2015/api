@@ -50,7 +50,7 @@ RelationShipSchema.statics = {
 	},
 	getPending: function(user_id, criteria, cb) {
 		this.getOwnerRelationship({
-			  other:user_id,
+			  other: user_id,
 			  status: 'pending',
 			  type: 'friends'
 			}, criteria, '_id name username email personal', function(err, friends) {

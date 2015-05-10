@@ -317,16 +317,14 @@ describe('Users', function () {
         .expect(function(res){
         })
         .end(done)
-    });
-
-   
+    });  
 
 
     it('you confirm me ', function(done){
 
       var url = '/api/'
       .concat(valid_token)
-      .concat('/users/' + friend_id + '/' + user_id + '/confirm');
+      .concat('/users/' + user_id + '/' + friend_id + '/confirm');
 
       request(app)
         .put(url)
@@ -368,7 +366,7 @@ describe('Users', function () {
 
       var url = '/api/'
       .concat(valid_token)
-      .concat('/users/' + friend_id_tres + '/' + user_id + '/reject');
+      .concat('/users/' + user_id + '/' + friend_id_tres + '/reject');
 
       request(app)
         .put(url)
@@ -413,7 +411,7 @@ describe('Users', function () {
       it('test search friends by name status pending', function(done) {
         var url = '/api/'
           .concat(valid_token)
-          .concat('/users/' + user_id + '/friends/pending');
+          .concat('/users/' + friend_id_dos + '/friends/pending');
 
         request(app)
           .get(url)
