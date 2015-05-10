@@ -7,7 +7,7 @@ var MessageSchema = new Schema({
 	typeOf: {type:String},
 	date: {type:Date},
   	content: { type: String, default: '' },
-  	userFrom: { type: Schema.Types.ObjectId, ref:'User' }
+  	user: { type: Schema.Types.ObjectId, ref:'User' }
 });
 
 mongoose.model('Message', MessageSchema);
