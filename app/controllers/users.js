@@ -37,7 +37,7 @@ exports.wallPost = function(req, res) {
 };
 
 exports.rejectFriend = function(req, res, next) {
-   Relationship.getPendingRelationShip(req.params.friendId, req.profile.id, 
+   Relationship.getPendingRelationShip(req.profile.id, req.params.friendId, 
     function(err, relationship) {
       relationship.status = 'reject';
       relationship.save(function(err) {
@@ -48,13 +48,21 @@ exports.rejectFriend = function(req, res, next) {
 }
 
 exports.confirmFriend = function(req, res, next) {
-  Relationship.getPendingRelationShip(req.params.friendId, req.profile.id, 
+  Relationship.getPendingRelationShip(req.profile.id, req.params.friendId,
     function(err, relationship) {
       relationship.status = 'ok';
       relationship.save(function(err) {
         if(err) return res.status(400).json(err);
-        res.status(200).json(relationship);  
-    });    
+          var relationshipother = new Relationship({
+          me: req.params.friendId,
+          other:req.profile.id,
+          status: 'ok',
+          type: 'friends'
+        }).save(function(err) {
+          if(err) return res.status(400).json(err);
+          res.status(200).json(relationship);  
+        });
+      });    
   });
 };
 

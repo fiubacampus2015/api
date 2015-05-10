@@ -39,16 +39,25 @@ RelationShipSchema.statics = {
 				cb(null, response);
 		});
 	},
+	getOwnerRelationship: function (options, otheroptions, select, cb) {
+		this.find(options)
+		  .select('me')
+		  .populate({
+		    path:'me',
+		    match: otheroptions,
+		    select: select || '_id name email personal'
+		  }).exec(cb);
+	},
 	getPending: function(user_id, criteria, cb) {
-		this.getOthers({
-			  me:user_id,
+		this.getOwnerRelationship({
+			  other:user_id,
 			  status: 'pending',
 			  type: 'friends'
-			}, criteria, '_id name email personal', function(err, friends) {
+			}, criteria, '_id name username email personal', function(err, friends) {
 				if (err) return cb(err);
 				var response = [];
 				friends.forEach(function(fri) {
-					if(fri.other) response.push(fri.other);
+					if(fri.me) response.push(fri.me);
 				});
 
 				cb(null, response);
