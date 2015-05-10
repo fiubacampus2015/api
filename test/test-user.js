@@ -249,7 +249,7 @@ describe('Users', function () {
               branch: 'gestion',  
               initdate: new Date
             }]
-          },
+          }
         })        
         .expect(200)
         .expect(function(res){
@@ -260,30 +260,7 @@ describe('Users', function () {
       });
   });
 
-  describe('GET /api/:token/people', function(){
-
-    it('test search people by name', function(done){
-      doRequest('/people?name=otro', done);
-    });
-
-    it('test search people by city', function(done){
-      doRequest('/people?personal.city=buenos', done);
-    });
-
-    it('test search people by email', function(done){
-      doRequest('/people?email=foo@bar.com', done);
-    });
-
-    it('test search people by phone', function(done){
-      doRequest('/people?personal.phones.mobile=123', done);
-    });
-
-    it('test search people by education', function(done){
-      doRequest('/people?education.careers.title=ing', done);
-    });
-
-  });
-
+  
   describe('GET friends', function(){
     var friend_id,
       friend_id_dos,
@@ -291,10 +268,25 @@ describe('Users', function () {
 
     before(function (done) {
         // guardo un amigo para relacionarme
-        var friend = new User({name:'pepe', email:'pepelo', username:'foo', password: 'bar'});
+        var friend = new User({name:'pepe', email:'pepelo', username:'foo', password: 'bar', personal: {
+            comments: "esto es un comentario",
+            phones: {
+              mobile: "123",
+              other: "456"
+            },
+            nacionality: "argentina",
+            city: "buenos aires"
+          }});
+
         friend.save(function(err){
           friend_id = friend._id;
-          var frienddos = new User({name:'andres', email:'andrelo', username:'foo', password: 'bar'});
+          var frienddos = new User({name:'andres', email:'andrelo', username:'foo', password: 'bar', education:{
+             careers:[{
+              title: 'ing.',
+              branch: 'gestion',  
+              initdate: new Date
+            }]
+          }});
           frienddos.save(function(err){
             friend_id_dos = frienddos._id;
             var friendtres = new User({name:'paparulo', email:'paparulo', username:'foo', password: 'bar'});
@@ -478,6 +470,31 @@ describe('Users', function () {
       .end(done)
     });
   });
+
+  describe('GET /api/:token/people', function(){
+
+    it('test search people by name', function(done){
+      doRequest('/people?name=pepe', done);
+    });
+
+    it('test search people by city', function(done){
+      doRequest('/people?personal.city=buenos', done);
+    });
+
+    it('test search people by email', function(done){
+      doRequest('/people?email=paparulo', done);
+    });
+
+    it('test search people by phone', function(done){
+      doRequest('/people?personal.phones.mobile=123', done);
+    });
+
+    it('test search people by education', function(done){
+      doRequest('/people?education.careers.title=ing', done);
+    });
+
+  });
+
 
   after(function (done) {
      require('./helper').clearDb(done)
