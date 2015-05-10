@@ -13,7 +13,7 @@ var RelationShipSchema = new Schema({
 RelationShipSchema.statics = {
 	getOthers: function (options, otheroptions, select, cb) {
 		this.find(options)
-		  .select('other')
+		  .select('other status')
 		  .populate({
 		    path:'other',
 		    match: otheroptions,
@@ -32,6 +32,25 @@ RelationShipSchema.statics = {
 					if(fri.other)
 					{ 
 						fri.other["friend"] = true;
+						response.push(fri.other);
+					}
+				});
+
+				cb(null, response);
+		});
+	},
+	getRelationShips: function(user_id, criteria, cb) {
+		this.getOthers({
+			  me:user_id,
+			  type: 'friends'
+			}, criteria, '_id name username email personal job education', function(err, friends) {
+				if (err) return cb(err);
+				var response = [];
+				friends.forEach(function(fri) {
+					if(fri.other)
+					{ 
+						fri.other["friend"] = (fri.status === 'ok');
+						fri.other["status"] = fri.status;
 						response.push(fri.other);
 					}
 				});

@@ -99,7 +99,7 @@ exports.search = function(req, res) {
   Object.keys(req.query).forEach(function(key){
       criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
   });
-  Relationship.getFriends(req.user._id, criteria,
+  Relationship.getRelationShips(req.user._id, criteria,
     function(err, friends) {
       if (err) return next(err);
       var friends_id = [];
