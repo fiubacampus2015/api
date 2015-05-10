@@ -36,6 +36,17 @@ exports.wallPost = function(req, res) {
   });
 };
 
+exports.rejectFriend = function(req, res, next) {
+   Relationship.getPendingRelationShip(req.params.friendId, req.profile.id, 
+    function(err, relationship) {
+      relationship.status = 'reject';
+      relationship.save(function(err) {
+        if(err) return res.status(400).json(err);
+        res.status(200).json(relationship);  
+    });    
+  }); 
+}
+
 exports.confirmFriend = function(req, res, next) {
   Relationship.getPendingRelationShip(req.params.friendId, req.profile.id, 
     function(err, relationship) {

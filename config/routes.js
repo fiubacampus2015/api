@@ -22,6 +22,8 @@ module.exports = function (app, passport) {
 
   app.put('/api/:token/users/:userId/:friendId/confirm', authentication, users.confirmFriend);
 
+  app.put('/api/:token/users/:userId/:friendId/reject', authentication, users.rejectFriend);
+
   app.get('/api/:token/people', authentication, users.search);
 
   app.get('/api/:token/users', authentication, users.search);

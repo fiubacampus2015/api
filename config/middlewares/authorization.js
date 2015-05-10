@@ -24,13 +24,12 @@ exports.sendConfirmation = function(req, res){
     + req.profile.confirmation
     , function(err, result) {
       if(err)
-        return res.status(200).json(err);
-
-      res.status(201).json({
-        user:req.profile,
-        confirmation: req.profile.confirmation
-      });
-    });
+        return console.log(err);
+  });
+  res.status(201).json({
+    user:req.profile,
+    confirmation: req.profile.confirmation
+  });
 }
 
 exports.confirm = function(req, res, next) {

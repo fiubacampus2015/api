@@ -286,7 +286,8 @@ describe('Users', function () {
 
   describe('GET friends', function(){
     var friend_id,
-      friend_id_dos;
+      friend_id_dos,
+      friend_id_tres;
 
     before(function (done) {
         // guardo un amigo para relacionarme
@@ -296,7 +297,11 @@ describe('Users', function () {
           var frienddos = new User({name:'andres', email:'andrelo', username:'foo', password: 'bar'});
           frienddos.save(function(err){
             friend_id_dos = frienddos._id;
-            done();
+            var friendtres = new User({name:'paparulo', email:'paparulo', username:'foo', password: 'bar'});
+            friendtres.save(function(err){
+              friend_id_tres = friendtres._id;
+              done();
+            });
           });
         });        
     });
@@ -313,6 +318,9 @@ describe('Users', function () {
         })
         .end(done)
     });
+
+   
+
 
     it('you confirm me ', function(done){
 
@@ -342,6 +350,35 @@ describe('Users', function () {
 
     });
 
+    it('you be my friend too tres', function(done){
+      var url = '/api/'
+      .concat(valid_token)
+      .concat('/users/' + user_id + '/' + friend_id_tres);
+
+      request(app)
+        .put(url)
+        .expect(200)
+        .expect(function(res){
+        })
+        .end(done)
+
+    });
+
+     it('tres reject me ', function(done){
+
+      var url = '/api/'
+      .concat(valid_token)
+      .concat('/users/' + friend_id_tres + '/' + user_id + '/reject');
+
+      request(app)
+        .put(url)
+        .expect(200)
+        .expect(function(res) {
+        })
+        .end(done)
+    });
+
+    
     it('test search friends by name status ok', function(done){
       
       var url = '/api/'
@@ -373,21 +410,20 @@ describe('Users', function () {
         .end(done)
       });
 
-      it('test search friends by name status pending not result', function(done) {
+      it('test search friends by name status pending', function(done) {
+        var url = '/api/'
+          .concat(valid_token)
+          .concat('/users/' + user_id + '/friends/pending');
 
-      var url = '/api/'
-        .concat(valid_token)
-        .concat('/users/' + user_id + '/friends/pending');
-
-      request(app)
-        .get(url)
-        .set('Content-Type', 'application/json')
-        .expect(200)
-        .expect(function(res){
-          if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
-        })
-        .end(done)
-      });   
+        request(app)
+          .get(url)
+          .set('Content-Type', 'application/json')
+          .expect(200)
+          .expect(function(res){
+            if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+          })
+          .end(done)
+      });         
   });
 
   var doRequest = function (query, done) {
