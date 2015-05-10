@@ -15,7 +15,7 @@ var mongoose = require('mongoose'),
 exports.wallGet = function(req, res) {
   User.wall({
     _id : req.params.user 
-  },{},'_id content user', function(err, user) {
+  },{},'_id content user typeOf date', function(err, user) {
       res.status(200).json(user.wall);   
   }); 
 };
