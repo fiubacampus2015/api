@@ -25,11 +25,15 @@ RelationShipSchema.statics = {
 			  me:user_id,
 			  status: 'ok',
 			  type: 'friends'
-			}, criteria, '_id name email personal', function(err, friends) {
+			}, criteria, '_id name username email personal job education', function(err, friends) {
 				if (err) return cb(err);
 				var response = [];
 				friends.forEach(function(fri) {
-					if(fri.other) response.push(fri.other);
+					if(fri.other)
+					{ 
+						fri["friend"] = true;
+						response.push(fri.other);
+					}
 				});
 
 				cb(null, response);

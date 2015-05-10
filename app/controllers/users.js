@@ -99,7 +99,7 @@ exports.search = function(req, res) {
         f["friend"] = true;
         friends_id.push(f._id);
       });
-      User.find(criteria,"_id name username email personal")
+      User.find(criteria,"_id name username email personal education")
         .where("_id")
         .nin(friends_id)
         .exec(function(err, users) {
