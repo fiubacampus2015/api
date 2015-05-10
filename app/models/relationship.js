@@ -31,7 +31,7 @@ RelationShipSchema.statics = {
 				friends.forEach(function(fri) {
 					if(fri.other)
 					{ 
-						fri["friend"] = true;
+						fri.other["friend"] = true;
 						response.push(fri.other);
 					}
 				});
