@@ -161,7 +161,7 @@ UserSchema.statics = {
       me: user_id
       }).populate({
         path:'me user',
-        select: '_id name email personal'
+        select: '_id name username'
 
       }).sort([['date', 'descending']]).exec(cb);
 
