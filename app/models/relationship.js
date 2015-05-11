@@ -32,6 +32,7 @@ RelationShipSchema.statics = {
 					if(fri.other)
 					{ 
 						fri.other["friend"] = true;
+						fri.other["status"] = fri.status;
 						response.push(fri.other);
 					}
 				});
