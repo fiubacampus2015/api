@@ -113,7 +113,9 @@ exports.search = function(req, res) {
       var friends_id = [];
       friends.forEach(function(f) {
         f["friend"] = true;
-        friends_id.push(f._id);
+        if(friends_id.indexOf(f._id) == -1) {
+          friends_id.push(f._id);  
+        }        
       });
       friends_id.push(req.user._id);
       User.find(criteria,"_id name username email personal education")
