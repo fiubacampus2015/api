@@ -13,10 +13,9 @@ var mongoose = require('mongoose'),
   utils = require('../../lib/utils');
 
 exports.wallGet = function(req, res) {
-  User.wall({
-    _id : req.params.user 
-  },{},'_id content user typeOf date', function(err, user) {
-      res.status(200).json(user.wall);   
+
+  User.wall(req.params.user, {}, '_id content user typeOf date', function(err, user) {
+      res.status(200).json(user);   
   }); 
 };
 
@@ -25,7 +24,8 @@ exports.wallPost = function(req, res) {
     _id : req.params.user
   }, '' ,function(err, user){
     var message = new Message(req.body);
-    message.user = req.user;
+    message.user = req.user._id;
+    message.me = req.params.user;
     message.save(function(err){
       user.wall.push(message);
       user.save(function(err){

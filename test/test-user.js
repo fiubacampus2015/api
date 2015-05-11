@@ -438,7 +438,22 @@ describe('Users', function () {
       .post('/api/' + valid_token + '/users/' + user_id +'/wall')
       .set('Content-Type', 'application/json')
       .send({
-        content: "hola capo",
+        content: "hola capo 1",
+        typeOf:'post'
+      })
+      .expect(201)
+      .expect(function(res){
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+      })
+      .end(done)
+    });
+
+    it('write add message into friends wall', function(done) {
+      request(app)
+      .post('/api/' + valid_token + '/users/' + user_id +'/wall')
+      .set('Content-Type', 'application/json')
+      .send({
+        content: "hola capo 2",
         typeOf:'post'
       })
       .expect(201)
@@ -454,7 +469,7 @@ describe('Users', function () {
       .expect(200)
       .expect(function(res){
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
-          console.log("wall", res.body)
+          
       })
       .end(done)
     });

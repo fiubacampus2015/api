@@ -156,12 +156,22 @@ UserSchema.statics = {
     })
     .exec(cb);
   },
-  wall: function(options, wallOptions, select, cb) {
-    this.findOne(options).populate({
+  wall: function(user_id, wallOptions, select, cb) {
+    Message.find({
+      me: user_id
+      }).populate({
+        path:'me user',
+        select: '_id name email personal'
+
+      }).sort([['date', 'descending']]).exec(cb);
+
+
+    /*this.findOne({ _id: user_id}).populate({
       path: 'wall',
-      select: select || '_id content user'
+      select: select || '_id content user',
+      options: { sort: 'date' }
     })
-    .exec(cb);
+    .exec(cb);*/
   },
   complete: function(options, select, cb) {
     this.findOne(options).populate({
