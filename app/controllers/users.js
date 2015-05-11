@@ -145,9 +145,9 @@ exports.addFriend = function(req, res) {
     type: 'friends'
   }, function(err, count) {
     if(count > 0) {
-      return res.status(400).json({
+      return res.status(200).json({
         status: 400,
-        reason: "ya existe una solicitud de amistad en estado pendiente"
+        reason: "Ya existe una solicitud de amistad en estado pendiente"
       });
     }
     var relationship = new Relationship({
@@ -157,7 +157,10 @@ exports.addFriend = function(req, res) {
         type: 'friends'
       }).save(function(err) {
         if(err) return res.status(400).json(err);
-        res.status(200).json(user);
+        res.status(200).json({
+        status: 200,
+        reason: ""
+      });
       });
   });  
 };
