@@ -36,6 +36,14 @@ exports.wallPost = function(req, res) {
   });
 };
 
+exports.wallDelete = function(req, res, next) {
+  console.log("id: ", req.body._id)
+  Message.remove({ _id:req.body._id }, function(err) {
+      console.log("error delete", err)
+      res.status(200).json({});
+    });
+}
+
 exports.rejectFriend = function(req, res, next) {
    Relationship.getPendingRelationShip(req.profile.id, req.params.friendId, 
     function(err, relationship) {
@@ -128,15 +136,28 @@ exports.search = function(req, res) {
 exports.addFriend = function(req, res) {
   var user = req.profile;
 
-  var relationship = new Relationship({
+  Relationship.count({
     me: req.profile.id,
     other:req.params.friendId,
     status: 'pending', //TODO: cambiar a pending
     type: 'friends'
-  }).save(function(err) {
-    if(err) return res.status(400).json(err);
-    res.status(200).json(user);
-  });
+  }, function(err, count) {
+    if(count > 0) {
+      return res.status(400).json({
+        status: 400,
+        reason: "ya existe una solicitud de amistad en estado pendiente"
+      });
+    }
+    var relationship = new Relationship({
+        me: req.profile.id,
+        other:req.params.friendId,
+        status: 'pending', //TODO: cambiar a pending
+        type: 'friends'
+      }).save(function(err) {
+        if(err) return res.status(400).json(err);
+        res.status(200).json(user);
+      });
+  });  
 };
 
 exports.showConfirm = function(req, res, next){

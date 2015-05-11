@@ -10,6 +10,7 @@ var cookies,
   count, 
   valid_token, 
   user_id,
+  message_id,
   confirmation;
 
 describe('Users', function () {
@@ -340,6 +341,20 @@ describe('Users', function () {
 
     });
 
+    it('you be my friend too repeat error', function(done){
+      var url = '/api/'
+      .concat(valid_token)
+      .concat('/users/' + user_id + '/' + friend_id_dos);
+
+      request(app)
+        .put(url)
+        .expect(400)
+        .expect(function(res){
+        })
+        .end(done)
+
+    });
+
     it('you be my friend too tres', function(done){
       var url = '/api/'
       .concat(valid_token)
@@ -463,13 +478,41 @@ describe('Users', function () {
       .end(done)
     });
 
+    it('write other message into friends wall', function(done) {
+      request(app)
+      .post('/api/' + valid_token + '/users/' + user_id +'/wall')
+      .set('Content-Type', 'application/json')
+      .send({
+        content: "hola capo 3",
+        typeOf:'post'
+      })
+      .expect(201)
+      .expect(function(res){
+        message_id = res.body[res.body.length - 1]._id
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+      })
+      .end(done)
+    });
+
+    it('delete message into friends wall', function(done) {
+      request(app)
+      .delete('/api/' + valid_token + '/users/' + user_id +'/wall')
+      .set('Content-Type', 'application/json')
+      .send({
+        _id: message_id
+      })
+      .expect(200)
+      .expect(function(res){
+      })
+      .end(done)
+    });
+
     it('GET friends wall', function(done) {
       request(app)
       .get('/api/' + valid_token + '/users/' + user_id +'/wall')
       .expect(200)
       .expect(function(res){
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
-          
       })
       .end(done)
     });
