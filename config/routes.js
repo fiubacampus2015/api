@@ -32,7 +32,7 @@ module.exports = function (app, passport) {
 
   app.post('/api/:token/users/:user/wall', authentication, users.wallPost); 
 
-  app.delete('/api/:token/users/:user/wall', authentication, users.wallDelete); 
+  app.post('/api/:token/users/:user/walldelete', authentication, users.wallDelete); 
 
   app.get('/app/download', function(req, res, next){
     res.render('index', {});

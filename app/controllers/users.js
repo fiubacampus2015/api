@@ -37,11 +37,11 @@ exports.wallPost = function(req, res) {
 };
 
 exports.wallDelete = function(req, res, next) {
-  console.log("id: ", req.body._id)
   Message.remove({ _id:req.body._id }, function(err) {
       console.log("error delete", err)
       res.status(200).json({});
     });
+
 }
 
 exports.rejectFriend = function(req, res, next) {
