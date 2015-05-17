@@ -350,8 +350,9 @@ describe('Users', function () {
 
       request(app)
         .put(url)
-        .expect(400)
+        .expect(200)
         .expect(function(res){
+          if(res.body.status != 400) return "no ERROR!!"
         })
         .end(done)
 

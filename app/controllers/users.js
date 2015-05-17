@@ -163,7 +163,8 @@ exports.addFriend = function(req, res) {
     type: 'friends'
   }, function(err, count) {
     if(count > 0) {
-      return res.status(400).json({
+      return res.status(200).json({
+        status:400,
         reason: "Ya existe una solicitud de amistad en estado pendiente"
       });
     }
