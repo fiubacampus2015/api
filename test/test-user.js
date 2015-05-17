@@ -11,7 +11,9 @@ var cookies,
   valid_token, 
   user_id,
   message_id,
-  confirmation;
+  confirmation,
+  group_id,
+  forum_id;
 
 describe('Users', function () {
 
@@ -571,6 +573,7 @@ describe('Users', function () {
       })
       .expect(201)
       .expect(function(res){
+        group_id = res.body._id;
       })
       .end(done)
     });
@@ -582,6 +585,33 @@ describe('Users', function () {
       .expect(function(res) {
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
           //console.log(res.body)
+      })
+      .end(done)
+    });
+
+     it('should create a groups forum', function(done){
+      request(app)
+      .post('/api/' + valid_token + '/groups/' + group_id + '/forums')
+      .send({
+        title:'esto es un foro para discutir cosas generales del grupo',
+        message: {
+          content: "esto es un post a groups",
+          typeOf: 'forum'
+        }
+      })
+      .expect(201)
+      .expect(function(res) {
+      })
+      .end(done)
+    });
+
+    it('should search a groups forum', function(done){
+      request(app)
+      .get('/api/' + valid_token + '/groups/' + group_id + '/forums?title=generales&limit=1&page=0')
+      .expect(200)
+      .expect(function(res) {
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+          console.log(res.body)
       })
       .end(done)
     });

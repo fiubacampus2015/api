@@ -6,8 +6,13 @@ var GroupSchema = new Schema({
 	date: {type:Date, default: Date.now},
 	name: { type:String, default: ''},
 	description: { type:String, default: ''},
-  	status: { type: String, default: '' },
-  	owner: { type: Schema.Types.ObjectId, ref:'User' }
+	public: { type:Boolean, default: true},
+	status: { type: String, default: '' },
+	owner: { type: Schema.Types.ObjectId, ref:'User' }/*,
+	members: {
+		user: { type: Schema.Types.ObjectId, ref:'User' },
+		status: { type: String, default: 'pending' }
+	}*/
 });
 
 mongoose.model('Group', GroupSchema);
