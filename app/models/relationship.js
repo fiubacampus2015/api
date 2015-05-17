@@ -11,21 +11,23 @@ var RelationShipSchema = new Schema({
 
 
 RelationShipSchema.statics = {
-	getOthers: function (options, otheroptions, select, cb) {
+	getOthers: function (options, otheroptions, select, limit, page, cb) {
 		this.find(options)
 		  .select('other status')
+		  .limit(limit)
+		  .skip(limit * page)
 		  .populate({
 		    path:'other',
 		    match: otheroptions,
 		    select: select || '_id name email personal'
 		  }).exec(cb);
 	},
-	getFriends: function(user_id, criteria, cb) {
+	getFriends: function(user_id, criteria, limit, page, cb) {
 		this.getOthers({
 			  me:user_id,
 			  status: 'ok',
 			  type: 'friends'
-			}, criteria, '_id name username email personal job education', function(err, friends) {
+			}, criteria, '_id name username email personal job education', limit, page, function(err, friends) {
 				if (err) return cb(err);
 				var response = [];
 				friends.forEach(function(fri) {
@@ -40,11 +42,11 @@ RelationShipSchema.statics = {
 				cb(null, response);
 		});
 	},
-	getRelationShips: function(user_id, criteria, cb) {
+	getRelationShips: function(user_id, criteria, limit, page, cb) {
 		this.getOthers({
 			  me:user_id,
 			  type: 'friends'
-			}, criteria, '_id name username email personal job education', function(err, friends) {
+			}, criteria, '_id name username email personal job education', limit, page, function(err, friends) {
 				if (err) return cb(err);
 				var response = [];
 				friends.forEach(function(fri) {

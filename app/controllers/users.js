@@ -14,7 +14,7 @@ var mongoose = require('mongoose'),
 
 exports.wallGet = function(req, res) {
 
-  User.wall(req.params.user, {}, '_id content user typeOf date', function(err, user) {
+  User.wall(req.params.user, {}, 'teid content user typeOf date', function(err, user) {
       res.status(200).json(user);   
   }); 
 };
@@ -77,10 +77,13 @@ exports.confirmFriend = function(req, res, next) {
 exports.friends = function(req, res, next) {
   var criteria = {};
   Object.keys(req.query).forEach(function(key){
-      criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
+    if (key == 'limit' || key == 'page')
+      return;
+
+    criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
   });
 
-  Relationship.getFriends(req.params.user, criteria,
+  Relationship.getFriends(req.params.user, criteria, req.query.limit || 100, req.query.page || 0,
     function(err, friends) {
       if (err) return next(err);
       return res.status(200).json(friends);
@@ -105,9 +108,13 @@ exports.search = function(req, res) {
   var criteria = {};
 
   Object.keys(req.query).forEach(function(key){
+      if (key == 'limit' || key == 'page') 
+        return;
+
       criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
   });
-  Relationship.getRelationShips(req.user._id, criteria,
+  console.log(criteria)
+  Relationship.getRelationShips(req.user._id, criteria, req.query.limit || 100, req.query.page || 0,
     function(err, friends) {
       if (err) return next(err);
       var friends_id = [];
@@ -117,9 +124,13 @@ exports.search = function(req, res) {
           friends_id.push(f._id);  
         }        
       });
+      console.log(friends_id.count)
       friends_id.push(req.user._id);
+      var limit_no_friend = (req.query.limit || 10) - (friends_id || []).length;
       User.find(criteria,"_id name username email personal education")
         .where("_id")
+        .limit( limit_no_friend )
+        .skip( limit_no_friend * (req.query.page || 0) )
         .nin(friends_id)
         .exec(function(err, users) {
           if(!err) {

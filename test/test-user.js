@@ -496,7 +496,7 @@ describe('Users', function () {
 
     it('delete message into friends wall', function(done) {
       request(app)
-      .delete('/api/' + valid_token + '/users/' + user_id +'/wall')
+      .post('/api/' + valid_token + '/users/' + user_id +'/walldelete')
       .set('Content-Type', 'application/json')
       .send({
         _id: message_id
@@ -551,6 +551,10 @@ describe('Users', function () {
 
     it('test search people by education', function(done){
       doRequest('/people?education.careers.title=ing', done);
+    });
+
+    it('should get people paginate', function(done){
+      doRequest('/people?name=p&limit=10&page=0', done);
     });
 
   });
