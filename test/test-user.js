@@ -559,6 +559,35 @@ describe('Users', function () {
 
   });
 
+  describe('GROUPS', function(){
+
+    it('should create a group', function(done){
+      request(app)
+      .post('/api/' + valid_token + '/groups')
+      .send({
+        owner: user_id,
+        name:'un grupo copado',
+        description: 'un grupo para poder hablar de cosas copadas ja'        
+      })
+      .expect(201)
+      .expect(function(res){
+      })
+      .end(done)
+    });
+
+    it('should search a group', function(done){
+      request(app)
+      .get('/api/' + valid_token + '/groups?name=copado&limit=1&page=0')
+      .expect(200)
+      .expect(function(res) {
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+          //console.log(res.body)
+      })
+      .end(done)
+    });
+  });
+
+
 
   after(function (done) {
      require('./helper').clearDb(done)

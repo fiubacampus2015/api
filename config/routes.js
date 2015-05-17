@@ -1,4 +1,5 @@
 var users = require('../app/controllers/users'),
+  groups = require('../app/controllers/groups'),
   auth = require('./middlewares/authorization'),
   authentication = [auth.requiresLogin];
 
@@ -32,7 +33,11 @@ module.exports = function (app, passport) {
 
   app.post('/api/:token/users/:user/wall', authentication, users.wallPost); 
 
-  app.post('/api/:token/users/:user/walldelete', authentication, users.wallDelete); 
+  app.post('/api/:token/users/:user/walldelete', authentication, users.wallDelete);
+
+  app.post('/api/:token/groups', authentication, groups.create);
+
+  app.get('/api/:token/groups', authentication, groups.search);
 
   app.get('/app/download', function(req, res, next){
     res.render('index', {});

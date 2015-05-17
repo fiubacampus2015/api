@@ -38,7 +38,6 @@ exports.wallPost = function(req, res) {
 
 exports.wallDelete = function(req, res, next) {
   Message.remove({ _id:req.body._id }, function(err) {
-      console.log("error delete", err)
       res.status(200).json({});
     });
 
@@ -113,7 +112,6 @@ exports.search = function(req, res) {
 
       criteria[key] = new RegExp('^' + req.query[key] + '.*', "i");
   });
-  console.log(criteria)
   Relationship.getRelationShips(req.user._id, criteria, req.query.limit || 100, req.query.page || 0,
     function(err, friends) {
       if (err) return next(err);
@@ -124,7 +122,6 @@ exports.search = function(req, res) {
           friends_id.push(f._id);  
         }        
       });
-      console.log(friends_id.count)
       friends_id.push(req.user._id);
       var limit_no_friend = (req.query.limit || 10) - (friends_id || []).length;
       User.find(criteria,"_id name username email personal education")
