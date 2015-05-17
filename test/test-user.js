@@ -396,6 +396,7 @@ describe('Users', function () {
         .get(url)
         .expect(200)
         .expect(function(res){
+          console.log(res.body)
           if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
         })
         .end(done) 
@@ -430,7 +431,39 @@ describe('Users', function () {
             if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
           })
           .end(done)
-      });         
+      });
+
+      it('should delete a relationship', function(done) {
+        var url = '/api/'
+          .concat(valid_token)
+          .concat('/users/' + user_id + '/' + friend_id + '/delete');
+
+        request(app)
+          .post(url)
+          .set('Content-Type', 'application/json')
+          .expect(200)
+          .expect(function(res){
+            
+          })
+          .end(done)
+      });
+
+      it('test search delete friends by name', function(done) {
+
+        var url = '/api/'
+        .concat(valid_token)
+        .concat('/users/' + user_id + '/friends?name=pepe');
+
+      request(app)
+        .get(url)
+        .set('Content-Type', 'application/json')
+        .expect(200)
+        .expect(function(res){
+          if(res.body.length > 0) return "result!!!"
+        })
+        .end(done)
+
+      });
   });
 
   var doRequest = function (query, done) {
@@ -584,7 +617,6 @@ describe('Users', function () {
       .expect(200)
       .expect(function(res) {
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
-          //console.log(res.body)
       })
       .end(done)
     });
@@ -611,7 +643,6 @@ describe('Users', function () {
       .expect(200)
       .expect(function(res) {
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
-          console.log(res.body)
       })
       .end(done)
     });

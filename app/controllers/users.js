@@ -43,6 +43,16 @@ exports.wallDelete = function(req, res, next) {
 
 }
 
+exports.deleteFriend = function(req, res, next) {
+  Relationship.remove({
+      me: req.profile._id,
+      other:req.params.friendId
+    }, function(err) {
+      if(err) return next(err);
+      res.status(200).json({});
+    });
+}
+
 exports.rejectFriend = function(req, res, next) {
    Relationship.getPendingRelationShip(req.profile.id, req.params.friendId, 
     function(err, relationship) {
@@ -153,8 +163,7 @@ exports.addFriend = function(req, res) {
     type: 'friends'
   }, function(err, count) {
     if(count > 0) {
-      return res.status(200).json({
-        status: 400,
+      return res.status(400).json({
         reason: "Ya existe una solicitud de amistad en estado pendiente"
       });
     }
