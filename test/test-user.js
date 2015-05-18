@@ -671,6 +671,19 @@ describe('Users', function () {
       .end(done)
     });
 
+    it('should change a group', function(done){
+      request(app)
+      .put('/api/' + valid_token + '/groups/' + group_id)
+      .send({
+        name: "mejor otro nombre",
+        description: "mejor otra description"
+      })
+      .expect(200)
+      .expect(function(res) {        
+      })
+      .end(done)
+    });
+
 
     it('should delete a group', function(done){
       request(app)

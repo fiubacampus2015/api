@@ -110,3 +110,17 @@ exports.delete = function(req, res, next) {
 	});
 }
 
+exports.put = function(req, res, next) {
+	Group.findOne(req.params.groupId, function(err, group) {
+		group.title = req.body.title || group.title;
+		group.name = req.body.name || group.name;
+		group.description =  req.body.description || group.description;
+		group.status = req.body.status || group.status;
+		group.public = req.body.public || group.status;
+		group.save(function(err) {
+			if(err) return next(err)
+			return res.status(200).json(group)
+		})
+	})
+}
+
