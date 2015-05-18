@@ -13,7 +13,8 @@ var cookies,
   message_id,
   confirmation,
   group_id,
-  forum_id;
+  forum_id,
+  message_id;
 
 describe('Users', function () {
 
@@ -657,6 +658,7 @@ describe('Users', function () {
       })
       .expect(201)
       .expect(function(res) {
+        message_id = res.body._id;
       })
       .end(done)
     });
@@ -664,6 +666,20 @@ describe('Users', function () {
     it('should get a posts forum', function(done){
       request(app)
       .get('/api/' + valid_token + '/groups/' + group_id + '/forums/' + forum_id + '/messages?limit=10&page=0')
+      .expect(200)
+      .expect(function(res) {
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+
+      })
+      .end(done)
+    });
+
+    it('should delete a posts forum', function(done){
+      request(app)
+      .post('/api/' + valid_token + '/groups/' + group_id + '/forums/' + forum_id + '/messages/delete')
+      .send({
+        _id: message_id
+      })
       .expect(200)
       .expect(function(res) {
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"

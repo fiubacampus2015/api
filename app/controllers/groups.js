@@ -66,6 +66,13 @@ exports.searchForum = function(req, res, next) {
   });
 };
 
+exports.messageDelete = function(req, res, next) {
+	Message.remove(req.body._id, function(err) {
+		if(err) return res.status(400).json(err);
+		return res.status(200).json({});
+	})
+};
+
 exports.messageToForum = function(req, res, next) {
 	Forum.findOne({
 		_id: req.params.forumId
@@ -84,7 +91,7 @@ exports.messageToForum = function(req, res, next) {
 					forum.posts.push(post._id);
 					forum.save(function(err) {
 						if(err) return next(err);
-						return res.status(201).json(forum);
+						return res.status(201).json(message);
 					});
 				});
 			});

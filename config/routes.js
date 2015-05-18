@@ -49,6 +49,8 @@ module.exports = function (app, passport) {
 
   app.get('/api/:token/groups/:groupId/forums/:forumId/messages', authentication, groups.messageFromForum);
 
+  app.post('/api/:token/groups/:groupId/forums/:forumId/messages/delete', authentication, groups.messageDelete);
+
   app.get('/api/:token/groups/:groupId/forums', authentication, groups.searchForum);
 
   app.get('/api/:token/groups', authentication, groups.search);
