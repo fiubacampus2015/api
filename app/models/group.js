@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 
 var GroupSchema = new Schema({
 	date: {type:Date, default: Date.now},
+	photo: { type: String, default:'' },
 	name: { type:String, default: ''},
 	description: { type:String, default: ''},
 	public: { type:Boolean, default: true},
