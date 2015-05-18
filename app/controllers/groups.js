@@ -1,6 +1,7 @@
 var mongoose = require('mongoose'),
 	Group = mongoose.model('Group'),
 	Message = mongoose.model('Message'),
+	Post = mongoose.model('Post'),
 	Forum = mongoose.model('Forum');
 
 exports.create = function(req, res, next) {
@@ -36,10 +37,11 @@ exports.createForum = function(req, res, next) {
 		title: req.body.title
 	});
 
-	forum.posts.push({
+	forum.posts.push(new Post({
 		user: req.user._id,
+		forum: forum,
 		message: new Message(req.body.message)
-	});
+	}));
 
 	forum.save(function(err) {
 		if(err) return next(err);
@@ -62,6 +64,42 @@ exports.searchForum = function(req, res, next) {
       if(err) return res.status(400).json(err);
       return res.status(200).json(forums);
   });
+};
+
+exports.messageToForum = function(req, res, next) {
+	Forum.findOne({
+		_id: req.params.forumId
+	}, function(err, forum) {
+		if(err) return next(err)
+		var message = new Message(req.body)
+			.save(function(err) {
+				if(err) return next(err)
+				var post = new Post({
+					user: req.user._id,
+					forum: forum._id,
+					message: message._id
+				});
+				post.save(function(err) {
+					if(err) return next(err)
+					forum.posts.push(post._id);
+					forum.save(function(err) {
+						if(err) return next(err);
+						return res.status(201).json(forum);
+					});
+				});
+			});
+	});
 }
 
+exports.messageFromForum = function(req, res, next) {
+  	Post.find({
+		forum: req.params.forumId
+	})
+	.limit( req.query.limit || 10 )
+    .skip( (req.query.limit || 10) * (req.query.page || 0) )
+    .exec(function(err, posts) {
+      if(err) return res.status(400).json(err);
+      return res.status(200).json(posts);
+  	});
+}
 

@@ -38,7 +38,12 @@ module.exports = function (app, passport) {
   app.post('/api/:token/users/:user/walldelete', authentication, users.wallDelete);
 
   app.post('/api/:token/groups', authentication, groups.create);
+
   app.post('/api/:token/groups/:groupId/forums', authentication, groups.createForum);
+
+  app.post('/api/:token/groups/:groupId/forums/:forumId/messages', authentication, groups.messageToForum);
+
+  app.get('/api/:token/groups/:groupId/forums/:forumId/messages', authentication, groups.messageFromForum);
 
   app.get('/api/:token/groups/:groupId/forums', authentication, groups.searchForum);
 
