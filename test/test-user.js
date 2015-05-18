@@ -670,6 +670,20 @@ describe('Users', function () {
       })
       .end(done)
     });
+
+
+    it('should delete a group', function(done){
+      request(app)
+      .post('/api/' + valid_token + '/groups/delete')
+      .send({
+        _id: forum_id
+      })
+      .expect(200)
+      .expect(function(res) {        
+      })
+      .end(done)
+    });
+
   });
 
   after(function (done) {

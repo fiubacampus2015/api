@@ -103,3 +103,10 @@ exports.messageFromForum = function(req, res, next) {
   	});
 }
 
+exports.delete = function(req, res, next) {
+	Group.remove({_id: req.body._id}, function(err){
+		if(err) return res.status(400).json(err)
+		return res.status(200).json({});
+	});
+}
+
