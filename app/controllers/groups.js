@@ -78,23 +78,23 @@ exports.messageToForum = function(req, res, next) {
 		_id: req.params.forumId
 	}, function(err, forum) {
 		if(err) return next(err)
-		var message = new Message(req.body)
-			.save(function(err) {
+		var message = new Message(req.body);
+		message.save(function(err) {
+			if(err) return next(err)
+			var post = new Post({
+				user: req.user._id,
+				forum: forum._id,
+				message: message._id
+			});
+			post.save(function(err) {
 				if(err) return next(err)
-				var post = new Post({
-					user: req.user._id,
-					forum: forum._id,
-					message: message._id
-				});
-				post.save(function(err) {
-					if(err) return next(err)
-					forum.posts.push(post._id);
-					forum.save(function(err) {
-						if(err) return next(err);
-						return res.status(201).json(message);
-					});
+				forum.posts.push(post._id);
+				forum.save(function(err) {
+					if(err) return next(err);
+					return res.status(201).json(message);
 				});
 			});
+		});
 	});
 }
 
@@ -104,9 +104,15 @@ exports.messageFromForum = function(req, res, next) {
 	})
 	.limit( req.query.limit || 10 )
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
+    .populate('message')
+    .sort([['date', 'descending']])
     .exec(function(err, posts) {
       if(err) return res.status(400).json(err);
-      return res.status(200).json(posts);
+      var response = [];
+      posts.forEach(function(post) {
+      	response.push(post.message);
+      });
+      return res.status(200).json(response);
   	});
 }
 
