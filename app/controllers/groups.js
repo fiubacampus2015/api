@@ -21,6 +21,7 @@ exports.search = function(req, res, next) {
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
 
+  	criteria.public = req.query.public || true;
 	Group.find(criteria, "_id name description photo owner public")
 	.populate("owner")
     .limit( req.query.limit || 10 )
@@ -119,6 +120,13 @@ exports.messageFromForum = function(req, res, next) {
 
 exports.delete = function(req, res, next) {
 	Group.remove({_id: req.body._id}, function(err){
+		if(err) return res.status(400).json(err)
+		return res.status(200).json({});
+	});
+}
+
+exports.deleteForum = function(req, res, next) {
+	Forum.remove({_id: req.body._id}, function(err){
 		if(err) return res.status(400).json(err)
 		return res.status(200).json({});
 	});
