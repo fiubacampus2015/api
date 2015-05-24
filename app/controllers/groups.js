@@ -21,7 +21,8 @@ exports.search = function(req, res, next) {
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
 
-	Group.find(criteria,"_id name description photo owner")
+	Group.find(criteria, "_id name description photo owner public")
+	.populate("owner")
     .limit( req.query.limit || 10 )
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
     .exec(function(err, groups) {
@@ -136,4 +137,3 @@ exports.put = function(req, res, next) {
 		})
 	})
 }
-
