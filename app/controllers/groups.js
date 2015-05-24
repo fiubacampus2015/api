@@ -56,7 +56,7 @@ exports.searchForum = function(req, res, next) {
         return;
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
-
+	criteria.group = req.params.groupId;
 	Forum.find(criteria,"_id date title")
     .limit( req.query.limit || 10 )
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
