@@ -81,6 +81,7 @@ exports.messageToForum = function(req, res, next) {
 	}, function(err, forum) {
 		if(err) return next(err)
 		var message = new Message(req.body);
+		message.user = req.user._id;
 		message.save(function(err) {
 			if(err) return next(err)
 			var post = new Post({
@@ -107,13 +108,19 @@ exports.messageFromForum = function(req, res, next) {
 	.limit( req.query.limit || 10 )
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
     .populate('message')
+    .populate({
+      path: 'user',
+      select: '_id name username'
+    })
     .sort([['date', 'descending']])
     .exec(function(err, posts) {
       if(err) return res.status(400).json(err);
       var response = [];
       posts.forEach(function(post) {
+      	post.message['user'] = post.user;
       	response.push(post.message);
       });
+      console.log(response);
       return res.status(200).json(response);
   	});
 }
