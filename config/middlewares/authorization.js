@@ -9,7 +9,7 @@ exports.forumsActions = function(req, res, next) {
   for (var i = req.forums.length - 1; i >= 0; i--) {
     var actions = [];
     if(req.forums[i].owner._id.toString() === req.user._id.toString()) {
-      actions.push(ownerActions);
+      actions = ownerActions ;
     }
     req.forums[i]["actions"] = actions;
   }
@@ -25,9 +25,9 @@ exports.groupsActions = function(req, res, next) {
   for (var i = req.groups.length - 1; i >= 0; i--) {
     var actions = [];
     if(req.groups[i].owner._id.toString() === req.user._id.toString()) {
-      actions.push(ownerActions);
+      actions = ownerActions;
     } else {
-      actions.push(guestActions);
+      actions = guestActions;
     }
     req.groups[i]["actions"] = actions;
   }
