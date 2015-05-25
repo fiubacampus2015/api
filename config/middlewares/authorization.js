@@ -3,6 +3,19 @@ mailer = require('../mailer'),
 Token = mongoose.model('Token'),
 config = require('../config');
 
+exports.messagesActions = function(req, res, next) {
+  var ownerActions = [{action:'delete'}]
+  for (var i = req.messages.length - 1; i >= 0; i--) {
+    var actions = [];
+    if(req.messages[i].user._id.toString() === req.user._id.toString()) {
+      actions = ownerActions ;
+    }
+    req.messages[i]["actions"] = actions;
+  }
+  return res.status(200).json(req.messages);
+};
+
+
 
 exports.forumsActions = function(req, res, next) {
   var ownerActions = [{action:'delete'}]

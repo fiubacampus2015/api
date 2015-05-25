@@ -49,7 +49,7 @@ module.exports = function (app, passport) {
 
   app.post('/api/:token/groups/:groupId/forums/:forumId/messages', authentication, groups.messageToForum);
 
-  app.get('/api/:token/groups/:groupId/forums/:forumId/messages', authentication, groups.messageFromForum);
+  app.get('/api/:token/groups/:groupId/forums/:forumId/messages', authentication, groups.messageFromForum, auth.messagesActions);
 
   app.post('/api/:token/groups/:groupId/forums/:forumId/messages/delete', authentication, groups.messageDelete);
 

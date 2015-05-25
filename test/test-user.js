@@ -617,6 +617,7 @@ describe('Users', function () {
       .get('/api/' + valid_token + '/groups?name=copado&limit=1&page=0')
       .expect(200)
       .expect(function(res) {
+        console.log(res.body[0].actions)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
@@ -644,11 +645,13 @@ describe('Users', function () {
       .get('/api/' + valid_token + '/groups/' + group_id + '/forums?title=generales&limit=1&page=0')
       .expect(200)
       .expect(function(res) {
-        //  console.log("FORUM ACTION", res.body)
+        //  consolel.tog("FORUM ACTION", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
     });
+
+   
 
     it('should post a message forum', function(done){
       request(app)
@@ -669,6 +672,7 @@ describe('Users', function () {
       .get('/api/' + valid_token + '/groups/' + group_id + '/forums/' + forum_id + '/messages?limit=10&page=0')
       .expect(200)
       .expect(function(res) {
+        console.log("MESSAGES", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
 
       })

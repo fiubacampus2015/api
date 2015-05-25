@@ -124,8 +124,8 @@ exports.messageFromForum = function(req, res, next) {
       	post.message['user'] = post.user;
       	response.push(post.message);
       });
-      console.log(response);
-      return res.status(200).json(response);
+      req.messages = response
+      next();
   	});
 }
 

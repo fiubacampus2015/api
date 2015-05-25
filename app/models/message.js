@@ -8,7 +8,8 @@ var MessageSchema = new Schema({
 	date: {type:Date, default: Date.now},
   	content: { type: String, default: '' },
   	user: { type: Schema.Types.ObjectId, ref:'User' },
-  	me: { type: Schema.Types.ObjectId, ref:'User' }
+  	me: { type: Schema.Types.ObjectId, ref:'User' },
+  	actions:[]
 });
 
 mongoose.model('Message', MessageSchema);
