@@ -9,7 +9,8 @@ var GroupSchema = new Schema({
 	description: { type:String, default: ''},
 	public: { type:Boolean, default: true},
 	status: { type: String, default: '' },
-	owner: { type: Schema.Types.ObjectId, ref:'User' }/*,
+	owner: { type: Schema.Types.ObjectId, ref:'User' },
+	actions:[]/*,
 	members: {
 		user: { type: Schema.Types.ObjectId, ref:'User' },
 		status: { type: String, default: 'pending' }

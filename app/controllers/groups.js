@@ -28,7 +28,8 @@ exports.search = function(req, res, next) {
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
     .exec(function(err, groups) {
       if(err) return res.status(400).json(err);
-      return res.status(200).json(groups);
+      req.groups = groups;
+      next();
   });
 }
 

@@ -55,7 +55,7 @@ module.exports = function (app, passport) {
 
   app.get('/api/:token/groups/:groupId/forums', authentication, groups.searchForum);
 
-  app.get('/api/:token/groups', authentication, groups.search);
+  app.get('/api/:token/groups', authentication, groups.search, auth.groupsActions);
 
   app.get('/app/download', function(req, res, next){
     res.render('index', {});

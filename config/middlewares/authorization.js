@@ -3,6 +3,26 @@ mailer = require('../mailer'),
 Token = mongoose.model('Token'),
 config = require('../config');
 
+
+var ownerActions = [{action:'delete'}, {action:'acceptRequest'}, {action:'denyRequest'}]
+var memberActions = [{action:'unsuscribe'}]
+var guestActions = [{action:'suscribe'}]
+
+
+exports.groupsActions = function(req, res, next) {
+  for (var i = req.groups.length - 1; i >= 0; i--) {
+    var actions = [];
+    console.log(req.groups[i].owner._id, req.user._id, req.groups[i].owner._id.toString() === req.user._id.toString())
+    if(req.groups[i].owner._id.toString() === req.user._id.toString()) {
+      actions.push(ownerActions);
+    } else {
+      actions.push(guestActions);
+    }
+    req.groups[i]["actions"] = actions;
+  }
+  return res.status(200).json(req.groups);
+};
+
 exports.requiresLogin = function(req, res, next) {
   Token
   .findById(req.params.token)
