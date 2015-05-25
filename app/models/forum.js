@@ -6,6 +6,8 @@ var ForumSchema = new Schema({
 	date: {type:Date, default: Date.now},
 	group: { type: Schema.Types.ObjectId, ref:'Group' },
 	title: {type:String, default: ''},
+	owner: { type: Schema.Types.ObjectId, ref:'User' },
+	actions:[],
   	posts: [{ type: Schema.Types.ObjectId, ref:'Post' }]
 });
 

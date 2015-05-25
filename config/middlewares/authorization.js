@@ -4,15 +4,26 @@ Token = mongoose.model('Token'),
 config = require('../config');
 
 
-var ownerActions = [{action:'delete'}, {action:'acceptRequest'}, {action:'denyRequest'}]
-var memberActions = [{action:'unsuscribe'}]
-var guestActions = [{action:'suscribe'}]
+exports.forumsActions = function(req, res, next) {
+  var ownerActions = [{action:'delete'}]
+  for (var i = req.forums.length - 1; i >= 0; i--) {
+    var actions = [];
+    if(req.forums[i].owner._id.toString() === req.user._id.toString()) {
+      actions.push(ownerActions);
+    }
+    req.forums[i]["actions"] = actions;
+  }
+  return res.status(200).json(req.forums);
+};
 
 
 exports.groupsActions = function(req, res, next) {
+  var ownerActions = [{action:'delete'}, {action:'acceptRequest'}, {action:'denyRequest'}],
+    memberActions = [{action:'unsuscribe'}],
+    guestActions = [{action:'suscribe'}]
+
   for (var i = req.groups.length - 1; i >= 0; i--) {
     var actions = [];
-    console.log(req.groups[i].owner._id, req.user._id, req.groups[i].owner._id.toString() === req.user._id.toString())
     if(req.groups[i].owner._id.toString() === req.user._id.toString()) {
       actions.push(ownerActions);
     } else {

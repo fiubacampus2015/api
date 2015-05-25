@@ -53,7 +53,7 @@ module.exports = function (app, passport) {
 
   app.post('/api/:token/groups/:groupId/forums/:forumId/messages/delete', authentication, groups.messageDelete);
 
-  app.get('/api/:token/groups/:groupId/forums', authentication, groups.searchForum);
+  app.get('/api/:token/groups/:groupId/forums', authentication, groups.searchForum, auth.forumsActions);
 
   app.get('/api/:token/groups', authentication, groups.search, auth.groupsActions);
 

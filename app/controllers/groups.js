@@ -37,7 +37,8 @@ exports.createForum = function(req, res, next) {
 
 	var forum = new Forum({
 		group: req.params.groupId,
-		title: req.body.title
+		title: req.body.title,
+		owner:req.user._id
 	});
 
 	forum.posts.push(new Post({
@@ -60,12 +61,14 @@ exports.searchForum = function(req, res, next) {
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
 	criteria.group = req.params.groupId;
-	Forum.find(criteria,"_id date title")
+	Forum.find(criteria,"_id date title owner")
     .limit( req.query.limit || 10 )
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
+    .populate('owner')
     .exec(function(err, forums) {
       if(err) return res.status(400).json(err);
-      return res.status(200).json(forums);
+      req.forums = forums;
+      next()
   });
 };
 
