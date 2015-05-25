@@ -601,7 +601,7 @@ describe('Users', function () {
       request(app)
       .post('/api/' + valid_token + '/groups')
       .send({
-        owner: user_id,
+        owner: {_id:user_id},
         name:'un grupo copado',
         description: 'un grupo para poder hablar de cosas copadas ja'        
       })
@@ -617,7 +617,6 @@ describe('Users', function () {
       .get('/api/' + valid_token + '/groups?name=copado&limit=1&page=0')
       .expect(200)
       .expect(function(res) {
-
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
