@@ -617,7 +617,7 @@ describe('Users', function () {
       .get('/api/' + valid_token + '/groups?name=copado&limit=1&page=0')
       .expect(200)
       .expect(function(res) {
-        console.log(res.body[0].actions)
+        //console.log(res.body[0].actions)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
@@ -672,7 +672,7 @@ describe('Users', function () {
       .get('/api/' + valid_token + '/groups/' + group_id + '/forums/' + forum_id + '/messages?limit=10&page=0')
       .expect(200)
       .expect(function(res) {
-        console.log("MESSAGES", res.body)
+        //console.log("MESSAGES", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
 
       })
@@ -729,6 +729,20 @@ describe('Users', function () {
       .end(done)
     });
 
+  });
+
+  describe('positions', function(done){
+    it('should post a position', function(done){
+      request(app)
+      .post('/api/' + valid_token + '/users/' + user_id + "/position")
+      .send({
+        position: "12312:2312312"
+      })
+      .expect(201)
+      .expect(function(res) {
+      })
+      .end(done)
+    });
   });
 
   after(function (done) {
