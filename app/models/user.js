@@ -41,7 +41,8 @@ var UserSchema = new Schema({
     }]
   },
   friend: { type: Boolean, default:false },
-  wall: [{ type: Schema.Types.ObjectId, ref:'Message' }] 
+  wall: [{ type: Schema.Types.ObjectId, ref:'Message' }],
+  lastPosition:{type:String, default:''} 
 });
 
 var oAuthTypes = [

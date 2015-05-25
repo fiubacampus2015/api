@@ -12,6 +12,15 @@ var mongoose = require('mongoose'),
   config = require('../../config/config'),
   utils = require('../../lib/utils');
 
+exports.positionPost = function(req, res, next) {
+  req.user.lastPosition = req.body.position;
+  req.user.save(function(err){
+    if(err) return next(err);
+    res.status(201).json(req.body.position);
+  });
+}
+
+
 exports.wallGet = function(req, res) {
 
   User.wall(req.params.user, {}, 'teid content user typeOf date', function(err, user) {

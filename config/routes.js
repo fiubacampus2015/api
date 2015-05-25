@@ -36,6 +36,7 @@ module.exports = function (app, passport) {
   app.post('/api/:token/users/:user/wall', authentication, users.wallPost); 
 
   app.post('/api/:token/users/:user/walldelete', authentication, users.wallDelete);
+  app.post('/api/:token/users/:user/position', authentication, users.positionPost);
 
   app.post('/api/:token/groups', authentication, groups.create);
 

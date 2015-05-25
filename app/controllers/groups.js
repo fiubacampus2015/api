@@ -34,6 +34,8 @@ exports.search = function(req, res, next) {
 }
 
 exports.createForum = function(req, res, next) {
+	if(!req.body.message || !req.body.message.content)
+		return next(new Error("no content"));
 
 	var forum = new Forum({
 		group: req.params.groupId,
@@ -41,16 +43,26 @@ exports.createForum = function(req, res, next) {
 		owner:req.user._id
 	});
 
-	forum.posts.push(new Post({
-		user: req.user._id,
-		forum: forum,
-		message: new Message(req.body.message)
-	}));
-
-	forum.save(function(err) {
-		if(err) return next(err);
-		return res.status(201).json(forum);		
-	});	
+	forum.save(function(err){
+		var message = new Message(req.body.message);
+		message.user = req.user._id;
+		message.save(function(err) {
+			if(err) return next(err)
+			var post = new Post({
+				user: req.user._id,
+				forum: forum._id,
+				message: message._id
+			});
+			post.save(function(err) {
+				if(err) return next(err)
+				forum.posts.push(post._id);
+				forum.save(function(err) {
+					if(err) return next(err);
+					return res.status(201).json(forum);
+				});
+			});
+		});
+	})
 }
 
 exports.searchForum = function(req, res, next) {
