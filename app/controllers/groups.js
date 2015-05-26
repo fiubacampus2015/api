@@ -2,7 +2,40 @@ var mongoose = require('mongoose'),
 	Group = mongoose.model('Group'),
 	Message = mongoose.model('Message'),
 	Post = mongoose.model('Post'),
+	Membership = mongoose.model('Membership'),
 	Forum = mongoose.model('Forum');
+
+exports.subscribe = function(req, res, next) {
+	var membership = new Membership({
+		user: req.body._id,
+		status: 'pending',
+		group: req.params.groupId
+	});
+
+	membership.save(function(err) {
+		if(err) return next(err);
+		Group.findByIdAndUpdate(req.params.groupId, { $inc: { members: 1 }}).exec(
+			function(err, model) {
+        		if(err) return next(err);
+            	return res.status(201).json(membership)
+        	});
+	});
+};
+
+exports.unsubscribe = function(req, res, next){
+
+	Membership.remove({
+		group:req.params.groupId,
+		user: req.body.user._id
+	}, function(err) {
+		if(err) return next(err);
+		Group.findByIdAndUpdate(req.params.groupId, { $inc: { members: -1 }}).exec(
+			function(err, model) {
+        		if(err) return next(err);
+            	return res.status(200).json({})
+        	});
+	});
+};
 
 exports.create = function(req, res, next) {
 	var group = new Group(req.body);
@@ -22,7 +55,7 @@ exports.search = function(req, res, next) {
   	});
 
   	criteria.public = req.query.public || true;
-	Group.find(criteria, "_id name description photo owner public")
+	Group.find(criteria, "_id name description photo owner public members")
 	.populate("owner")
     .limit( req.query.limit || 10 )
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
@@ -170,3 +203,4 @@ exports.put = function(req, res, next) {
 		})
 	})
 }
+

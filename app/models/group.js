@@ -10,11 +10,9 @@ var GroupSchema = new Schema({
 	public: { type:Boolean, default: true},
 	status: { type: String, default: '' },
 	owner: { type: Schema.Types.ObjectId, ref:'User' },
-	actions:[]/*,
-	members: {
-		user: { type: Schema.Types.ObjectId, ref:'User' },
-		status: { type: String, default: 'pending' }
-	}*/
+	actions:[],
+	members: { type:Number, default: 0},
+	request: { type:Number, default: 0}
 });
 
 mongoose.model('Group', GroupSchema);

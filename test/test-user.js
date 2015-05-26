@@ -14,7 +14,11 @@ var cookies,
   confirmation,
   group_id,
   forum_id,
-  message_id;
+  message_id,
+  friend_id,
+  friend_id_dos,
+  friend_id_tres;
+
 
 describe('Users', function () {
 
@@ -266,10 +270,7 @@ describe('Users', function () {
 
   
   describe('GET friends', function(){
-    var friend_id,
-      friend_id_dos,
-      friend_id_tres;
-
+    
     before(function (done) {
         // guardo un amigo para relacionarme
         var friend = new User({name:'pepe', email:'pepelo', username:'foo', password: 'bar', personal: {
@@ -631,17 +632,7 @@ describe('Users', function () {
       
     });
 
-    it('should search a group', function(done){
-      request(app)
-      .get('/api/' + valid_token + '/groups?name=copado&limit=2&page=0')
-      .expect(200)
-      .expect(function(res) {
-        //console.log(res.body)
-        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
-      })
-      .end(done)
-    });
-
+    
      it('should create a groups forum', function(done){
       request(app)
       .post('/api/' + valid_token + '/groups/' + group_id + '/forums')
@@ -676,18 +667,19 @@ describe('Users', function () {
       .end(done)
     });
 
-    it('should search a groups forum', function(done){
+    it('should subscribe a group', function(done){
       request(app)
-      .get('/api/' + valid_token + '/groups/' + group_id + '/forums?title=generales&limit=2&page=0')
-      .expect(200)
+      .post('/api/' + valid_token + '/groups/' + group_id + '/subscribe')
+      .send({
+        user: friend_id_dos
+      })
+      .expect(201)
       .expect(function(res) {
-        //console.log("", res.body)
+        console.log("subscription", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
     });
-
-   
 
     it('should post a message forum', function(done){
       request(app)
@@ -740,6 +732,46 @@ describe('Users', function () {
       })
       .end(done)
     });
+
+    
+    it('should search a group', function(done){
+      request(app)
+      .get('/api/' + valid_token + '/groups?name=copado&limit=2&page=0')
+      .expect(200)
+      .expect(function(res) {
+        console.log("groups: ", res.body)
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+      })
+      .end(done)
+    });
+
+
+
+    it('should search a groups forum', function(done){
+      request(app)
+      .get('/api/' + valid_token + '/groups/' + group_id + '/forums?title=GENERALES&limit=2&page=0')
+      .expect(200)
+      .expect(function(res) {
+        //console.log("", res.body)
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+      })
+      .end(done)
+    });
+
+    it('should unsubscribe a group', function(done){
+      request(app)
+      .post('/api/' + valid_token + '/groups/' + group_id + '/unsubscribe')
+      .send({
+        user: friend_id_dos
+      })
+      .expect(200)
+      .expect(function(res) {
+        console.log("subscription", res.body)
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+      })
+      .end(done)
+    });
+
 
     it('should delete a forum', function(done){
       request(app)

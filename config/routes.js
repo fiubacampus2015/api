@@ -48,6 +48,10 @@ module.exports = function (app, passport) {
 
   app.post('/api/:token/groups/:groupId/forums/delete', authentication, groups.deleteForum);
 
+  app.post('/api/:token/groups/:groupId/subscribe', authentication, groups.subscribe);
+
+  app.post('/api/:token/groups/:groupId/unsubscribe', authentication, groups.unsubscribe);
+
   app.post('/api/:token/groups/:groupId/forums/:forumId/messages', authentication, groups.messageToForum);
 
   app.get('/api/:token/groups/:groupId/forums/:forumId/messages', authentication, groups.messageFromForum, auth.messagesActions);
