@@ -26,6 +26,7 @@ exports.search = function(req, res, next) {
 	.populate("owner")
     .limit( req.query.limit || 10 )
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
+    .sort([['name', 'ascending']])
     .exec(function(err, groups) {
       if(err) return res.status(400).json(err);
       req.groups = groups;
@@ -76,6 +77,7 @@ exports.searchForum = function(req, res, next) {
 	Forum.find(criteria,"_id date title owner")
     .limit( req.query.limit || 10 )
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
+    .sort([['title', 'ascending']])
     .populate('owner')
     .exec(function(err, forums) {
       if(err) return res.status(400).json(err);

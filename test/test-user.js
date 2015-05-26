@@ -610,14 +610,33 @@ describe('Users', function () {
         group_id = res.body._id;
       })
       .end(done)
+
+
+    });
+
+    it('should create another group', function(done){
+      request(app)
+      .post('/api/' + valid_token + '/groups')
+      .send({
+        owner: {_id:user_id},
+        name:'a pero que grupo copado he',
+        description: 'otro grupo que la rompe'        
+      })
+      .expect(201)
+      .expect(function(res){
+        
+      })
+      .end(done)
+
+      
     });
 
     it('should search a group', function(done){
       request(app)
-      .get('/api/' + valid_token + '/groups?name=copado&limit=1&page=0')
+      .get('/api/' + valid_token + '/groups?name=copado&limit=2&page=0')
       .expect(200)
       .expect(function(res) {
-        //console.log(res.body[0].actions)
+        //console.log(res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
@@ -640,12 +659,29 @@ describe('Users', function () {
       .end(done)
     });
 
+     it('should create another groups forum', function(done){
+      request(app)
+      .post('/api/' + valid_token + '/groups/' + group_id + '/forums')
+      .send({
+        title:'a que no sabes que titulo tiene mi foro de temas generales',
+        message: {
+          content: "esto es otro post a groups",
+          typeOf: 'forum'
+        }
+      })
+      .expect(201)
+      .expect(function(res) {
+        
+      })
+      .end(done)
+    });
+
     it('should search a groups forum', function(done){
       request(app)
-      .get('/api/' + valid_token + '/groups/' + group_id + '/forums?title=generales&limit=1&page=0')
+      .get('/api/' + valid_token + '/groups/' + group_id + '/forums?title=generales&limit=2&page=0')
       .expect(200)
       .expect(function(res) {
-        //  consolel.tog("FORUM ACTION", res.body)
+        //console.log("", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
