@@ -766,7 +766,7 @@ describe('Users', function () {
       })
       .expect(200)
       .expect(function(res) {
-        console.log("subscription", res.body)
+        //console.log("subscription", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
