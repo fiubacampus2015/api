@@ -671,11 +671,13 @@ describe('Users', function () {
       request(app)
       .post('/api/' + valid_token + '/groups/' + group_id + '/subscribe')
       .send({
-        user: user_id
+        user: {
+          _id: user_id
+        }
       })
       .expect(201)
       .expect(function(res) {
-        console.log("subscription", res.body)
+        //console.log("subscription", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
@@ -727,7 +729,7 @@ describe('Users', function () {
       .get('/api/' + valid_token + '/groups?name=copado&limit=2&page=0')
       .expect(200)
       .expect(function(res) {
-        console.log("groups: ", res.body)
+        //console.log("groups: ", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
@@ -762,7 +764,9 @@ it('should change a group', function(done){
       request(app)
       .post('/api/' + valid_token + '/groups/' + group_id + '/unsubscribe')
       .send({
-        user: friend_id_dos
+        user: {
+          _id: friend_id_dos 
+        }
       })
       .expect(200)
       .expect(function(res) {

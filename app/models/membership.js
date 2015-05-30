@@ -25,9 +25,13 @@ MemberShipSchema.statics = {
 		  	if (err)
 		      return; // handle error
       		async.forEach(memberships, function (mp, callback) {
-		      mp.group.populate('owner', function (err, result) {
-		         callback();
-		      });
+      			if(mp.group && mp.group._id) {
+      				mp.group.populate('owner', function (err, result) {
+		 				callback();
+					});	
+      			} else
+      			 	callback();
+				
 		   	}, function (err) {
 		      // forEach async completed
 		      if(err)
