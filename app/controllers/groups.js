@@ -6,19 +6,25 @@ var mongoose = require('mongoose'),
 	Forum = mongoose.model('Forum');
 
 exports.subscribe = function(req, res, next) {
-	var membership = new Membership({
-		user: req.body._id,
-		status: 'pending',
-		group: req.params.groupId
-	});
 
-	membership.save(function(err) {
+	// TODO: subscript public accepted
+
+	Group.findOne(req.params.groupId).populate('owner').exec(function(err, group) {
 		if(err) return next(err);
-		Group.findByIdAndUpdate(req.params.groupId, { $inc: { members: 1 }}).exec(
-			function(err, model) {
-        		if(err) return next(err);
-            	return res.status(201).json(membership)
-        	});
+		var membership = new Membership({
+			user: req.body.user,
+			status: group.status == 'public' ? 'accepted' : 'pending',
+			group: req.params.groupId
+		});
+
+		membership.save(function(err) {
+			if(err) return next(err);
+			group.members = group.members + 1;
+			group.save(function(err){
+				if(err) return next(err);
+	           	return res.status(201).json(membership)
+			});
+		});
 	});
 };
 
@@ -26,7 +32,7 @@ exports.unsubscribe = function(req, res, next){
 
 	Membership.remove({
 		group:req.params.groupId,
-		user: req.body.user._id
+		user: req.body.user
 	}, function(err) {
 		if(err) return next(err);
 		Group.findByIdAndUpdate(req.params.groupId, { $inc: { members: -1 }}).exec(
@@ -53,18 +59,41 @@ exports.search = function(req, res, next) {
 
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
+  	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members" ,req.query.limit || 100, req.query.page || 0,
+	    function(memberships) {
+	      var groups_id = [],
+	      	groups = [];
+	      memberships.forEach(function(m) {
+	      	
+	      	if(m.group && m.group._id) {
+	      		groups.push(m.group)
+	      		if(groups_id.indexOf(m.group._id) == -1) {
+	          		groups_id.push(m.group._id);  
+	        	}
+	      	}
+	      });
+	    
+	      var limit_no_member = (req.query.limit || 10) - (groups_id || []).length;
+	      Group.find(criteria, "_id name description photo owner members")
+			.where("_id")
+	        .limit( limit_no_member )
+	        .skip( limit_no_member * (req.query.page || 0) )
+	        .nin(groups_id)
+			.populate("owner")
+		    .sort([['name', 'ascending']])
+		    .exec(function(err, groups_no_member) {
+	    		if(!err) {
+	            	groups_no_member.forEach(function(u) {
+		              	groups.push(u);
+		            });  
+	          	} else {
+	            	console.log("error", err);
+	          	}
+	          	req.groups = groups;
+		      	next();
+		  	});
+  	});
 
-  	criteria.public = req.query.public || true;
-	Group.find(criteria, "_id name description photo owner public members")
-	.populate("owner")
-    .limit( req.query.limit || 10 )
-    .skip( (req.query.limit || 10) * (req.query.page || 0) )
-    .sort([['name', 'ascending']])
-    .exec(function(err, groups) {
-      if(err) return res.status(400).json(err);
-      req.groups = groups;
-      next();
-  });
 }
 
 exports.createForum = function(req, res, next) {

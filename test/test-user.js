@@ -671,7 +671,7 @@ describe('Users', function () {
       request(app)
       .post('/api/' + valid_token + '/groups/' + group_id + '/subscribe')
       .send({
-        user: friend_id_dos
+        user: user_id
       })
       .expect(201)
       .expect(function(res) {
@@ -720,19 +720,7 @@ describe('Users', function () {
       .end(done)
     });
 
-    it('should change a group', function(done){
-      request(app)
-      .put('/api/' + valid_token + '/groups/' + group_id)
-      .send({
-        name: "mejor otro nombre",
-        description: "mejor otra description"
-      })
-      .expect(200)
-      .expect(function(res) {        
-      })
-      .end(done)
-    });
-
+    
     
     it('should search a group', function(done){
       request(app)
@@ -745,6 +733,18 @@ describe('Users', function () {
       .end(done)
     });
 
+it('should change a group', function(done){
+      request(app)
+      .put('/api/' + valid_token + '/groups/' + group_id)
+      .send({
+        name: "mejor otro nombre",
+        description: "mejor otra description"
+      })
+      .expect(200)
+      .expect(function(res) {        
+      })
+      .end(done)
+    });
 
 
     it('should search a groups forum', function(done){

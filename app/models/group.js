@@ -8,7 +8,7 @@ var GroupSchema = new Schema({
 	name: { type:String, default: ''},
 	description: { type:String, default: ''},
 	public: { type:Boolean, default: true},
-	status: { type: String, default: '' },
+	status: { type: String, default: 'public' },
 	owner: { type: Schema.Types.ObjectId, ref:'User' },
 	actions:[],
 	members: { type:Number, default: 0},
