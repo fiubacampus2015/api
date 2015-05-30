@@ -671,9 +671,7 @@ describe('Users', function () {
       request(app)
       .post('/api/' + valid_token + '/groups/' + group_id + '/subscribe')
       .send({
-        user: {
-          _id: user_id
-        }
+        _id: user_id
       })
       .expect(201)
       .expect(function(res) {
@@ -764,9 +762,9 @@ it('should change a group', function(done){
       request(app)
       .post('/api/' + valid_token + '/groups/' + group_id + '/unsubscribe')
       .send({
-        user: {
+        
           _id: friend_id_dos 
-        }
+        
       })
       .expect(200)
       .expect(function(res) {

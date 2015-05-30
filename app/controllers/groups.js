@@ -10,7 +10,7 @@ exports.subscribe = function(req, res, next) {
 	Group.findOne(req.params.groupId).populate('owner').exec(function(err, group) {
 		if(err) return next(err);
 		var membership = new Membership({
-			user: req.body.user._id,
+			user: req.body._id,
 			status: group.status == 'public' ? 'accepted' : 'pending',
 			group: req.params.groupId
 		});
@@ -30,7 +30,7 @@ exports.unsubscribe = function(req, res, next){
 
 	Membership.remove({
 		group:req.params.groupId,
-		user: req.body.user._id
+		user: req.body._id
 	}, function(err) {
 		if(err) return next(err);
 		Group.findByIdAndUpdate(req.params.groupId, { $inc: { members: -1 }}).exec(
