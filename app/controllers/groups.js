@@ -147,7 +147,7 @@ exports.searchForum = function(req, res, next) {
 };
 
 exports.messageDelete = function(req, res, next) {
-	Message.remove(req.body._id, function(err) {
+	Message.remove({ _id:req.body._id }, function(err) {
 		if(err) return res.status(400).json(err);
 		return res.status(200).json({});
 	})
@@ -195,8 +195,12 @@ exports.messageFromForum = function(req, res, next) {
       if(err) return res.status(400).json(err);
       var response = [];
       posts.forEach(function(post) {
-      	post.message['user'] = post.user;
-      	response.push(post.message);
+      	console.log(post);
+      	if (post.message!=null)
+      	{
+      		post.message['user'] = post.user;
+      		response.push(post.message);
+      	}
       });
       req.messages = response
       next();
