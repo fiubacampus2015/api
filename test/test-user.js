@@ -17,7 +17,8 @@ var cookies,
   message_id,
   friend_id,
   friend_id_dos,
-  friend_id_tres;
+  friend_id_tres,
+  subscribe_id;
 
 
 describe('Users', function () {
@@ -677,6 +678,24 @@ describe('Users', function () {
       .expect(function(res) {
         //console.log("subscription", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+        subscribe_id = res.body._id;
+        console.log("subscribe_id: ", subscribe_id)
+      })
+      .end(done)
+    });
+
+    it('should resolve a subscription', function(done){
+      request(app)
+      .put('/api/' + valid_token + '/groups/' + group_id + '/subscribe/' + subscribe_id + '/resolve')
+      .send({
+        status: "accepted"
+      })
+      .expect(200)
+      .expect(function(res) {
+        //console.log(res.body)
+        //console.log("subscription", res.body)
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+        
       })
       .end(done)
     });
@@ -767,7 +786,9 @@ describe('Users', function () {
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
-    });    
+    });
+
+
 
     it('should unsubscribe a group', function(done){
       request(app)

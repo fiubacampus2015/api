@@ -5,6 +5,18 @@ var mongoose = require('mongoose'),
 	Membership = mongoose.model('Membership'),
 	Forum = mongoose.model('Forum');
 
+exports.subscribeResolve = function(req, res, next) {
+	Membership.findOne({ _id: req.params.susId}).populate('group').exec(function(err, membership) {
+		if(err) return next(err);
+		if(membership.group.owner.toString() !== req.user._id.toString()) return res.status(403).json({});
+		membership.status = req.body.status;
+		membership.save(function(err) {
+			if(err) return next(err);
+			res.status(200).json(membership);
+		});
+	});
+}
+
 exports.members = function(req, res, next) {
 	Membership.find({
 		group: req.params.groupId,
@@ -35,6 +47,8 @@ exports.subscribe = function(req, res, next) {
 			group.members = group.members + 1;
 			group.save(function(err){
 				if(err) return next(err);
+				console.log(membership._id)
+
 	           	return res.status(201).json(membership)
 			});
 		});
