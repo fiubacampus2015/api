@@ -5,6 +5,21 @@ var mongoose = require('mongoose'),
 	Membership = mongoose.model('Membership'),
 	Forum = mongoose.model('Forum');
 
+exports.members = function(req, res, next) {
+	Membership.find({
+		group: req.params.groupId,
+		status: 'accepted'
+	}).populate('user').exec(function(err, memberships) {
+		if (err) return next(err);
+		var users = [];
+		memberships.forEach(function(membership) {
+			users.push(membership.user);
+		});
+		res.status(200).json(users);
+	});
+}
+
+
 exports.subscribe = function(req, res, next) {
 
 	Group.findOne({ _id:req.params.groupId}).populate('owner').exec(function(err, group) {

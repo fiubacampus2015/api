@@ -9,6 +9,8 @@ module.exports = function (app, passport) {
 
   app.get('/api/users/:userId/confirm/:confirmation', auth.confirm, users.showConfirm);
 
+  // USERS
+
   app.post('/api/users/authenticate', users.authenticate);
 
   app.get('/api/:token/users/:userId', authentication, users.get);
@@ -38,17 +40,25 @@ module.exports = function (app, passport) {
   app.post('/api/:token/users/:user/walldelete', authentication, users.wallDelete);
   app.post('/api/:token/users/:user/position', authentication, users.positionPost);
 
+  // GROUPS
+
   app.post('/api/:token/groups', authentication, groups.create);
 
   app.put('/api/:token/groups/:groupId', authentication, groups.put);
-
+  
   app.post('/api/:token/groups/delete', authentication, groups.delete);
+
+  app.post('/api/:token/groups/:groupId/subscribe', authentication, groups.subscribe);
+  
+  app.get('/api/:token/groups', authentication, groups.search, auth.groupsActions);
+  
+  app.get('/api/:token/groups/:groupId/members', authentication, groups.members);
+
+  // GROUPS FORUMS
 
   app.post('/api/:token/groups/:groupId/forums', authentication, groups.createForum);
 
   app.post('/api/:token/groups/:groupId/forums/delete', authentication, groups.deleteForum);
-
-  app.post('/api/:token/groups/:groupId/subscribe', authentication, groups.subscribe);
 
   app.post('/api/:token/groups/:groupId/unsubscribe', authentication, groups.unsubscribe);
 
@@ -60,15 +70,11 @@ module.exports = function (app, passport) {
 
   app.get('/api/:token/groups/:groupId/forums', authentication, groups.searchForum, auth.forumsActions);
 
-  app.get('/api/:token/groups', authentication, groups.search, auth.groupsActions);
-
   app.get('/app/download', function(req, res, next){
     res.render('index', {});
   });
 
-
   app.param('userId', users.load);
-
 
   app.use(function (err, req, res, next) {
 

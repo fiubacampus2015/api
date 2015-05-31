@@ -733,7 +733,7 @@ describe('Users', function () {
       .end(done)
     });
 
-it('should change a group', function(done){
+  it('should change a group', function(done){
       request(app)
       .put('/api/' + valid_token + '/groups/' + group_id)
       .send({
@@ -757,6 +757,17 @@ it('should change a group', function(done){
       })
       .end(done)
     });
+
+    it('should get members', function(done){
+      request(app)
+      .get('/api/' + valid_token + '/groups/' + group_id + '/members')
+      .expect(200)
+      .expect(function(res) {
+        //console.log(res.body)
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+      })
+      .end(done)
+    });    
 
     it('should unsubscribe a group', function(done){
       request(app)

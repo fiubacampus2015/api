@@ -7,8 +7,7 @@ var Schema = mongoose.Schema;
 var MemberShipSchema = new Schema({
 	user:{ type: Schema.Types.ObjectId, ref: 'User' },
 	status: { type:String, default: 'pending'},
-	group:{ type: Schema.Types.ObjectId, ref: 'Group' },
-	owner_name: { type:String}
+	group:{ type: Schema.Types.ObjectId, ref: 'Group' }
 });
 
 MemberShipSchema.statics = {
