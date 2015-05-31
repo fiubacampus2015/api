@@ -64,6 +64,7 @@ exports.search = function(req, res, next) {
 	      memberships.forEach(function(m) {
 	      	
 	      	if(m.group && m.group._id) {
+	      		m.group["member"] = true;
 	      		groups.push(m.group)
 	      		if(groups_id.indexOf(m.group._id) == -1) {
 	          		groups_id.push(m.group._id);  
@@ -82,6 +83,7 @@ exports.search = function(req, res, next) {
 		    .exec(function(err, groups_no_member) {
 	    		if(!err) {
 	            	groups_no_member.forEach(function(u) {
+		              	u["member"] = false;
 		              	groups.push(u);
 		            });  
 	          	} else {

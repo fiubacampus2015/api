@@ -40,7 +40,7 @@ exports.groupsActions = function(req, res, next) {
     if(req.groups[i].owner._id.toString() === req.user._id.toString()) {
       actions = ownerActions;
     } else {
-      actions = guestActions;
+      actions = (req.groups[i].member) ? memberActions : guestActions;
     }
     req.groups[i]["actions"] = actions;
   }
