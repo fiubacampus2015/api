@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 
 exports.subscribe = function(req, res, next) {
 
-	Group.findOne(req.params.groupId).populate('owner').exec(function(err, group) {
+	Group.findOne({ _id:req.params.groupId}).populate('owner').exec(function(err, group) {
 		if(err) return next(err);
 		var membership = new Membership({
 			user: req.body._id,
