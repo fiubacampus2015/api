@@ -5,6 +5,9 @@ var mongoose = require('mongoose'),
 	Membership = mongoose.model('Membership'),
 	Forum = mongoose.model('Forum');
 
+
+exports.files = function(req, res, next) {}
+
 exports.subscribeResolve = function(req, res, next) {
 	Membership.findOne({ _id: req.params.susId}).populate('group').exec(function(err, membership) {
 		if(err) return next(err);
@@ -18,16 +21,23 @@ exports.subscribeResolve = function(req, res, next) {
 }
 
 exports.members = function(req, res, next) {
-	Membership.find({
-		group: req.params.groupId,
-		status: 'accepted'
-	}).populate('user').exec(function(err, memberships) {
-		if (err) return next(err);
-		var users = [];
-		memberships.forEach(function(membership) {
-			users.push(membership.user);
+	
+	Group.findOne({
+		_id: req.params.groupId
+	}).populate('owner').exec(function(err, group) {
+		Membership.find({
+			group: req.params.groupId,
+			status: 'accepted'
+		}).populate('user').exec(function(err, memberships) {
+			if (err) return next(err);
+			var users = [];
+			users.push(group.owner);
+			memberships.forEach(function(membership) {
+				users.push(membership.user);
+			});
+
+			res.status(200).json(users);
 		});
-		res.status(200).json(users);
 	});
 }
 
@@ -91,7 +101,6 @@ exports.search = function(req, res, next) {
 	      var groups_id = [],
 	      	groups = [];
 	      memberships.forEach(function(m) {
-	      	
 	      	if(m.group && m.group._id) {
 	      		m.group["member"] = true;
 	      		groups.push(m.group)

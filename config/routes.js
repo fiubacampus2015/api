@@ -51,7 +51,9 @@ module.exports = function (app, passport) {
   app.post('/api/:token/groups/:groupId/subscribe', authentication, groups.subscribe);
   
   app.put('/api/:token/groups/:groupId/subscribe/:susId/resolve', authentication, groups.subscribeResolve);
-  
+
+  app.put('/api/:token/groups/:groupId/files', authentication, groups.files);
+
   app.get('/api/:token/groups', authentication, groups.search, auth.groupsActions);
   
   app.get('/api/:token/groups/:groupId/members', authentication, groups.members);
