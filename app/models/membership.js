@@ -22,7 +22,7 @@ MemberShipSchema.statics = {
 		    select: select
 		  }).exec(function(err, memberships){
 		  	if (err)
-		      return; // handle error
+		      return cb(err, undefined)
       		async.forEach(memberships, function (mp, callback) {
       			if(mp.group && mp.group._id) {
       				mp.group.populate('owner', function (err, result) {
@@ -32,10 +32,8 @@ MemberShipSchema.statics = {
       			 	callback();
 				
 		   	}, function (err) {
-		      // forEach async completed
-		      if(err)
-		         return; // handle error
-		      cb(memberships);
+		      if(err) cb(err, undefined);
+		      cb(null, memberships);
 		   	});
 	  });
 	}

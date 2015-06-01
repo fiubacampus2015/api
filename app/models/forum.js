@@ -8,6 +8,7 @@ var ForumSchema = new Schema({
 	title: {type:String, default: ''},
 	owner: { type: Schema.Types.ObjectId, ref:'User' },
 	actions:[],
+	root: {type:Boolean, default: false},
   	posts: [{ type: Schema.Types.ObjectId, ref:'Post' }]
 });
 

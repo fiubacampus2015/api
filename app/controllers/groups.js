@@ -62,8 +62,6 @@ exports.subscribe = function(req, res, next) {
 			group.members = group.members + 1;
 			group.save(function(err){
 				if(err) return next(err);
-				console.log(membership._id)
-
 	           	return res.status(201).json(membership)
 			});
 		});
@@ -102,7 +100,8 @@ exports.search = function(req, res, next) {
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
   	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members" ,req.query.limit || 100, req.query.page || 0,
-	    function(memberships) {
+	    function(err, memberships) {
+	    	if(err) return next(err);
 	      var groups_id = [],
 	      	groups = [];
 	      memberships.forEach(function(m) {
@@ -179,6 +178,7 @@ exports.searchForum = function(req, res, next) {
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
 	criteria.group = req.params.groupId;
+	criteria["root"] = false;
 	Forum.find(criteria,"_id date title owner")
     .limit( req.query.limit || 10 )
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
@@ -230,6 +230,47 @@ exports.messageToForum = function(req, res, next) {
 		});
 	});
 }
+
+exports.messageToGroup = function(req, res, next) {
+	Forum.findOne({
+		group: req.params.groupId,
+		root: true
+	}, function(err, forum) {
+		if(err) return next(err)
+		
+		var createMessage = function(forum, req, res, next) {
+			var message = new Message(req.body);
+			message.user = req.user._id;
+			message.save(function(err) {
+				if(err) return next(err)
+				var post = new Post({
+					user: req.user._id,
+					forum: forum._id,
+					group: forum.group,
+					message: message._id
+				});
+				post.save(function(err) {
+					if(err) return next(err)
+					forum.posts.push(post._id);
+					forum.save(function(err) {
+						if(err) return next(err);
+						return res.status(201).json(message);
+					});
+				});
+			});	
+		};
+		if(!forum) {
+			forum = new Forum({
+				group: req.params.groupId,
+				owner:req.user._id
+			});
+			forum.save(function(err){
+				if(err) return next(err);
+				createMessage(forum, req, res, next);
+			});
+		} else createMessage(forum, req, res, next);
+	});	
+};
 
 exports.messageFromForum = function(req, res, next) {
   	Post.find({

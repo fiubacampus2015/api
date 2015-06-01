@@ -680,7 +680,7 @@ describe('Users', function () {
         //console.log("subscription", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
         subscribe_id = res.body._id;
-        console.log("subscribe_id: ", subscribe_id)
+        //console.log("subscribe_id: ", subscribe_id)
       })
       .end(done)
     });
@@ -728,12 +728,25 @@ describe('Users', function () {
       .end(done)
     });
 
+    it('should post a message group', function(done){
+      request(app)
+      .post('/api/' + valid_token + '/groups/' + group_id  + '/messages')
+      .send({
+          content: "VAMO.txt",
+          typeOf: 'file'
+      })
+      .expect(201)
+      .expect(function(res) {
+      })
+      .end(done)
+    });
+
     it('should get groups files', function(done){
       request(app)
       .get('/api/' + valid_token + '/groups/' + group_id + '/files')
       .expect(200)
       .expect(function(res) {
-        console.log("MESSAGES", res.body)
+        //console.log("MESSAGES", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
