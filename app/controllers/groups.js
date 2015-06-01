@@ -6,7 +6,13 @@ var mongoose = require('mongoose'),
 	Forum = mongoose.model('Forum');
 
 
-exports.files = function(req, res, next) {}
+exports.files = function(req, res, next) {
+
+	Group.files({_id: req.params.groupId}, function(err, files){
+		if(err) return next(err);
+		return res.status(200).json(files);
+	});
+}
 
 exports.subscribeResolve = function(req, res, next) {
 	Membership.findOne({ _id: req.params.susId}).populate('group').exec(function(err, membership) {
@@ -35,7 +41,6 @@ exports.members = function(req, res, next) {
 			memberships.forEach(function(membership) {
 				users.push(membership.user);
 			});
-
 			res.status(200).json(users);
 		});
 	});
@@ -211,6 +216,7 @@ exports.messageToForum = function(req, res, next) {
 			var post = new Post({
 				user: req.user._id,
 				forum: forum._id,
+				group: forum.group,
 				message: message._id
 			});
 			post.save(function(err) {

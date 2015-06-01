@@ -526,7 +526,7 @@ describe('Users', function () {
       })
       .expect(201)
       .expect(function(res){
-        message_id = res.body[res.body.length - 1]._id
+        message_id = res.body._id
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)
@@ -713,6 +713,32 @@ describe('Users', function () {
       })
       .end(done)
     });
+
+    it('should post a message forum', function(done){
+      request(app)
+      .post('/api/' + valid_token + '/groups/' + group_id + '/forums/' + forum_id + '/messages')
+      .send({
+          content: "Archivo.txt",
+          typeOf: 'file'
+      })
+      .expect(201)
+      .expect(function(res) {
+      })
+      .end(done)
+    });
+
+    it('should get groups files', function(done){
+      request(app)
+      .get('/api/' + valid_token + '/groups/' + group_id + '/files')
+      .expect(200)
+      .expect(function(res) {
+        console.log("MESSAGES", res.body)
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+      })
+      .end(done)
+    });
+
+
 
     it('should get a posts forum', function(done){
       request(app)
