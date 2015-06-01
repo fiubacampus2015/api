@@ -30,7 +30,7 @@ GroupSchema.statics = {
 		  	.find()
 		  	.where('forum').in(forums_id)
 		  	.populate({
-		      path: 'message',
+		      path: 'message user',
 		      match: {
 		      	 'typeOf': { $in: ['photo','video', 'file'] } 
 		      },
