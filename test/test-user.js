@@ -526,6 +526,7 @@ describe('Users', function () {
       })
       .expect(201)
       .expect(function(res){
+        //console.log(res.body)
         message_id = res.body._id
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })

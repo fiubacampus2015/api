@@ -39,6 +39,7 @@ exports.wallPost = function(req, res) {
       user.wall.push(message);
       user.save(function(err){
         if(err) return res.status(400).json(err);
+        message['user'] = req.user;
         res.status(201).json(message);
       });  
     });
