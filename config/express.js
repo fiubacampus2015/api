@@ -25,6 +25,8 @@ module.exports = function (app, passport) {
   app.use(compression({
     threshold: 512
   }));
+  app.use(bodyParser.json({limit: '10mb'}));
+app.use(bodyParser.urlencoded({limit: '10mb'}));
 
   // middleware de archivos estaticos de express
   app.use(express.static(config.root + '/public'));
@@ -94,7 +96,6 @@ module.exports = function (app, passport) {
   // use passport session
   app.use(passport.initialize());
   app.use(passport.session());
-
   // connect flash for flash messages - should be declared after sessions
   app.use(flash());
 
