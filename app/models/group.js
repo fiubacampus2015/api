@@ -14,6 +14,7 @@ var GroupSchema = new Schema({
 	owner: { type: Schema.Types.ObjectId, ref:'User' },
 	actions:[],
 	members: { type:Number, default: 0},
+	msgs: { type:Number, default: 0},
 	request: { type:Number, default: 0}
 });
 
@@ -45,6 +46,30 @@ GroupSchema.statics = {
 		    	cb(null, messages);
 		    });
 	  });
+	},
+	memberPlusPlus: function(id) {
+		this.findByIdAndUpdate( id, { $inc: { 'members' : '1' }}).exec();
+	},
+	memberDecrease: function(id) {
+		this.findByIdAndUpdate( id, { $inc: { 'members' : '-1' }}).exec();
+	},
+	filePlusPlus: function(id) {
+		this.findByIdAndUpdate( id, { $inc: { 'files' : '1' }}).exec();
+	},
+	fileDecrease: function(id) {
+		this.findByIdAndUpdate( id, { $inc: { 'files' : '-1' }}).exec();
+	},
+	msgsPlusPlus: function(id) {
+		this.findByIdAndUpdate( id, { $inc: { 'msgs' : '1' }}).exec();
+	},
+	msgsDecrease: function(id) {
+		this.findByIdAndUpdate( id, { $inc: { 'msgs' : '-1' }}).exec();
+	},
+	requestPlusPlus: function(id) {
+		this.findByIdAndUpdate( id, { $inc: { 'request' : '1' }}).exec();
+	},
+	requestDecrease: function(id) {
+		this.findByIdAndUpdate( id, { $inc: { 'request' : '-1' }}).exec();
 	}
 }
 

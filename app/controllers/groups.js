@@ -19,10 +19,13 @@ exports.subscribeResolve = function(req, res, next) {
 		if(err) return next(err);
 		if(membership.group.owner.toString() !== req.user._id.toString()) return res.status(403).json({});
 		membership.status = req.body.status;
+		if(membership.status == 'accepted')
+			Group.memberPlusPlus(req.params.groupId, function(){ /* async */ });
 		membership.save(function(err) {
 			if(err) return next(err);
 			res.status(200).json(membership);
 		});
+
 	});
 }
 
@@ -59,11 +62,12 @@ exports.subscribe = function(req, res, next) {
 
 		membership.save(function(err) {
 			if(err) return next(err);
-			group.members = group.members + 1;
-			group.save(function(err){
-				if(err) return next(err);
-	           	return res.status(201).json(membership)
-			});
+			if(group.status == 'accepted') {
+				group.members = group.members + 1;
+				group.save(function(err){ });	
+			};
+			
+           	return res.status(201).json(membership);
 		});
 	});
 };
@@ -75,11 +79,8 @@ exports.unsubscribe = function(req, res, next){
 		user: req.body._id
 	}, function(err) {
 		if(err) return next(err);
-		Group.findByIdAndUpdate(req.params.groupId, { $inc: { members: -1 }}).exec(
-			function(err, model) {
-        		if(err) return next(err);
-            	return res.status(200).json({})
-        	});
+		Group.memberDecrease(req.params.groupId, function(){ /* async */ });
+    	return res.status(200).json({})
 	});
 };
 
@@ -99,7 +100,7 @@ exports.search = function(req, res, next) {
 
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
-  	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members" ,req.query.limit || 100, req.query.page || 0,
+  	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members msgs files request" ,req.query.limit || 100, req.query.page || 0,
 	    function(err, memberships) {
 	    	if(err) return next(err);
 	      var groups_id = [],
@@ -208,7 +209,8 @@ exports.messageToForum = function(req, res, next) {
 	Forum.findOne({
 		_id: req.params.forumId
 	}, function(err, forum) {
-		if(err) return next(err)
+		if(err) return next(err);
+		Group.msgsPlusPlus(forum.group, function(){ /* async */ });
 		var message = new Message(req.body);
 		message.user = req.user._id;
 		message.save(function(err) {
