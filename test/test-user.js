@@ -746,7 +746,7 @@ describe('Users', function () {
       .get('/api/' + valid_token + '/groups/' + group_id + '/files')
       .expect(200)
       .expect(function(res) {
-        //console.log("MESSAGES", res.body)
+        console.log("MESSAGES", res.body)
         if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
       })
       .end(done)

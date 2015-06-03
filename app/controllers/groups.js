@@ -9,6 +9,7 @@ var mongoose = require('mongoose'),
 exports.files = function(req, res, next) {
 
 	Group.files({_id: req.params.groupId}, function(err, files){
+		console.log("sjkdajskdjkasjdkajskdjaksjd",files);
 		if(err) return next(err);
 		return res.status(200).json(files);
 	});
