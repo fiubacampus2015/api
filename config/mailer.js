@@ -2,7 +2,7 @@ var mailer   = require("mailer"),
 config = require("./config");
 var fs = require('fs');
 
-var mailTemplate = fs.readFileSync('./app/views/confirm_mail.html').toString();
+var mailTemplate = fs.readFileSync('./public/confirm_mail.html').toString();
 
 exports.sendConfirmation = function(to, link, callback) {
 
