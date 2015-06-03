@@ -76,7 +76,7 @@ module.exports = function (app, passport) {
   app.get('/api/:token/groups/:groupId/forums', authentication, groups.searchForum, auth.forumsActions);
 
   app.get('/app/download', function(req, res, next){
-    res.render('index', {});
+    res.render('download', {});
   });
 
   app.param('userId', users.load);
