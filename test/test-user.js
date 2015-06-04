@@ -173,7 +173,9 @@ describe('Users', function () {
           if (!('token' in res.body)) return "no token";
           if (!('id' in res.body)) return "no id";
           if (!('confirmed' in res.body)) return "no confirmed";
+          console.log("token:", res.body.token);
           valid_token = res.body.token;
+          console.log("user_id:", res.body.id);
           user_id = res.body.id;
         })
         .expect(200)
@@ -891,6 +893,6 @@ describe('Users', function () {
   });
 
   after(function (done) {
-     require('./helper').clearDb(done)
+     //require('./helper').clearDb(done)
   }); 
 })

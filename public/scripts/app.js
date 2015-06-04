@@ -12,9 +12,11 @@ angular
     'oc.lazyLoad',
     'ui.router',
     'ui.bootstrap',
-    'angular-loading-bar'
+    'angular-loading-bar',
+    'ngResource',
+    'ngRoute'
   ])
-  .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider',function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider) {
+  .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider', '$resourceProvider' ,function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider, $resourceProvider) {
     
     $ocLazyLoadProvider.config({
       debug:false,
@@ -84,6 +86,7 @@ angular
               name:'sbAdminApp',
               files:[
               'scripts/controllers/main.js',
+              'scripts/controllers/user.js',
               'scripts/directives/timeline/timeline.js',
               'scripts/directives/notifications/notifications.js',
               'scripts/directives/chat/chat.js',
@@ -153,6 +156,9 @@ angular
        templateUrl:'views/ui-elements/grid.html',
        url:'/grid'
    })
-  }]);
+  }])
+  .factory('User', ['$resource', function($resource) { return  $resource('/api/:token/users/:userId', { token:'@token', userId:'@userId' });  }])
+
+  ;
 
     
