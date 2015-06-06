@@ -28,6 +28,7 @@ angular
     $stateProvider
       .state('dashboard', {
         url:'/dashboard',
+        controller: 'MainCtrl',
         templateUrl: 'views/dashboard/main.html',
         resolve: {
             loadMyDirectives:function($ocLazyLoad){
@@ -78,7 +79,6 @@ angular
     })
       .state('dashboard.home',{
         url:'/home',
-        controller: 'MainCtrl',
         templateUrl:'views/dashboard/home.html',
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
@@ -105,6 +105,7 @@ angular
         url:'/blank'
     })
       .state('login',{
+        controller: 'UserCtrl',
         templateUrl:'views/pages/login.html',
         url:'/login'
     })
@@ -132,6 +133,14 @@ angular
         templateUrl:'views/table.html',
         url:'/table'
     })
+      .state('dashboard.groups',{
+        templateUrl:'views/groups.html',
+        url:'/groups'
+    })
+      .state('dashboard.users',{
+        templateUrl:'views/users.html',
+        url:'/users'
+    })
       .state('dashboard.panels-wells',{
           templateUrl:'views/ui-elements/panels-wells.html',
           url:'/panels-wells'
@@ -157,8 +166,9 @@ angular
        url:'/grid'
    })
   }])
-  .factory('User', ['$resource', function($resource) { return  $resource('/api/:pepe/users/:userId', { pepe:'554fee030afb650300427d43', userId:'554fed700afb650300427d42' });  }])
-
+  .factory('User', ['$resource', function($resource) { return  $resource('/api/users/:id' );  }])
+  .factory('Group', ['$resource', function($resource) { return  $resource('/api/groups/:id' );  }])
+  .factory('Forum', ['$resource', function($resource) { return  $resource('/api/forums/:id');  }])
   ;
 
     

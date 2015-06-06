@@ -275,6 +275,30 @@ exports.authenticate = function(req, res, next){
 };
 
 
+exports.all = function(req, res, next) {
+  var criteria = {};
+  Object.keys(req.query).forEach(function(key){
+      if (key == 'limit' || key == 'page') 
+        return;
+
+      criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
+    });
+  User.find(criteria)
+    .sort([['name', 'ascending']])
+    .exec(function(err, users) {
+      if(err) return res.status(400).json(err);
+      res.status(200).json(users)
+  }); 
+}
+
+exports.show = function(req, res, next) {
+  User.findOne({_id:req.params.id})
+    .exec(function(err, group) {
+    if (err) return next(err);
+    return res.status(200).json(group);
+    });
+}
+
 
 // For params :userId
 exports.load = function (req, res, next, id) {

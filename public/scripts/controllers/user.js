@@ -7,7 +7,20 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('UserCtrl',function($scope,$position, User) {
-  	$scope.user = User.get({token: '554fed700afb650300427d42', id:'5539b84999ec5f88076558e1'});
-  	console.log("VAMO: ", $scope.user)
+  .controller('UserCtrl',function($scope,$position, User, $http) {
+  	$scope.user = {
+  		email: '',
+  		password:''
+  	};
+
+  	$scope.puto = 'a'
+  	$scope.password = 'b'
+
+
+  	console.log("USER")
+
+  	$scope.authenticate = function() {
+  		console.log("VAMOOOO")
+  		console.log($scope.user);
+  	}
   });

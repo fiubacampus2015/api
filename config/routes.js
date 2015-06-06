@@ -9,6 +9,21 @@ module.exports = function (app, passport) {
 
   app.get('/api/users/:userId/confirm/:confirmation', auth.confirm, users.showConfirm);
 
+
+  // FOR FRONT
+
+  app.get('/api/groups', groups.all);
+  app.get('/api/forums', groups.allForums);
+  app.get('/api/forums/:id', groups.showForum);
+  app.get('/api/users/:id', users.show);
+  app.get('/api/users', users.all);
+  
+  app.get('/api/groups/:id', groups.show);
+  app.get('/api/groups/:groupId/forums', groups.searchForum, function(req, res) {
+    res.status(200).json(req.forums)
+  });
+
+  
   // USERS
 
   app.post('/api/users/authenticate', users.authenticate);
@@ -54,6 +69,7 @@ module.exports = function (app, passport) {
 
   app.get('/api/:token/groups/:groupId/files', authentication, groups.files);
 
+  app.get('/api/:token/groups', authentication, groups.search, auth.groupsActions);
   app.get('/api/:token/groups', authentication, groups.search, auth.groupsActions);
   
   app.get('/api/:token/groups/:groupId/members', authentication, groups.members);

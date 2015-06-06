@@ -7,6 +7,20 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('MainCtrl',function($scope,$position, User) {
-  	$scope.user = User.get();
+  .controller('MainCtrl',function($scope,$position, User, Group, Forum) {
+  	
+    $scope.user = User.get({id:'55723a0c7f42365c134c4eef'});
+    console.log("VAMO: ", $scope.user)
+
+  	var groups = Group.query(function(){
+  		$scope.groups = groups;
+  	});
+
+  	var forums = Forum.query(function(){
+  		$scope.forums = forums;
+  	});
+
+  	var users = User.query(function(){
+  		$scope.users = users;
+  	});
   });

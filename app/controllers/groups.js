@@ -101,6 +101,7 @@ exports.search = function(req, res, next) {
 
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
+  	console.log("req.user---------------------------", req.user)
   	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members msgs files request" ,req.query.limit || 100, req.query.page || 0,
 	    function(err, memberships) {
 	    	if(err) return next(err);
@@ -330,3 +331,56 @@ exports.put = function(req, res, next) {
 	})
 }
 
+
+
+exports.all = function(req, res, next) {
+	var criteria = {};
+	Object.keys(req.query).forEach(function(key){
+      if (key == 'limit' || key == 'page') 
+        return;
+
+      criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
+  	});
+  Group.find(criteria, "_id name description photo owner members")
+	.populate("owner")
+    .sort([['name', 'ascending']])
+    .exec(function(err, groups) {
+		if (err) return next(err);
+		return res.status(200).json(groups);
+  	});
+}
+
+exports.allForums = function(req, res, next) {
+	var criteria = {};
+	Object.keys(req.query).forEach(function(key){
+      if (key == 'limit' || key == 'page') 
+        return;
+
+      criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
+  	});
+  Forum.find(criteria,"_id date title owner group")
+    .sort([['title', 'ascending']])
+    .populate('owner')
+    .exec(function(err, forums) {
+      if(err) return res.status(400).json(err);
+      res.status(200).json(forums)
+  });	
+}
+
+exports.show = function(req, res, next) {
+  Group.findOne({_id:req.params.id}, "_id name description photo owner members")
+	.populate("owner")
+    .exec(function(err, group) {
+		if (err) return next(err);
+		return res.status(200).json(group);
+  	});
+}
+
+exports.showForum = function(req, res, next) {
+  Forum.findOne({_id:req.params.id}, "_id date title owner group")
+	.populate("owner")
+    .exec(function(err, group) {
+		if (err) return next(err);
+		return res.status(200).json(group);
+  	});
+}
