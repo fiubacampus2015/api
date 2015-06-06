@@ -16,7 +16,7 @@ exports.positionPost = function(req, res, next) {
   req.user.lastPosition = req.body.position;
   req.user.save(function(err){
     if(err) return next(err);
-    res.status(201).json(req.body.position);
+    res.status(201).json(req.user);
   });
 }
 
