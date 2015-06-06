@@ -15,7 +15,7 @@ if (fs.existsSync(envFile)) {
 }
 
 module.exports = {
-  db: process.env.MONGOLAB_URI || 'mongodb://heroku_app35427088:sngsofmm6fgmknul6ii4mib49e@ds059651.mongolab.com:59651/heroku_app35427088',
+  db: process.env.MONGOLAB_URI || '',
   TOKEN_SECRET: process.env.TOKEN_SECRET || 'campus',
   MANDRILL_APIKEY: process.env.MANDRILL_APIKEY || "",
   MANDRILL_USERNAME:process.env.MANDRILL_USERNAME|| "",

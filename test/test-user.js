@@ -891,6 +891,6 @@ describe('Users', function () {
   });
 
   after(function (done) {
-     require('./helper').clearDb(done)
+     //require('./helper').clearDb(done)
   }); 
 })
