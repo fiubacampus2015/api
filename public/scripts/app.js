@@ -157,7 +157,7 @@ angular
        url:'/grid'
    })
   }])
-  .factory('User', ['$resource', function($resource) { return  $resource('/api/:token/users/:userId', { token:'@token', userId:'@userId' });  }])
+  .factory('User', ['$resource', function($resource) { return  $resource('/api/:pepe/users/:userId', { pepe:'554fee030afb650300427d43', userId:'554fed700afb650300427d42' });  }])
 
   ;
 

@@ -48,14 +48,20 @@ exports.groupsActions = function(req, res, next) {
 };
 
 exports.requiresLogin = function(req, res, next) {
+  Token.find(function(err, tokens){
+    console.log(err, tokens)
+  })
   Token
   .findById(req.params.token)
   .populate('_user')
   .exec(function (err, token) {
-    if(err)
+    console.log(err, token)
+    if(err || !token)
       return res.status(401).json(err);
-      req.user = token._user;
-      next();
+
+    console.log(token)
+    req.user = token._user;
+    next();
   });
 };
 

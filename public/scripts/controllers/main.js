@@ -8,5 +8,5 @@
  */
 angular.module('sbAdminApp')
   .controller('MainCtrl',function($scope,$position, User) {
-  	$scope.user = User.get({id:'5539b84999ec5f88076558e1'});
+  	$scope.user = User.get();
   });
