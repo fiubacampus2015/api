@@ -5,7 +5,6 @@
     </div>
     <!-- /.col-lg-12 -->
 </div>
-
 <!-- /.row -->
 <div class="row">
     
@@ -24,7 +23,7 @@
             <!-- /.panel-heading -->
             <div class="panel-body">
                 <div class="table-responsive">
-                    <table class="table">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>Nombre</th>
@@ -36,12 +35,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                             <tr ng-repeat="group in groups | filter:group_search">
+                             <tr ng-repeat="group in groups | filter:group_search" ng-click="forums_search.group = group._id;group_selec=group" ng-class="forums_search.group == group._id ? 'info' : '' ">
                                 <td>{{group.name}}</td>
                                 <td>{{group.description}}</td>
                                 <td class="center">{{group.members}}</td>
                                 <td>{{group.owner.name}} ({{group.owner.email}})</td>
-                                <td>{{group.status}}</td>
+                                <td>{{group.suspend ? 'suspendido' : 'activo'}}</td>
                                 <td>
                                     <button ng-show="!group.suspend" type="button" class="btn btn-warning btn-circle" title="suspended" 
                                         ng-click="entity_suspend(group)">
@@ -53,6 +52,69 @@
                                 </td>
                             </tr>
                             
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.table-responsive -->
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+    </div>
+    <!-- /.col-lg-6 -->
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <h2 class="page-header">Foros</h2>
+
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<!-- /.row -->
+<div class="row">
+    
+    <div class="col-lg-12">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="input-group custom-search-form">
+                    <input type="text" class="form-control" placeholder="Search..." ng-model="forums_search.title">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </span>
+                </div>        
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" >
+                        <thead>
+                            <tr>
+                                <th>Titulo</th>
+                                <th>Owner</th>
+                                <th># Posts</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody >
+                             <tr ng-repeat="forum in forums | filter:forums_search" >
+                                <td>{{forum.title}}</td>
+                                <td>{{forum.owner.name}}</td>
+                                <td class="center">{{forum.posts}}</td>
+                                <td>{{forum.suspend ? 'suspendido' : 'activo'}}</td>
+                                <td>
+                                    <button ng-show="!forum.suspend" type="button" class="btn btn-warning btn-circle" title="suspend" 
+                                        ng-click="entity_suspend(forum)">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-circle" ng-show="forum.suspend" ng-click="entity_active(forum)">
+                                        <i class="fa fa-check" title="activar"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

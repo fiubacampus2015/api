@@ -81,3 +81,7 @@ body {
 text-decoration: none;
 background-color: #eee;
 }
+
+.table-hover>tbody>tr:hover {
+  cursor: pointer;
+}

@@ -13,6 +13,9 @@ angular.module('sbAdminApp')
     console.log("VAMO: ", $scope.user)
 
   	var groups = Group.query(function(){
+      $scope.forums_search = {};
+      $scope.group_selec = groups[0];
+      $scope.forums_search.group = $scope.group_selec._id;
   		$scope.groups = groups;
   	});
 

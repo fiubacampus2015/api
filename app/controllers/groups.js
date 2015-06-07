@@ -142,13 +142,13 @@ exports.search = function(req, res, next) {
 }
 
 exports.createForum = function(req, res, next) {
-	if(!req.body.message || !req.body.message.content)
+	if (!req.body.message || !req.body.message.content)
 		return next(new Error("no content"));
 
 	var forum = new Forum({
 		group: req.params.groupId,
 		title: req.body.title,
-		owner:req.user._id
+		owner: req.user._id
 	});
 
 	forum.save(function(err){
