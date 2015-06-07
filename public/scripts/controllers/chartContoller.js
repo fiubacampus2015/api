@@ -8,29 +8,35 @@
  */
 angular.module('sbAdminApp')
   .controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
-    $scope.line = {
-	    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
-	    series: ['Series A', 'Series B'],
-	    data: [
-	      [65, 59, 80, 81, 56, 55, 40],
-	      [28, 48, 40, 19, 86, 27, 90]
-	    ],
-	    onClick: function (points, evt) {
-	      console.log(points, evt);
-	    }
-    };
+    
 
     $scope.bar = {
-	    labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
-		series: ['Series A', 'Series B'],
-
+	    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
+		series: ['Miembros', 'Mensajes'],
 		data: [
 		   [65, 59, 80, 81, 56, 55, 40],
 		   [28, 48, 40, 19, 86, 27, 90]
-		]
-    	
+		],
+        onClick: function (points, evt) {
+          console.log(points, evt);
+        }
     };
 
+
+    setTimeout(function(){
+        console.log("cambio")
+        $scope.bar.data = [
+           [100, 59, 80, 81, 56, 55, 40],
+           [28, 48, 40, 100, 86, 27, 90]
+        ];
+        console.log($scope.bar)
+        $scope.bar.update()
+    }, 2000)
+
+
+
+
+    /*
     $scope.donut = {
     	labels: ["Download Sales", "In-Store Sales", "Mail-Order Sales"],
     	data: [300, 500, 100]
@@ -64,5 +70,5 @@ angular.module('sbAdminApp')
     		this.type = this.type === 'PolarArea' ?
     	    'Pie' : 'PolarArea';
 		}
-    };
+    };*/
 }]);
