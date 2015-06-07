@@ -53,28 +53,43 @@ GroupSchema.statics = {
 	  });
 	},
 	memberPlusPlus: function(id) {
-		this.findByIdAndUpdate( id, { $inc: { 'members' : '1' }}).exec();
+		this.PlusDescreaseProperty(id, 'members', 1);
 	},
 	memberDecrease: function(id) {
-		this.findByIdAndUpdate( id, { $inc: { 'members' : '-1' }}).exec();
+		this.PlusDescreaseProperty(id, 'members', -1);
 	},
 	filePlusPlus: function(id) {
-		this.findByIdAndUpdate( id, { $inc: { 'files' : '1' }}).exec();
+		this.PlusDescreaseProperty(id, 'files', 1);
 	},
 	fileDecrease: function(id) {
-		this.findByIdAndUpdate( id, { $inc: { 'files' : '-1' }}).exec();
+		this.PlusDescreaseProperty(id, 'files', -1);
+		
 	},
 	msgsPlusPlus: function(id) {
-		this.findByIdAndUpdate( id, { $inc: { 'msgs' : '1' }}).exec();
+		this.PlusDescreaseProperty(id, 'msgs', 1);
 	},
 	msgsDecrease: function(id) {
-		this.findByIdAndUpdate( id, { $inc: { 'msgs' : '-1' }}).exec();
+		this.PlusDescreaseProperty(id, 'msgs', -1);
 	},
 	requestPlusPlus: function(id) {
-		this.findByIdAndUpdate( id, { $inc: { 'request' : '1' }}).exec();
+		this.PlusDescreaseProperty(id, 'request', 1);
+		
 	},
 	requestDecrease: function(id) {
-		this.findByIdAndUpdate( id, { $inc: { 'request' : '-1' }}).exec();
+		this.PlusDescreaseProperty(id, 'request', -1);
+	},
+	PlusDescreaseProperty: function(id, property, factor) {
+		this.findOne({
+			id: id
+		}).exec(function(err, group){
+			if(err || !group) return;
+			if(group[property] != 0) {
+				group[property] = group[property] + (1 * factor);
+				group.save(function(err){
+					console.log("FAIL SAVE USER", err);
+				});
+			}
+		})
 	}
 }
 
