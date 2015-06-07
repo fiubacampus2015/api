@@ -21,6 +21,7 @@
                                 <th>User</th>
                                 <th>Nombre</th>
                                 <th>Email</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -28,7 +29,14 @@
                                 <td>{{user.username}}</td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
-                                </tr>
+                                <td>{{user._id}}</td>
+                                <td>
+                                    <button ng-show="user.status != 'suspend'" type="button" class="btn btn-warning btn-circle" title="suspended" 
+                                        ng-click="user_suspend(user)">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </td>
+                            </tr>
                         </tbody>
                     </table>
                 </div>

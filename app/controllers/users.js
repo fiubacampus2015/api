@@ -222,6 +222,7 @@ exports.put = function(req, res){
   var user = req.profile,
     userReq = req.body;
   Object.keys(userReq).forEach(function(key){
+    console.log(key)
     user[key] = userReq[key];
   });
 

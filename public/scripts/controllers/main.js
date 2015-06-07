@@ -23,4 +23,11 @@ angular.module('sbAdminApp')
   	var users = User.query(function(){
   		$scope.users = users;
   	});
+
+
+    $scope.user_suspend = function(user) {
+      user.status = 'suspend';
+      user.$update();
+    };
+
   });
