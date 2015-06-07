@@ -317,7 +317,7 @@ exports.deleteForum = function(req, res, next) {
 }
 
 exports.put = function(req, res, next) {
-	Group.findOne(req.params.groupId, function(err, group) {
+	Group.findOne({_id: req.params.groupId}, function(err, group) {
 		group.title = req.body.title || group.title;
 		group.name = req.body.name || group.name;
 		group.description =  req.body.description || group.description;
