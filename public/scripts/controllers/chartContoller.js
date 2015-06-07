@@ -9,7 +9,7 @@
 angular.module('sbAdminApp')
   .controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
     $scope.line = {
-	    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+	    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
 	    series: ['Series A', 'Series B'],
 	    data: [
 	      [65, 59, 80, 81, 56, 55, 40],
@@ -40,8 +40,7 @@ angular.module('sbAdminApp')
     	labels:["Eating", "Drinking", "Sleeping", "Designing", "Coding", "Cycling", "Running"],
 
     	data:[
-    	    [65, 59, 90, 81, 56, 55, 40],
-    	    [28, 48, 40, 19, 96, 27, 100]
+    	    [100, 10, 10, 10, 100, 10, 100],
     	]
     };
 

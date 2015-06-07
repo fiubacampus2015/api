@@ -44,10 +44,10 @@
                                 <td>
                                     <button ng-show="!group.suspend" type="button" class="btn btn-warning btn-circle" title="suspended" 
                                         ng-click="entity_suspend(group)">
-                                        <i class="fa fa-times"></i>
+                                        <i class="fa fa-check" title="activar"></i>
                                     </button>
                                     <button type="button" class="btn btn-info btn-circle" ng-show="group.suspend" ng-click="entity_active(group)">
-                                        <i class="fa fa-check" title="activar"></i>
+                                        <i class="fa fa-times"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -108,10 +108,10 @@
                                 <td>
                                     <button ng-show="!forum.suspend" type="button" class="btn btn-warning btn-circle" title="suspend" 
                                         ng-click="entity_suspend(forum)">
-                                        <i class="fa fa-times"></i>
+                                        <i class="fa fa-check" title="activar"></i>
                                     </button>
                                     <button type="button" class="btn btn-info btn-circle" ng-show="forum.suspend" ng-click="entity_active(forum)">
-                                        <i class="fa fa-check" title="activar"></i>
+                                        <i class="fa fa-times"></i>
                                     </button>
                                 </td>
                             </tr>
