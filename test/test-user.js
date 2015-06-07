@@ -808,6 +808,18 @@ describe('Users', function () {
       .end(done)
     });
 
+    it('should get my groups and subscribed groups', function(done){
+      
+      console.log('/api/' + valid_token + '/users/' + user_id + '/groups')
+      request(app)
+      .get('/api/' + valid_token + '/users/' + user_id + '/groups')
+      .expect(200)
+      .expect(function(res) {
+        if(!res.body || typeof(res.body) !== 'object' || res.body.length == 0) return "no result!"
+      })
+      .end(done)
+    })
+
     it('should get members', function(done){
       request(app)
       .get('/api/' + valid_token + '/groups/' + group_id + '/members')
