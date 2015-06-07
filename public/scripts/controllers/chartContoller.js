@@ -17,21 +17,14 @@ angular.module('sbAdminApp')
 		   [65, 59, 80, 81, 56, 55, 40],
 		   [28, 48, 40, 19, 86, 27, 90]
 		],
-        onClick: function (points, evt) {
-          console.log(points, evt);
+        toggle : function () {
+            this.data[0][0] = this.data[0][0] + 10;
         }
     };
 
-
     setTimeout(function(){
-        console.log("cambio")
-        $scope.bar.data = [
-           [100, 59, 80, 81, 56, 55, 40],
-           [28, 48, 40, 100, 86, 27, 90]
-        ];
-        console.log($scope.bar)
-        $scope.bar.update()
-    }, 2000)
+        $scope.bar.toggle()
+    }, 1000)
 
 
 
