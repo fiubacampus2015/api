@@ -61,13 +61,15 @@ exports.subscribeResolve = function(req, res, next) {
 		if(err) return next(err);
 		if(membership.group.owner.toString() !== req.user._id.toString()) return res.status(403).json({});
 		membership.status = req.body.status;
-		if(membership.status == 'accepted')
+		if(membership.status == 'accepted') {
 			Group.memberPlusPlus(req.params.groupId, function(){ /* async */ });
+			Group.requestDecrease(req.params.groupId, function(){});
+		};
+
 		membership.save(function(err) {
 			if(err) return next(err);
 			res.status(200).json(membership);
 		});
-
 	});
 }
 
@@ -106,8 +108,13 @@ exports.subscribe = function(req, res, next) {
 			if(err) return next(err);
 			if(group.status == 'accepted') {
 				group.members = group.members + 1;
-				group.save(function(err){ });	
-			};
+			} else {
+				if (group.status == 'pending')
+					group.request = group.request + 1;
+			}
+
+			group.save(function(err){ });	
+
 			
            	return res.status(201).json(membership);
 		});
@@ -158,7 +165,7 @@ exports.search = function(req, res, next) {
 	      });
 	    
 	      var limit_no_member = (req.query.limit || 10) - (groups_id || []).length;
-	      Group.find(criteria, "_id name description photo owner members")
+	      Group.find(criteria, "_id name description photo owner members msgs files request")
 			.where("_id")
 	        .limit( limit_no_member )
 	        .skip( limit_no_member * (req.query.page || 0) )
