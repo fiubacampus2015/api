@@ -102,7 +102,7 @@ exports.search = function(req, res, next) {
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
   	console.log("req.user---------------------------", req.user)
-  	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members msgs files request" ,req.query.limit || 100, req.query.page || 0,
+  	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members msgs files request suspend" ,req.query.limit || 100, req.query.page || 0,
 	    function(err, memberships) {
 	    	if(err) return next(err);
 	      var groups_id = [],
@@ -118,7 +118,7 @@ exports.search = function(req, res, next) {
 	      });
 	    
 	      var limit_no_member = (req.query.limit || 10) - (groups_id || []).length;
-	      Group.find(criteria, "_id name description photo owner members")
+	      Group.find(criteria, "_id name description photo owner members suspend")
 			.where("_id")
 	        .limit( limit_no_member )
 	        .skip( limit_no_member * (req.query.page || 0) )
@@ -319,11 +319,11 @@ exports.deleteForum = function(req, res, next) {
 
 exports.put = function(req, res, next) {
 	Group.findOne(req.params.groupId, function(err, group) {
-		group.title = req.body.title || group.title;
-		group.name = req.body.name || group.name;
-		group.description =  req.body.description || group.description;
-		group.status = req.body.status || group.status;
-		group.public = req.body.public || group.status;
+		var groupReq = req.body;
+		  Object.keys(groupReq).forEach(function(key){
+		    group[key] = groupReq[key];
+		  });
+		  
 		group.save(function(err) {
 			if(err) return next(err)
 			return res.status(200).json(group)
@@ -341,7 +341,7 @@ exports.all = function(req, res, next) {
 
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
-  Group.find(criteria, "_id name description photo owner members")
+  Group.find(criteria, "_id name description photo owner members suspend")
 	.populate("owner")
     .sort([['name', 'ascending']])
     .exec(function(err, groups) {
@@ -358,7 +358,7 @@ exports.allForums = function(req, res, next) {
 
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
-  Forum.find(criteria,"_id date title owner group")
+  Forum.find(criteria,"_id date title owner group suspend")
     .sort([['title', 'ascending']])
     .populate('owner')
     .exec(function(err, forums) {
@@ -368,7 +368,7 @@ exports.allForums = function(req, res, next) {
 }
 
 exports.show = function(req, res, next) {
-  Group.findOne({_id:req.params.id}, "_id name description photo owner members")
+  Group.findOne({_id:req.params.id}, "_id name description photo owner members suspend")
 	.populate("owner")
     .exec(function(err, group) {
 		if (err) return next(err);
@@ -377,7 +377,7 @@ exports.show = function(req, res, next) {
 }
 
 exports.showForum = function(req, res, next) {
-  Forum.findOne({_id:req.params.id}, "_id date title owner group")
+  Forum.findOne({_id:req.params.id}, "_id date title owner group suspend")
 	.populate("owner")
     .exec(function(err, group) {
 		if (err) return next(err);

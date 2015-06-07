@@ -167,8 +167,8 @@ angular
    })
   }])
   .factory('User', ['$resource', function($resource) { return  $resource('/api/users/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
-  .factory('Group', ['$resource', function($resource) { return  $resource('/api/groups/:id' );  }])
-  .factory('Forum', ['$resource', function($resource) { return  $resource('/api/forums/:id');  }])
+  .factory('Group', ['$resource', function($resource) { return  $resource('/api/groups/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
+  .factory('Forum', ['$resource', function($resource) { return  $resource('/api/forums/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
   ;
 
     

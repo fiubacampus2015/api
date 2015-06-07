@@ -25,9 +25,14 @@ angular.module('sbAdminApp')
   	});
 
 
-    $scope.user_suspend = function(user) {
-      user.status = 'suspend';
-      user.$update();
+    $scope.entity_suspend = function(entity) {
+      entity.suspend = true;
+      entity.$update();
+    };
+
+    $scope.entity_active = function(entity) {
+      entity.suspend = false;
+      entity.$update();
     };
 
   });

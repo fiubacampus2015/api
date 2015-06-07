@@ -19,7 +19,9 @@ module.exports = function (app, passport) {
   app.put('/api/users/:userId', users.put);
   app.get('/api/users', users.all);
   
+  app.post('/api/groups', groups.create);
   app.get('/api/groups/:id', groups.show);
+  app.put('/api/groups/:id', groups.put);
   app.get('/api/groups/:groupId/forums', groups.searchForum, function(req, res) {
     res.status(200).json(req.forums)
   });

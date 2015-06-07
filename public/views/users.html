@@ -21,6 +21,8 @@
                                 <th>User</th>
                                 <th>Nombre</th>
                                 <th>Email</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
 
                             </tr>
                         </thead>
@@ -29,11 +31,14 @@
                                 <td>{{user.username}}</td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
-                                <td>{{user._id}}</td>
+                                <td>{{user.status}}</td>
                                 <td>
-                                    <button ng-show="user.status != 'suspend'" type="button" class="btn btn-warning btn-circle" title="suspended" 
-                                        ng-click="user_suspend(user)">
+                                    <button ng-show="!user.suspend" type="button" class="btn btn-warning btn-circle" title="suspended" 
+                                        ng-click="entity_suspend(user)">
                                         <i class="fa fa-times"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-info btn-circle" ng-show="user.suspend" ng-click="entity_active(user)">
+                                        <i class="fa fa-check" title="activar"></i>
                                     </button>
                                 </td>
                             </tr>
