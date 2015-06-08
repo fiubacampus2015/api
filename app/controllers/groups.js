@@ -42,7 +42,8 @@ exports.userGroups = function(req, res, next ){
 	            	console.log("error", err);
 	          	}
 	          	req.groups = groups;
-		      	res.status(200).json(groups)
+		      	next();
+		      	//res.status(200).json(groups)
 		  	});
   	});
 }
