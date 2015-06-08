@@ -29,6 +29,7 @@
                                 <th>Nombre</th>
                                 <th>Descripcion</th>
                                 <th># Miembros</th>
+                                <th># Mensajes</th>
                                 <th>Owner</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
@@ -39,6 +40,7 @@
                                 <td>{{group.name}}</td>
                                 <td>{{group.description}}</td>
                                 <td class="center">{{group.members}}</td>
+                                <td class="center">{{group.msgs}}</td>
                                 <td>{{group.owner.name}} ({{group.owner.email}})</td>
                                 <td>{{group.suspend ? 'suspendido' : 'activo'}}</td>
                                 <td>

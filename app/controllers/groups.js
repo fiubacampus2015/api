@@ -260,7 +260,8 @@ exports.messageToForum = function(req, res, next) {
 		_id: req.params.forumId
 	}, function(err, forum) {
 		if(err) return next(err);
-		Group.msgsPlusPlus(forum.group, function(){ /* async */ });
+		console.log("MENSAJE PLUS PLUS", forum.group)
+		Group.msgsPlusPlus(forum.group);
 		var message = new Message(req.body);
 		message.user = req.user._id;
 		message.save(function(err) {
@@ -304,6 +305,7 @@ exports.messageToGroup = function(req, res, next) {
 				post.save(function(err) {
 					if(err) return next(err)
 					forum.posts.push(post._id);
+					Group.msgsPlusPlus(forum.group);
 					forum.save(function(err) {
 						if(err) return next(err);
 						return res.status(201).json(message);
@@ -389,7 +391,7 @@ exports.all = function(req, res, next) {
 
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
-  Group.find(criteria, "_id name description photo owner members suspend")
+  Group.find(criteria, "_id name description photo owner members suspend msgs files requests")
 	.populate("owner")
     .sort([['name', 'ascending']])
     .exec(function(err, groups) {

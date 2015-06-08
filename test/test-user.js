@@ -24,6 +24,7 @@ var cookies,
 describe('Users', function () {
 
   before(function (done) {
+    //done()
      require('./helper').clearDb(done)
   }); 
   
@@ -908,6 +909,6 @@ describe('Users', function () {
 
   after(function (done) {
       done()
-     //require('./helper').clearDb(done)
+     require('./helper').clearDb(done)
   }); 
 })

@@ -1,5 +1,7 @@
 var mongoose = require('mongoose'),
   	Post = mongoose.model('Post'),
+	winston = require('winston'), // log
+
   	Forum = mongoose.model('Forum'),
 	crypto = require('crypto'),
 	Schema = mongoose.Schema;
@@ -81,15 +83,13 @@ GroupSchema.statics = {
 	},
 	PlusDescreaseProperty: function(id, property, factor) {
 		this.findOne({
-			id: id
+			_id: id
 		}).exec(function(err, group){
 			if(err || !group) return;
-			if(group[property] != 0) {
-				group[property] = group[property] + (1 * factor);
-				group.save(function(err){
-					console.log("FAIL SAVE USER", err);
-				});
-			}
+			group[property] = group[property] + (1 * factor);
+			group.save(function(err){
+				winston.info("FAIL SAVE USER", err);
+			});
 		})
 	}
 }

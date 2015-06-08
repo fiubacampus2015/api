@@ -25,6 +25,10 @@ module.exports = function (app, passport) {
   app.get('/api/groups/:groupId/forums', groups.searchForum, function(req, res) {
     res.status(200).json(req.forums)
   });
+
+  //app.get('/api/messages', groups.messages)
+
+
   
   // USERS
 
