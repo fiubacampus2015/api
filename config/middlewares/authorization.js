@@ -50,9 +50,6 @@ exports.groupsActions = function(req, res, next) {
 exports.requiresLogin = function(req, res, next) {
   
 
-  Token.find(function(err, tokens){
-    console.log(err, tokens)
-  })
   Token
   .findById(req.params.token)
   .populate('_user')

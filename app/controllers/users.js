@@ -303,10 +303,6 @@ exports.show = function(req, res, next) {
 
 // For params :userId
 exports.load = function (req, res, next, id) {
-  User.find(function (err, users) {
-    console.log(err, users)
-  });
-  
   User.load({ _id : id }, function (err, user) {
     if (err) return next(err);
     console.log(err, user)
