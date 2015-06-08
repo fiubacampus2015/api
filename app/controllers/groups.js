@@ -149,7 +149,8 @@ exports.search = function(req, res, next) {
 
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
-  	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members msgs files request" ,req.query.limit || 100, req.query.page || 0,
+  	console.log("req.user---------------------------", req.user)
+  	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members msgs files request suspend" ,req.query.limit || 100, req.query.page || 0,
 	    function(err, memberships) {
 	    	if(err) return next(err);
 	      var groups_id = [],
@@ -189,13 +190,13 @@ exports.search = function(req, res, next) {
 }
 
 exports.createForum = function(req, res, next) {
-	if(!req.body.message || !req.body.message.content)
+	if (!req.body.message || !req.body.message.content)
 		return next(new Error("no content"));
 
 	var forum = new Forum({
 		group: req.params.groupId,
 		title: req.body.title,
-		owner:req.user._id
+		owner: req.user._id
 	});
 
 	forum.save(function(err){
@@ -259,7 +260,8 @@ exports.messageToForum = function(req, res, next) {
 		_id: req.params.forumId
 	}, function(err, forum) {
 		if(err) return next(err);
-		Group.msgsPlusPlus(forum.group, function(){ /* async */ });
+		console.log("MENSAJE PLUS PLUS", forum.group)
+		Group.msgsPlusPlus(forum.group);
 		var message = new Message(req.body);
 		message.user = req.user._id;
 		message.save(function(err) {
@@ -303,6 +305,7 @@ exports.messageToGroup = function(req, res, next) {
 				post.save(function(err) {
 					if(err) return next(err)
 					forum.posts.push(post._id);
+					Group.msgsPlusPlus(forum.group);
 					forum.save(function(err) {
 						if(err) return next(err);
 						return res.status(201).json(message);
@@ -365,12 +368,12 @@ exports.deleteForum = function(req, res, next) {
 }
 
 exports.put = function(req, res, next) {
-	Group.findOne({_id: req.params.groupId}, function(err, group) {
-		group.title = req.body.title || group.title;
-		group.name = req.body.name || group.name;
-		group.description =  req.body.description || group.description;
-		group.status = req.body.status || group.status;
-		group.public = req.body.public || group.status;
+	Group.findOne(req.params.groupId, function(err, group) {
+		var groupReq = req.body;
+		  Object.keys(groupReq).forEach(function(key){
+		    group[key] = groupReq[key];
+		  });
+		  
 		group.save(function(err) {
 			if(err) return next(err)
 			return res.status(200).json(group)
@@ -378,3 +381,56 @@ exports.put = function(req, res, next) {
 	})
 }
 
+
+
+exports.all = function(req, res, next) {
+	var criteria = {};
+	Object.keys(req.query).forEach(function(key){
+      if (key == 'limit' || key == 'page') 
+        return;
+
+      criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
+  	});
+  Group.find(criteria, "_id name description photo owner members suspend msgs files requests")
+	.populate("owner")
+    .sort([['name', 'ascending']])
+    .exec(function(err, groups) {
+		if (err) return next(err);
+		return res.status(200).json(groups);
+  	});
+}
+
+exports.allForums = function(req, res, next) {
+	var criteria = {};
+	Object.keys(req.query).forEach(function(key){
+      if (key == 'limit' || key == 'page') 
+        return;
+
+      criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
+  	});
+  Forum.find(criteria,"_id date title owner group suspend")
+    .sort([['title', 'ascending']])
+    .populate('owner')
+    .exec(function(err, forums) {
+      if(err) return res.status(400).json(err);
+      res.status(200).json(forums)
+  });	
+}
+
+exports.show = function(req, res, next) {
+  Group.findOne({_id:req.params.id}, "_id name description photo owner members suspend")
+	.populate("owner")
+    .exec(function(err, group) {
+		if (err) return next(err);
+		return res.status(200).json(group);
+  	});
+}
+
+exports.showForum = function(req, res, next) {
+  Forum.findOne({_id:req.params.id}, "_id date title owner group suspend")
+	.populate("owner")
+    .exec(function(err, group) {
+		if (err) return next(err);
+		return res.status(200).json(group);
+  	});
+}

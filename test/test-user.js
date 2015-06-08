@@ -24,6 +24,7 @@ var cookies,
 describe('Users', function () {
 
   before(function (done) {
+    //done()
      require('./helper').clearDb(done)
   }); 
   
@@ -173,7 +174,9 @@ describe('Users', function () {
           if (!('token' in res.body)) return "no token";
           if (!('id' in res.body)) return "no id";
           if (!('confirmed' in res.body)) return "no confirmed";
+          console.log("token:", res.body.token);
           valid_token = res.body.token;
+          console.log("user_id:", res.body.id);
           user_id = res.body.id;
         })
         .expect(200)
@@ -905,7 +908,7 @@ describe('Users', function () {
   });
 
   after(function (done) {
-    done()
-     //require('./helper').clearDb(done)
+      done()
+     require('./helper').clearDb(done)
   }); 
 })

@@ -12,9 +12,11 @@ angular
     'oc.lazyLoad',
     'ui.router',
     'ui.bootstrap',
-    'angular-loading-bar'
+    'angular-loading-bar',
+    'ngResource',
+    'ngRoute'
   ])
-  .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider',function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider) {
+  .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider', '$resourceProvider' ,function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider, $resourceProvider) {
     
     $ocLazyLoadProvider.config({
       debug:false,
@@ -26,6 +28,7 @@ angular
     $stateProvider
       .state('dashboard', {
         url:'/dashboard',
+        controller: 'MainCtrl',
         templateUrl: 'views/dashboard/main.html',
         resolve: {
             loadMyDirectives:function($ocLazyLoad){
@@ -34,6 +37,7 @@ angular
                     name:'sbAdminApp',
                     files:[
                     'scripts/directives/header/header.js',
+                    'scripts/controllers/main.js',
                     'scripts/directives/header/header-notification/header-notification.js',
                     'scripts/directives/sidebar/sidebar.js',
                     'scripts/directives/sidebar/sidebar-search/sidebar-search.js'
@@ -76,14 +80,12 @@ angular
     })
       .state('dashboard.home',{
         url:'/home',
-        controller: 'MainCtrl',
         templateUrl:'views/dashboard/home.html',
         resolve: {
           loadMyFiles:function($ocLazyLoad) {
             return $ocLazyLoad.load({
               name:'sbAdminApp',
               files:[
-              'scripts/controllers/main.js',
               'scripts/directives/timeline/timeline.js',
               'scripts/directives/notifications/notifications.js',
               'scripts/directives/chat/chat.js',
@@ -102,6 +104,7 @@ angular
         url:'/blank'
     })
       .state('login',{
+        controller: 'UserCtrl',
         templateUrl:'views/pages/login.html',
         url:'/login'
     })
@@ -125,9 +128,37 @@ angular
           }
         }
     })
+      .state('dashboard.statistics',{
+        templateUrl:'views/statistics.html',
+        url:'/statistics',
+        controller:'ChartCtrl',
+        resolve: {
+          loadMyFile:function($ocLazyLoad) {
+            return $ocLazyLoad.load({
+              name:'chart.js',
+              files:[
+                'bower_components/angular-chart.js/dist/angular-chart.min.js',
+                'bower_components/angular-chart.js/dist/angular-chart.css'
+              ]
+            }),
+            $ocLazyLoad.load({
+                name:'sbAdminApp',
+                files:['scripts/controllers/chartContoller.js']
+            })
+          }
+        }
+    })
       .state('dashboard.table',{
         templateUrl:'views/table.html',
         url:'/table'
+    })
+      .state('dashboard.groups',{
+        templateUrl:'views/groups.html',
+        url:'/groups'
+    })
+      .state('dashboard.users',{
+        templateUrl:'views/users.html',
+        url:'/users'
     })
       .state('dashboard.panels-wells',{
           templateUrl:'views/ui-elements/panels-wells.html',
@@ -153,6 +184,10 @@ angular
        templateUrl:'views/ui-elements/grid.html',
        url:'/grid'
    })
-  }]);
+  }])
+  .factory('User', ['$resource', function($resource) { return  $resource('/api/users/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
+  .factory('Group', ['$resource', function($resource) { return  $resource('/api/groups/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
+  .factory('Forum', ['$resource', function($resource) { return  $resource('/api/forums/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
+  ;
 
     
