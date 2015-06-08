@@ -51,6 +51,7 @@ module.exports = function (app, passport) {
   app.get('/api/:token/users', authentication, users.search);
 
   app.get('/api/:token/users/:user/wall', authentication, users.wallGet);
+  app.get('/api/:token/users/:userId/groups', authentication, groups.userGroups);
 
   app.post('/api/:token/users/:user/wall', authentication, users.wallPost); 
 

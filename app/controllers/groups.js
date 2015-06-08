@@ -5,6 +5,47 @@ var mongoose = require('mongoose'),
 	Membership = mongoose.model('Membership'),
 	Forum = mongoose.model('Forum');
 
+exports.userGroups = function(req, res, next ){
+
+	Membership.getGroups({user: req.params.userId}, {},"_id name description photo owner members msgs files request" ,req.query.limit || 100, req.query.page || 0,
+	    function(err, memberships) {
+	    	if(err) return next(err);
+	      var groups_id = [],
+	      	groups = [];
+	      memberships.forEach(function(m) {
+	      	if(m.group && m.group._id) {
+	      		m.group["member"] = true;
+	      		groups.push(m.group)
+	      		if(groups_id.indexOf(m.group._id) == -1) {
+	          		groups_id.push(m.group._id);  
+	        	}
+	      	}
+	      });
+	    
+	      var limit_no_member = (req.query.limit || 10) - (groups_id || []).length;
+	      Group.find({
+	      	owner: req.params.userId
+	      }, "_id name description photo owner members")
+			.where("_id")
+	        .limit( limit_no_member )
+	        .skip( limit_no_member * (req.query.page || 0) )
+	        .nin(groups_id)
+			.populate("owner")
+		    .sort([['name', 'ascending']])
+		    .exec(function(err, groups_no_member) {
+	    		if(!err) {
+	            	groups_no_member.forEach(function(u) {
+		              	u["member"] = false;
+		              	groups.push(u);
+		            });  
+	          	} else {
+	            	console.log("error", err);
+	          	}
+	          	req.groups = groups;
+		      	res.status(200).json(groups)
+		  	});
+  	});
+}
 
 exports.files = function(req, res, next) {
 
@@ -20,13 +61,15 @@ exports.subscribeResolve = function(req, res, next) {
 		if(err) return next(err);
 		if(membership.group.owner.toString() !== req.user._id.toString()) return res.status(403).json({});
 		membership.status = req.body.status;
-		if(membership.status == 'accepted')
+		if(membership.status == 'accepted') {
 			Group.memberPlusPlus(req.params.groupId, function(){ /* async */ });
+			Group.requestDecrease(req.params.groupId, function(){});
+		};
+
 		membership.save(function(err) {
 			if(err) return next(err);
 			res.status(200).json(membership);
 		});
-
 	});
 }
 
@@ -65,8 +108,13 @@ exports.subscribe = function(req, res, next) {
 			if(err) return next(err);
 			if(group.status == 'accepted') {
 				group.members = group.members + 1;
-				group.save(function(err){ });	
-			};
+			} else {
+				if (group.status == 'pending')
+					group.request = group.request + 1;
+			}
+
+			group.save(function(err){ });	
+
 			
            	return res.status(201).json(membership);
 		});
@@ -118,7 +166,7 @@ exports.search = function(req, res, next) {
 	      });
 	    
 	      var limit_no_member = (req.query.limit || 10) - (groups_id || []).length;
-	      Group.find(criteria, "_id name description photo owner members suspend")
+	      Group.find(criteria, "_id name description photo owner members msgs files request")
 			.where("_id")
 	        .limit( limit_no_member )
 	        .skip( limit_no_member * (req.query.page || 0) )

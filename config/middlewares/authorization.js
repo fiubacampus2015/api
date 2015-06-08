@@ -57,13 +57,13 @@ exports.requiresLogin = function(req, res, next) {
   .findById(req.params.token)
   .populate('_user')
   .exec(function (err, token) {
-    console.log("TOKENNNNN", err, token)
     if(err || !token)
-      return res.status(401).json(err);
+      return res.status(200).json({
+        reason:'no token valid'
+      });
 
-    console.log(token)
-    req.user = token._user;
-    next();
+      req.user = token._user;
+      next();
   });
 };
 
