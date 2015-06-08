@@ -106,10 +106,10 @@ exports.subscribe = function(req, res, next) {
 
 		membership.save(function(err) {
 			if(err) return next(err);
-			if(group.status == 'accepted') {
+			if(membership.status == 'accepted') {
 				group.members = group.members + 1;
 			} else {
-				if (group.status == 'pending')
+				if (membership.status == 'pending')
 					group.request = group.request + 1;
 			}
 
