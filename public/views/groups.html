@@ -44,11 +44,11 @@
                                 <td>{{group.owner.name}} ({{group.owner.email}})</td>
                                 <td>{{group.suspend ? 'suspendido' : 'activo'}}</td>
                                 <td>
-                                    <button ng-show="!group.suspend" type="button" class="btn btn-warning btn-circle" title="suspended" 
+                                    <button ng-show="!group.suspend" type="button" class="btn btn-danger btn-circle" title="suspended" 
                                         ng-click="entity_suspend(group)">
                                         <i class="fa fa-check" title="activar"></i>
                                     </button>
-                                    <button type="button" class="btn btn-info btn-circle" ng-show="group.suspend" ng-click="entity_active(group)">
+                                    <button type="button" class="btn btn-success btn-circle" ng-show="group.suspend" ng-click="entity_active(group)">
                                         <i class="fa fa-times"></i>
                                     </button>
                                 </td>
@@ -108,11 +108,11 @@
                                 <td class="center">{{forum.posts}}</td>
                                 <td>{{forum.suspend ? 'suspendido' : 'activo'}}</td>
                                 <td>
-                                    <button ng-show="!forum.suspend" type="button" class="btn btn-warning btn-circle" title="suspend" 
+                                    <button ng-show="!forum.suspend" type="button" class="btn btn-danger btn-circle" title="suspend" 
                                         ng-click="entity_suspend(forum)">
                                         <i class="fa fa-check" title="activar"></i>
                                     </button>
-                                    <button type="button" class="btn btn-info btn-circle" ng-show="forum.suspend" ng-click="entity_active(forum)">
+                                    <button type="button" class="btn btn-success btn-circle" ng-show="forum.suspend" ng-click="entity_active(forum)">
                                         <i class="fa fa-times"></i>
                                     </button>
                                 </td>
