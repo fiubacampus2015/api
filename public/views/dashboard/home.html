@@ -8,10 +8,12 @@
     <!-- /.row -->
     <div class="row">
         
-        <stats number="{{groups.length}}" comments="Grupos!" colour="primary" type="comments" goto="dashboard.groups"></stats>
-        <stats number="{{users.length}}" comments="Usuarios!" colour="primary" type="user" goto="dashboard.users"></stats>
-        <stats number="{{forums.length}}" comments="Foros!" colour="yellow" type="shopping-cart" goto="dashboard.groups"></stats>
-        <stats number="24" comments="Nuevas solicitudes!" colour="red" type="support" goto="dashboard.groups"></stats>
+        <stats number="{{groups.length}}" comments="Grupos!" colour="primary" type="group" goto="dashboard.groups"></stats>
+        
+        <stats number="{{users.length}}" comments="Usuarios!" colour="yellow" type="user" goto="dashboard.users"></stats>
+
+        <stats number="{{forums.length}}" comments="Foros!" colour="red" type="comments" goto="dashboard.groups"></stats>
+        <!--stats number="24" comments="Nuevas solicitudes!" colour="red" type="support" goto="dashboard.groups"></stats-->
 
     </div>
     
