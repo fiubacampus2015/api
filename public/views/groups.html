@@ -36,15 +36,15 @@
                             </tr>
                         </thead>
                         <tbody>
-                             <tr ng-repeat="group in groups | filter:group_search" ng-click="forums_search.group = group._id;group_selec=group" ng-class="forums_search.group == group._id ? 'info' : '' ">
-                                <td>{{group.name}}</td>
+                             <tr ng-repeat="group in groups | filter:group_search" ng-click="forums_search.group = group;group_selec=group;" ng-class="forums_search.group == group._id ? 'info' : '' ">
+                                <td style="font-weight:bold">{{group.name}}</td>
                                 <td>{{group.description}}</td>
                                 <td class="center">{{group.members}}</td>
                                 <td class="center">{{group.msgs}}</td>
                                 <td>{{group.owner.name}} ({{group.owner.email}})</td>
                                 <td>{{group.suspend ? 'suspendido' : 'activo'}}</td>
-                                <td>
-                                    <button ng-show="!group.suspend" type="button" class="btn btn-success btn-circle" title="suspended" 
+                                <td style="text-align: center;">
+                                    <button ng-show="!group.suspend" type="button" class="btn btn-success btn-circle" title="activo" 
                                         ng-click="entity_suspend(group)">
                                         <i class="fa fa-check" title="activar"></i>
                                     </button>
@@ -67,7 +67,7 @@
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <h2 class="page-header">Foros</h2>
+        <h2 class="page-header">Foros: <span>{{(forums_search.group.name)? forums_search.group.name : ''}}<span></h2>
 
     </div>
     <!-- /.col-lg-12 -->
@@ -80,7 +80,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <div class="input-group custom-search-form">
-                    <input type="text" class="form-control" placeholder="Buscar..." ng-model="forums_search.title">
+                    <input type="text" class="form-control" placeholder="Buscar..." ng-model="forums_search.group.title">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button">
                             <i class="fa fa-search"></i>
@@ -94,7 +94,7 @@
                     <table class="table table-hover" >
                         <thead>
                             <tr>
-                                <th>T&iacute;tulo</th>
+                                <th style="font-weight:bold">T&iacute;tulo</th>
                                 <th>Administrador</th>
                                 <th># Mensajes</th>
                                 <th>Estado</th>
@@ -102,13 +102,13 @@
                             </tr>
                         </thead>
                         <tbody >
-                             <tr ng-repeat="forum in forums | filter:forums_search" >
+                             <tr ng-repeat="forum in forums | filter:forums_search.group._id" >
                                 <td>{{forum.title}}</td>
                                 <td>{{forum.owner.name}}</td>
                                 <td class="center">{{forum.posts}}</td>
                                 <td>{{forum.suspend ? 'suspendido' : 'activo'}}</td>
-                                <td>
-                                    <button ng-show="!forum.suspend" type="button" class="btn btn-success btn-circle" title="suspend" 
+                                <td style="text-align: center;">
+                                    <button ng-show="!forum.suspend" type="button" class="btn btn-success btn-circle" title="activo" 
                                         ng-click="entity_suspend(forum)">
                                         <i class="fa fa-check" title="activar"></i>
                                     </button>

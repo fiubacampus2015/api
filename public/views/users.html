@@ -30,17 +30,17 @@
                                 <th>Nombre</th>
                                 <th>Email</th>
                                 <th>Estado</th>
-                                <th>Acciones</th>
+                                <th style="text-align: center;">Acciones</th>
 
                             </tr>
                         </thead>
                         <tbody>
                              <tr ng-repeat="user in users | filter:search">
-                                <td>{{user.username}}</td>
+                                <td style="font-weight: bold;">{{user.username}}</td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
                                 <td>{{user.status}}</td>
-                                <td>
+                                <td style="text-align: center;">
                                     <button ng-show="!user.suspend" type="button" class="btn btn-danger btn-circle" title="suspended" 
                                         ng-click="entity_suspend(user)">
                                         <i class="fa fa-times"></i>
