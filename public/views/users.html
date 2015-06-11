@@ -12,7 +12,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">
             <div class="input-group custom-search-form">
-                    <input type="text" class="form-control" placeholder="Search..." ng-model="search.name">
+                    <input type="text" class="form-control" placeholder="Buscar..." ng-model="search.name">
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button">
                             <i class="fa fa-search"></i>
@@ -26,26 +26,26 @@
                     <table class="table">
                         <thead>
                             <tr>
-                                <th>User</th>
+                                <th>Usuario</th>
                                 <th>Nombre</th>
                                 <th>Email</th>
                                 <th>Estado</th>
-                                <th>Acciones</th>
+                                <th style="text-align: center;">Acciones</th>
 
                             </tr>
                         </thead>
                         <tbody>
                              <tr ng-repeat="user in users | filter:search">
-                                <td>{{user.username}}</td>
+                                <td style="font-weight: bold;">{{user.username}}</td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
                                 <td>{{user.status}}</td>
-                                <td>
-                                    <button ng-show="!user.suspend" type="button" class="btn btn-warning btn-circle" title="suspended" 
+                                <td style="text-align: center;">
+                                    <button ng-show="!user.suspend" type="button" class="btn btn-danger btn-circle" title="suspended" 
                                         ng-click="entity_suspend(user)">
                                         <i class="fa fa-times"></i>
                                     </button>
-                                    <button type="button" class="btn btn-info btn-circle" ng-show="user.suspend" ng-click="entity_active(user)">
+                                    <button type="button" class="btn btn-success btn-circle" ng-show="user.suspend" ng-click="entity_active(user)">
                                         <i class="fa fa-check" title="activar"></i>
                                     </button>
                                 </td>

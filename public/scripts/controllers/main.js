@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('MainCtrl',function($scope,$position, User, Group, Forum) {
+  .controller('MainCtrl', function($scope,$position, User, Group, Forum, Chart) {
   	
     $scope.user = User.get({id:'55723a0c7f42365c134c4eef'});
     console.log("VAMO: ", $scope.user)
