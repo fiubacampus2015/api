@@ -264,7 +264,8 @@ exports.authenticate = function(req, res, next){
             if(err) return next(err);
               res.status(200).json({
                 token: token._id, 
-                photo: user.personal.photo, 
+                photo: user.personal.photo,
+                suspend: user.suspend, 
                 id: user.id, 
                 name: user.name, 
                 surname: user.username, 

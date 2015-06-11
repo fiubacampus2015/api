@@ -7,7 +7,7 @@ var mongoose = require('mongoose'),
 
 exports.userGroups = function(req, res, next ){
 
-	Membership.getGroups({user: req.params.userId}, {},"_id name description photo owner members msgs files request" ,req.query.limit || 100, req.query.page || 0,
+	Membership.getGroups({user: req.params.userId}, {},"_id name description photo owner members msgs files request suspend" ,req.query.limit || 100, req.query.page || 0,
 	    function(err, memberships) {
 	    	if(err) return next(err);
 	      var groups_id = [],
@@ -25,7 +25,7 @@ exports.userGroups = function(req, res, next ){
 	      var limit_no_member = (req.query.limit || 10) - (groups_id || []).length;
 	      Group.find({
 	      	owner: req.params.userId
-	      }, "_id name description photo owner members")
+	      }, "_id name description photo owner members msgs files request suspend")
 			.where("_id")
 	        .limit( limit_no_member )
 	        .skip( limit_no_member * (req.query.page || 0) )
@@ -42,7 +42,8 @@ exports.userGroups = function(req, res, next ){
 	            	console.log("error", err);
 	          	}
 	          	req.groups = groups;
-		      	res.status(200).json(groups)
+		      	next();
+		      	//res.status(200).json(groups)
 		  	});
   	});
 }
@@ -166,7 +167,7 @@ exports.search = function(req, res, next) {
 	      });
 	    
 	      var limit_no_member = (req.query.limit || 10) - (groups_id || []).length;
-	      Group.find(criteria, "_id name description photo owner members msgs files request")
+	      Group.find(criteria, "_id name description photo owner members msgs files request suspend")
 			.where("_id")
 	        .limit( limit_no_member )
 	        .skip( limit_no_member * (req.query.page || 0) )
@@ -230,7 +231,7 @@ exports.searchForum = function(req, res, next) {
   	});
 	criteria.group = req.params.groupId;
 	criteria["root"] = false;
-	Forum.find(criteria,"_id date title owner")
+	Forum.find(criteria,"_id date title owner suspend")
     .limit( req.query.limit || 10 )
     .skip( (req.query.limit || 10) * (req.query.page || 0) )
     .sort([['title', 'ascending']])
@@ -391,7 +392,7 @@ exports.all = function(req, res, next) {
 
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
-  Group.find(criteria, "_id name description photo owner members suspend msgs files requests")
+  Group.find(criteria, "_id name description photo owner members msgs files request suspend")
 	.populate("owner")
     .sort([['name', 'ascending']])
     .exec(function(err, groups) {
@@ -418,7 +419,7 @@ exports.allForums = function(req, res, next) {
 }
 
 exports.show = function(req, res, next) {
-  Group.findOne({_id:req.params.id}, "_id name description photo owner members suspend")
+  Group.findOne({_id:req.params.id}, "_id name description photo owner members msgs files request suspend")
 	.populate("owner")
     .exec(function(err, group) {
 		if (err) return next(err);
