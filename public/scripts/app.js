@@ -108,10 +108,30 @@ angular
         templateUrl:'views/pages/login.html',
         url:'/login'
     })
-      .state('dashboard.chart',{
+      .state('dashboard.chart_topten',{
         templateUrl:'views/chart.html',
         url:'/chart',
         controller:'ChartCtrl',
+        resolve: {
+          loadMyFile:function($ocLazyLoad) {
+            return $ocLazyLoad.load({
+              name:'chart.js',
+              files:[
+                'bower_components/angular-chart.js/dist/angular-chart.min.js',
+                'bower_components/angular-chart.js/dist/angular-chart.css'
+              ]
+            }),
+            $ocLazyLoad.load({
+                name:'sbAdminApp',
+                files:['scripts/controllers/chartContoller.js']
+            })
+          }
+        }
+    })
+      .state('dashboard.chart_careers',{
+        templateUrl:'views/careers.html',
+        url:'/chart/careers',
+        controller:'ChartCareersCtrl',
         resolve: {
           loadMyFile:function($ocLazyLoad) {
             return $ocLazyLoad.load({
@@ -188,6 +208,5 @@ angular
   .factory('User', ['$resource', function($resource) { return  $resource('/api/users/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
   .factory('Group', ['$resource', function($resource) { return  $resource('/api/groups/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
   .factory('Forum', ['$resource', function($resource) { return  $resource('/api/forums/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
+  .factory('Chart', ['$resource', function($resource) { return  $resource('/api/charts/:id', {id:'@_id'});  }])
   ;
-
-    

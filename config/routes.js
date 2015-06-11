@@ -1,5 +1,6 @@
 var users = require('../app/controllers/users'),
   groups = require('../app/controllers/groups'),
+  charts = require('../app/controllers/charts'),
   auth = require('./middlewares/authorization'),
   authentication = [auth.requiresLogin];
 
@@ -25,6 +26,8 @@ module.exports = function (app, passport) {
   app.get('/api/groups/:groupId/forums', groups.searchForum, function(req, res) {
     res.status(200).json(req.forums)
   });
+
+  app.get('/api/charts/:name', charts.doTheMagic)
 
   //app.get('/api/messages', groups.messages)
 

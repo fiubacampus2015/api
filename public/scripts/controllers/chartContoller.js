@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('ChartCtrl', ['$scope', '$timeout', function ($scope, $timeout) {
+  .controller('ChartCtrl', ['$scope', '$timeout', 'Charts', function ($scope, $timeout) {
     
 
     $scope.bar = {
@@ -18,6 +18,7 @@ angular.module('sbAdminApp')
 		   [28, 48, 40, 19, 86, 27, 90]
 		],
         toggle : function () {
+            //this.data = Charts.get({name:})
             this.data[0][0] = this.data[0][0] + 10;
         }
     };
@@ -64,4 +65,24 @@ angular.module('sbAdminApp')
     	    'Pie' : 'PolarArea';
 		}
     };*/
-}]);
+}])
+.controller('ChartCareersCtrl', function ($scope, $timeout, Chart) {
+
+
+    $scope.pie = {
+        labels : [],
+        data : []
+    };
+
+    $scope.doCall = function() {
+        $scope.pie = Chart.get({id:'career'});
+    }
+
+    setInterval(function(){
+        $scope.doCall();
+    }, 10000);
+
+    $scope.doCall();
+})
+;
+
