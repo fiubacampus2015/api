@@ -7,27 +7,23 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('ChartCtrl', ['$scope', '$timeout', 'Charts', function ($scope, $timeout) {
+    .controller('ChartCtrl', function ($scope, $timeout, Chart) {
     
 
     $scope.bar = {
-	    labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
-		series: ['Miembros', 'Mensajes'],
-		data: [
-		   [65, 59, 80, 81, 56, 55, 40],
-		   [28, 48, 40, 19, 86, 27, 90]
-		],
-        toggle : function () {
-            //this.data = Charts.get({name:})
-            this.data[0][0] = this.data[0][0] + 10;
-        }
+        labels : [],
+        data : []
     };
 
-    setTimeout(function(){
-        $scope.bar.toggle()
-    }, 1000)
+    $scope.doCall = function() {
+        $scope.bar = Chart.get({id:'topten'}); 
+    }
 
+    setInterval(function(){
+        $scope.doCall();
+    }, 10000);
 
+    $scope.doCall();
 
 
     /*
@@ -65,7 +61,7 @@ angular.module('sbAdminApp')
     	    'Pie' : 'PolarArea';
 		}
     };*/
-}])
+})
 .controller('ChartCareersCtrl', function ($scope, $timeout, Chart) {
 
 

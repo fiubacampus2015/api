@@ -43,7 +43,9 @@ var UserSchema = new Schema({
   },
   friend: { type: Boolean, default:false },
   wall: [{ type: Schema.Types.ObjectId, ref:'Message' }],
-  lastPosition:{type:String, default:''} 
+  lastPosition:{type:String, default:''}, 
+  created_at: { type: Date }, 
+  updated_at: { type: Date } 
 });
 
 var oAuthTypes = [
@@ -103,6 +105,12 @@ UserSchema.path('hashed_password').validate(function (hashed_password) {
 
 
 UserSchema.pre('save', function(next) {
+  now = new Date();
+  this.updated_at = now;
+  if ( !this.created_at ) {
+    this.created_at = now;
+  }
+
   if (!this.isNew) return next();
 
   if (!validatePresenceOf(this.password) && !this.skipValidation()) {
