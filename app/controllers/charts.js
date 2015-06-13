@@ -43,6 +43,8 @@ exports.doTheMagic = function(req, res, next ) {
 			this.loadMonth();
 			User.find({}, function(err, users) {
 				users.forEach(function(user){
+					if (!user.created_at) return;
+
 					var index = user.created_at.getMonth();
 					index = index ? parseInt(index) : index;
 					response.data[0][index] = response.data[0][index] + 1;	
