@@ -52,8 +52,20 @@ exports.userGroups = function(req, res, next ){
 
 exports.files = function(req, res, next) {
 
-	Group.files({_id: req.params.groupId}, function(err, files){
+	var criteria = {};
+	
+	criteria['typeOf']= { $in: ['photo','video', 'file'] };
+
+	Object.keys(req.query).forEach(function(key){
+      if (key == 'limit' || key == 'page') 
+        return;
+
+      criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
+  	});
+
+	Group.files({_id: req.params.groupId},criteria, function(err, files){
 		if(err) return next(err);
+		console.log(files);
 		return res.status(200).json(files);
 	});
 }
@@ -151,7 +163,7 @@ exports.search = function(req, res, next) {
 
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
-  	console.log("req.user---------------------------", req.user)
+  	//console.log("req.user---------------------------", req.user)
   	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members msgs files request suspend" ,req.query.limit || 100, req.query.page || 0,
 	    function(err, memberships) {
 	    	if(err) return next(err);
@@ -262,7 +274,7 @@ exports.messageToForum = function(req, res, next) {
 		_id: req.params.forumId
 	}, function(err, forum) {
 		if(err) return next(err);
-		console.log("MENSAJE PLUS PLUS", forum.group)
+		//console.log("MENSAJE PLUS PLUS", forum.group)
 		Group.msgsPlusPlus(forum.group);
 		var message = new Message(req.body);
 		message.user = req.user._id;
@@ -289,7 +301,6 @@ exports.messageToForum = function(req, res, next) {
 exports.messageToGroup = function(req, res, next) {
 	
 	var path = req.files.file.path;
-	console.log(req.user._id);
   	if (path!='')
     {
     	var originalName = req.files.file.originalname;

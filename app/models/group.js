@@ -22,7 +22,8 @@ var GroupSchema = new Schema({
 });
 
 GroupSchema.statics = {
-	files: function (options, select, cb) {
+	files: function (options,criteria, select, cb) {
+		criteria['typeOf']= { $in: ['photo','video', 'file'] };
 		Forum.find({
 			group: options._id
 		})
@@ -35,9 +36,7 @@ GroupSchema.statics = {
 		  	.populate("user")
 		  	.populate({
 		      path: 'message',
-		      match: {
-		      	 'typeOf': { $in: ['photo','video', 'file'] } 
-		      },
+		      match: criteria,
 		      select: select || '_id typeOf content',
 		      options: { sort: 'date' }
 		    })
