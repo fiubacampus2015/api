@@ -22,7 +22,7 @@ var GroupSchema = new Schema({
 });
 
 GroupSchema.statics = {
-	files: function (options,criteria, select, cb) {
+	files: function (options, criteria, select, cb) {
 		Forum.find({
 			group: options._id
 		})
@@ -40,7 +40,6 @@ GroupSchema.statics = {
 		      options: { sort: 'date' }
 		    })
 		    .exec(function(err, posts) {
-
 		    	if(err) cb(err, undefined);
 		    	var messages = [];
 		    	posts.forEach(function(post) {
