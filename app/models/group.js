@@ -48,7 +48,10 @@ GroupSchema.statics = {
 		    			messages.push(post.message);
 		    		}
 		    	});
-		    	cb(null, messages);
+		    	if(cb) cb(null, messages);
+		    	else if(select)	select(null, message)
+
+		    	return;
 		    });
 	  });
 	},
