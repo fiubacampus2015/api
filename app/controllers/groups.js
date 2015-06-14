@@ -4,6 +4,8 @@ var mongoose = require('mongoose'),
 	Post = mongoose.model('Post'),
 	Membership = mongoose.model('Membership'),
 	Forum = mongoose.model('Forum');
+	pathFile = require('path'),
+	fse = require('fs-extra');
 
 exports.userGroups = function(req, res, next ){
 
@@ -51,7 +53,6 @@ exports.userGroups = function(req, res, next ){
 exports.files = function(req, res, next) {
 
 	Group.files({_id: req.params.groupId}, function(err, files){
-		console.log("sjkdajskdjkasjdkajskdjaksjd",files);
 		if(err) return next(err);
 		return res.status(200).json(files);
 	});
@@ -286,45 +287,63 @@ exports.messageToForum = function(req, res, next) {
 }
 
 exports.messageToGroup = function(req, res, next) {
-	Forum.findOne({
-		group: req.params.groupId,
-		root: true
-	}, function(err, forum) {
-		if(err) return next(err)
-		
-		var createMessage = function(forum, req, res, next) {
-			var message = new Message(req.body);
-			message.user = req.user._id;
-			message.save(function(err) {
-				if(err) return next(err)
-				var post = new Post({
-					user: req.user._id,
-					forum: forum._id,
-					group: forum.group,
-					message: message._id
-				});
-				post.save(function(err) {
+	
+	var path = req.files.file.path;
+	console.log(req.user._id);
+  	if (path!='')
+    {
+    	var originalName = req.files.file.originalname;
+    	var pathDest =  '/content/'+req.params.groupId+'_'+originalName;
+    	fse.copy(path, 'public'+pathDest, function(err){
+        if (err) return next(err);
+
+		Forum.findOne({
+			group: req.params.groupId,
+			root: true
+		}, function(err, forum) {
+			if(err) return next(err)
+			
+			var createMessage = function(forum, req, res, next) {
+				var message = new Message(req.body);
+				message.user = req.user._id;
+				message.path = pathDest;
+				message.originalName = originalName;
+				message.save(function(err) {
 					if(err) return next(err)
-					forum.posts.push(post._id);
-					Group.msgsPlusPlus(forum.group);
-					forum.save(function(err) {
-						if(err) return next(err);
-						return res.status(201).json(message);
+					var post = new Post({
+						user: req.user._id,
+						forum: forum._id,
+						group: forum.group,
+						message: message._id
 					});
+					post.save(function(err) {
+						if(err) return next(err)
+						forum.posts.push(post._id);
+						Group.msgsPlusPlus(forum.group);
+						forum.save(function(err) {
+							if(err) return next(err);
+							message['user'] = req.user;
+							return res.status(201).json(message);
+						});
+					});
+				});	
+			};
+			if(!forum) {
+				forum = new Forum({
+					group: req.params.groupId,
+					user: req.user._id,
+					root:true
 				});
-			});	
-		};
-		if(!forum) {
-			forum = new Forum({
-				group: req.params.groupId,
-				owner:req.user._id
-			});
-			forum.save(function(err){
-				if(err) return next(err);
-				createMessage(forum, req, res, next);
-			});
-		} else createMessage(forum, req, res, next);
-	});	
+				forum.save(function(err){
+					if(err) return next(err);
+					createMessage(forum, req, res, next);
+				});
+			} else createMessage(forum, req, res, next);
+		});
+
+        });
+    }
+
 };
 
 exports.messageFromForum = function(req, res, next) {

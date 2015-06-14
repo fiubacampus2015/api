@@ -28,7 +28,7 @@ GroupSchema.statics = {
 		})
 		.select('_id')
 		.exec(function(err, forums_id){
-		  	if (err) cb(err, undefined);;
+		  	if (err) cb(err, undefined);
 		  	Post
 		  	.find()
 		  	.where('forum').in(forums_id)

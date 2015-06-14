@@ -7,6 +7,8 @@ var MessageSchema = new Schema({
 	typeOf: {type:String},
 	date: {type:Date, default: Date.now},
   	content: { type: String, default: '' },
+  	path: { type: String, default: '' },
+  	originalName: { type: String, default: '' },
   	user: { type: Schema.Types.ObjectId, ref:'User' },
   	me: { type: Schema.Types.ObjectId, ref:'User' },
   	actions:[]
