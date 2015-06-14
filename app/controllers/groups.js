@@ -63,7 +63,7 @@ exports.files = function(req, res, next) {
       		criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
 
   	});
-	Group.files({_id: req.params.groupId},criteria, null, function(err, files){
+	Group.files({_id: req.params.groupId},criteria, function(err, files){
 		if(err) return next(err);
 		console.log(files);
 		return res.status(200).json(files);
