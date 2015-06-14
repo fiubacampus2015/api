@@ -77,6 +77,8 @@ module.exports = function (app, passport) {
   
   app.put('/api/:token/groups/:groupId/subscribe/:susId/resolve', authentication, groups.subscribeResolve);
 
+  app.get('/api/:token/groups/:groupId/subscriptions', authentication, groups.subscriptions);
+
   app.get('/api/:token/groups/:groupId/files', authentication, groups.files);
 
   app.get('/api/:token/groups', authentication, groups.search, auth.groupsActions);

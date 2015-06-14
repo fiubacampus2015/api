@@ -70,6 +70,16 @@ exports.files = function(req, res, next) {
 	});
 }
 
+exports.subscriptions = function(req, res, next) {
+	Membership.find({
+		group: req.params.groupId,
+		status:'pending'
+	}).exec(function(err, subs){
+		if(err) next(err);
+		return res.status(200).json(subs);
+	});
+}
+
 exports.subscribeResolve = function(req, res, next) {
 	Membership.findOne({ _id: req.params.susId}).populate('group').exec(function(err, membership) {
 		if(err) return next(err);
@@ -400,11 +410,12 @@ exports.deleteForum = function(req, res, next) {
 
 exports.put = function(req, res, next) {
 	Group.findOne(req.params.groupId, function(err, group) {
+		console.log("To unsubscribe pre: ", group)
 		var groupReq = req.body;
-		  Object.keys(groupReq).forEach(function(key){
-		    group[key] = groupReq[key];
-		  });
-		  
+	  Object.keys(groupReq).forEach(function(key){
+	    group[key] = groupReq[key];
+	  });
+	  console.log("To unsubscribe post: ", group)
 		group.save(function(err) {
 			if(err) return next(err)
 			return res.status(200).json(group)
