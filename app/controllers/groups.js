@@ -16,6 +16,7 @@ exports.userGroups = function(req, res, next ){
 	      	groups = [];
 	      memberships.forEach(function(m) {
 	      	if(m.group && m.group._id) {
+	      		m.group["pendiente"] = m.status == 'pending' ? true : false;
 	      		m.group["member"] = true;
 	      		groups.push(m.group)
 	      		if(groups_id.indexOf(m.group._id) == -1) {
@@ -38,6 +39,7 @@ exports.userGroups = function(req, res, next ){
 	    		if(!err) {
 	            	groups_no_member.forEach(function(u) {
 		              	u["member"] = false;
+		              	u["pendiente"] = false;
 		              	groups.push(u);
 		            });  
 	          	} else {
@@ -77,7 +79,10 @@ exports.subscriptions = function(req, res, next) {
 	Membership.find({
 		group: req.params.groupId,
 		status:'pending'
-	}).exec(function(err, subs){
+	})
+	.populate('user')
+	.exec(function(err, subs){
+		console.log("-----------", subs)
 		if(err) next(err);
 		return res.status(200).json(subs);
 	});

@@ -4,6 +4,7 @@ var Schema = mongoose.Schema;
 
 var ForumSchema = new Schema({
 	date: {type:Date, default: Date.now},
+	last_activity: {type:Date, default: Date.now},
 	group: { type: Schema.Types.ObjectId, ref:'Group' },
 	title: {type:String, default: ''},
 	owner: { type: Schema.Types.ObjectId, ref:'User' },
@@ -19,6 +20,13 @@ var PostSchema = new Schema({
 	date: { type:Date, default: Date.now },
 	message: { type: Schema.Types.ObjectId, ref:'Message' }
 });
+
+ForumSchema.pre('save', function(next) {
+  now = new Date();
+  this.last_activity = now;
+  return next();
+});
+
 
 mongoose.model('Forum', ForumSchema);
 

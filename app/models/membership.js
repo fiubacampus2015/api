@@ -26,8 +26,8 @@ MemberShipSchema.statics = {
       		async.forEach(memberships, function (mp, callback) {
       			if(mp.group && mp.group._id) {
       				mp.group.populate('owner', function (err, result) {
-		 				callback();
-					});	
+		 						callback();
+							});
       			} else
       			 	callback();
 				

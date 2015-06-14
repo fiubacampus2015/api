@@ -13,6 +13,7 @@ var GroupSchema = new Schema({
 	description: { type:String, default: ''},
 	public: { type:Boolean, default: true},
 	suspend: { type:Boolean, default: false},
+	pendiente: { type:Boolean, default: false},
 	status: { type: String, default: 'public' },
 	owner: { type: Schema.Types.ObjectId, ref:'User' },
 	actions:[],

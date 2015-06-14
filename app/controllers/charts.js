@@ -53,40 +53,51 @@ exports.doTheMagic = function(req, res, next ) {
 				cb(null, response);
 			});
 			
-	},
-	loadMonth: function(){
-		var month = new Array(),
-			data = new Array();
+		},
+		active_user: function(req, res, cb){
+			var from = req.params.from,
+				to = req.params.to;
 
-		month[0] = "Enero";
-		month[1] = "Febrero";
-		month[2] = "Marzo";
-		month[3] = "Abril";
-		month[4] = "Mayo";
-		month[5] = "Junio";
-		month[6] = "Julio";
-		month[7] = "Agosto";
-		month[8] = "Septiembre";
-		month[9] = "Octubre";
-		month[10] = "Noviembre";
-		month[11] = "Diciembre";
-		data[0] = 0;
-		data[1] = 0;
-		data[2] = 0;
-		data[3] = 0;
-		data[4] = 0;
-		data[5] = 0;
-		data[6] = 0;
-		data[7] = 0;
-		data[8] = 0;
-		data[9] = 0;
-		data[10] = 0;
-		data[11] = 0;
-		response.labels = month;
-		response.data = [
-			data
-		];
-	}
+			/*Forum
+				.find()
+				.where('last_activity').gt(from).lt(to)
+				.limit(10)
+				..sort('-posts')
+*/
+		},
+		loadMonth: function(){
+			var month = new Array(),
+				data = new Array();
+
+			month[0] = "Enero";
+			month[1] = "Febrero";
+			month[2] = "Marzo";
+			month[3] = "Abril";
+			month[4] = "Mayo";
+			month[5] = "Junio";
+			month[6] = "Julio";
+			month[7] = "Agosto";
+			month[8] = "Septiembre";
+			month[9] = "Octubre";
+			month[10] = "Noviembre";
+			month[11] = "Diciembre";
+			data[0] = 0;
+			data[1] = 0;
+			data[2] = 0;
+			data[3] = 0;
+			data[4] = 0;
+			data[5] = 0;
+			data[6] = 0;
+			data[7] = 0;
+			data[8] = 0;
+			data[9] = 0;
+			data[10] = 0;
+			data[11] = 0;
+			response.labels = month;
+			response.data = [
+				data
+			];
+		}
 };
 
 	charMagix[req.params.name](req, res, function(err, response) {
