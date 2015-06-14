@@ -35,6 +35,7 @@ var UserSchema = new Schema({
     }]
   },
   education: {
+    creditos: { type: String, default:'' },
     careers:[{
       title: { type: String, default:'' },
       branch: { type: String, default:'' },
