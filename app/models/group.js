@@ -85,8 +85,8 @@ GroupSchema.statics = {
 		}).exec(function(err, group){
 			if(err || !group) return;
 			group[property] = group[property] + (1 * factor);
-			group.save(function(err){
-				winston.info("FAIL SAVE USER", err);
+			group.save(function(err) {
+				if(err)	winston.info("FAIL SAVE USER", err);
 			});
 		})
 	}
