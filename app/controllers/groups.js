@@ -9,7 +9,7 @@ var mongoose = require('mongoose'),
 
 exports.userGroups = function(req, res, next ){
 
-	Membership.getGroups({user: req.params.userId}, {},"_id name description photo owner members msgs files request suspend" ,req.query.limit || 100, req.query.page || 0,
+	Membership.getGroups({user: req.params.userId}, {},"_id name description photo owner members msgs files request suspend last_updated" ,req.query.limit || 100, req.query.page || 0,
 	    function(err, memberships) {
 	    	if(err) return next(err);
 	      var groups_id = [],
@@ -28,7 +28,7 @@ exports.userGroups = function(req, res, next ){
 	      var limit_no_member = (req.query.limit || 10) - (groups_id || []).length;
 	      Group.find({
 	      	owner: req.params.userId
-	      }, "_id name description photo owner members msgs files request suspend")
+	      }, "_id name description photo owner members msgs files request suspend last_updated")
 			.where("_id")
 	        .limit( limit_no_member )
 	        .skip( limit_no_member * (req.query.page || 0) )
@@ -184,7 +184,7 @@ exports.search = function(req, res, next) {
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
   	});
   	//console.log("req.user---------------------------", req.user)
-  	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members msgs files request suspend" ,req.query.limit || 100, req.query.page || 0,
+  	Membership.getGroups({user: req.user._id}, criteria,"_id name description photo owner members msgs files request suspend last_updated" ,req.query.limit || 100, req.query.page || 0,
 	    function(err, memberships) {
 	    	if(err) return next(err);
 	      var groups_id = [],
@@ -201,7 +201,7 @@ exports.search = function(req, res, next) {
 	      });
 	    
 	      var limit_no_member = (req.query.limit || 10) - (groups_id || []).length;
-	      Group.find(criteria, "_id name description photo owner members msgs files request suspend")
+	      Group.find(criteria, "_id name description photo owner members msgs files request suspend last_updated")
 			.where("_id")
 	        .limit( limit_no_member )
 	        .skip( limit_no_member * (req.query.page || 0) )

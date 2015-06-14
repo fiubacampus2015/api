@@ -8,6 +8,7 @@ var mongoose = require('mongoose'),
 
 var GroupSchema = new Schema({
 	date: {type:Date, default: Date.now},
+	last_updated: {type:Date, default: Date.now},
 	photo: { type: String, default:'' },
 	name: { type:String, default: ''},
 	description: { type:String, default: ''},
@@ -22,7 +23,17 @@ var GroupSchema = new Schema({
 	request: { type:Number, default: 0}
 });
 
+GroupSchema.pre('save', function(next) {
+  now = new Date();
+  this.last_updated = now;
+  next();
+});
+
 GroupSchema.statics = {
+
+
+
+
 	files: function (options, criteria, select, cb) {
 		Forum.find({
 			group: options._id
