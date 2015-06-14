@@ -29,6 +29,7 @@ GroupSchema.statics = {
 		.select('_id')
 		.exec(function(err, forums_id){
 		  	if (err) cb(err, undefined);
+		  	
 		  	Post
 		  	.find()
 		  	.where('forum').in(forums_id)
@@ -36,20 +37,19 @@ GroupSchema.statics = {
 		  	.populate({
 		      path: 'message',
 		      match: criteria,
-		      select: select || '_id typeOf content',
+		      select: '_id typeOf content',
 		      options: { sort: 'date' }
 		    })
-		    .exec(function(err, posts) {
+		    .exec(function(err, todos) {
 		    	if(err) cb(err, undefined);
 		    	var messages = [];
-		    	posts.forEach(function(post) {
+		    	todos.forEach(function(post) {
 		    		if(post.message) {
 		    			post.message["user"] = post["user"];
-		    			messages.push(post.message);
+		    				messages.push(post.message);
 		    		}
 		    	});
-		    	if(cb) cb(null, messages);
-		    	else if(select)	select(null, message)
+		    	cb(null, messages);	    	
 
 		    	return;
 		    });

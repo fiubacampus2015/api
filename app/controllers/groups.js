@@ -65,10 +65,10 @@ exports.files = function(req, res, next) {
   	});
 
 	Group.files({_id: req.params.groupId},
-		criteria, 
+		criteria,
+		undefined,
 		function(err, files){
 			if(err) return next(err);
-			console.log(files);
 			return res.status(200).json(files);
 	});
 }
