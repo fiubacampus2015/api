@@ -84,7 +84,9 @@ exports.subscriptions = function(req, res, next) {
 	.exec(function(err, subs){
 		console.log("-----------", subs)
 		if(err) next(err);
-		return res.status(200).json(subs);
+		return res.status(200).json({
+			subscriptions: subs
+		});
 	});
 }
 
