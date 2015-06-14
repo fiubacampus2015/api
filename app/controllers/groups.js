@@ -280,6 +280,20 @@ exports.messageDelete = function(req, res, next) {
 };
 
 exports.messageToForum = function(req, res, next) {
+	
+	var originalName = '';
+	var pathDest = '';
+	
+  	if (req.files.file!=null && req.files.file!='')
+    {
+    	var path = req.files.file.path;
+    	originalName = req.files.file.originalname;
+    	pathDest =  '/content/'+req.params.groupId+'_'+originalName;
+    	fse.copy(path, 'public'+pathDest, function(err){
+        if (err) return next(err);
+    	});
+    }
+
 	Forum.findOne({
 		_id: req.params.forumId
 	}, function(err, forum) {
@@ -288,6 +302,8 @@ exports.messageToForum = function(req, res, next) {
 		Group.msgsPlusPlus(forum.group);
 		var message = new Message(req.body);
 		message.user = req.user._id;
+		message.originalName = originalName;
+		message.path = pathDest;
 		message.save(function(err) {
 			if(err) return next(err)
 			var post = new Post({
