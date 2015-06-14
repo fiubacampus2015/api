@@ -55,15 +55,36 @@ exports.doTheMagic = function(req, res, next ) {
 			
 		},
 		active_user: function(req, res, cb){
-			var from = req.params.from,
-				to = req.params.to;
+			/*var from = req.params.from,
+				to = req.params.to;*/
 
-			/*Forum
-				.find()
-				.where('last_activity').gt(from).lt(to)
-				.limit(10)
-				..sort('-posts')
-*/
+
+			Post.aggregate([
+        {
+        	$group: {
+            _id: '$forum',  //$region is the column name in collection
+            count: {$sum: 1}
+          }
+        },{ 
+        	$sort : { count : -1 } 
+        },{ 
+        	$limit : 10 
+        }], function (err, result) {
+        		//Forum.find(result).select("title").exec(function(err, postforum) {
+        			if (err) return cb(err);
+			        response.labels = [];
+			        var data = [];
+			        result.forEach(function(r) {
+			        	response.labels.push(r._id);
+			        	data.push(r.count);
+			        }); 
+			        response.data = [
+								data
+							];  
+          		cb(undefined, response)
+        		});
+		        
+		    //});
 		},
 		loadMonth: function(){
 			var month = new Array(),

@@ -16,13 +16,14 @@ angular.module('sbAdminApp')
     };
 
     $scope.doCall = function() {
-        $scope.bar = Chart.get({id:'topten'}); 
+        $scope.bar = Chart.get({id:'active_user', to:'0101', from:'0202'}); 
     }
 
+    /*
     setInterval(function(){
         $scope.doCall();
     }, 10000);
-
+    */
     $scope.doCall();
 
 
