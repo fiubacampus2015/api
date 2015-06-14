@@ -23,7 +23,6 @@ var GroupSchema = new Schema({
 
 GroupSchema.statics = {
 	files: function (options,criteria, select, cb) {
-		criteria['typeOf']= { $in: ['photo','video', 'file'] };
 		Forum.find({
 			group: options._id
 		})

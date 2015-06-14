@@ -53,16 +53,16 @@ exports.userGroups = function(req, res, next ){
 exports.files = function(req, res, next) {
 
 	var criteria = {};
-	
-	criteria['typeOf']= { $in: ['photo','video', 'file'] };
 
+	criteria['typeOf']= { $in: ['photo','video', 'file'] };
 	Object.keys(req.query).forEach(function(key){
       if (key == 'limit' || key == 'page') 
         return;
 
-      criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
-  	});
+    	if (req.query[key]!='')
+      		criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
 
+  	});
 	Group.files({_id: req.params.groupId},criteria, function(err, files){
 		if(err) return next(err);
 		console.log(files);
