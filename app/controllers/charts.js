@@ -70,10 +70,11 @@ exports.doTheMagic = function(req, res, next ) {
 				});*/
 			});
 
-			/*var from = new Date(req.query.from).getTime(),
-				to = new Date(req.query.to).getTime();
+			var from = req.query.from ? new Date(req.query.from).getTime() : 1391223600000,
+				to = req.query.to ? new Date(req.query.to).getTime() : 1434331950000;
 
-			console.log(from, to)*/
+			
+
 			Post.aggregate([
 				{ $match : { 'last_updated': { $gte: from || 1391223600000, $lt: to || 1434331450000} } },
         {
