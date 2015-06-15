@@ -21,6 +21,7 @@ angular.module('sbAdminApp')
 
     $scope.doCall = function() {
         $scope.bar = Chart.get({id:'active_user', to:$scope.filter.to, from:$scope.filter.from}); 
+        console.log($scope.bar)
     }
 
     /*
@@ -105,7 +106,7 @@ angular.module('sbAdminApp')
 
     setInterval(function(){
         $scope.doCall();
-    }, 10000);
+    }, 30000);
 
     $scope.doCall();
 })
