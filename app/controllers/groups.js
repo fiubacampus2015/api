@@ -71,7 +71,7 @@ exports.files = function(req, res, next) {
 		undefined,
 		function(err, files){
 			if(err) return next(err);
-			return res.status(200).json(files);
+			return res.status(200).json({filesMessages: files});
 	});
 }
 
