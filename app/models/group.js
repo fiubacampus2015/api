@@ -45,7 +45,6 @@ GroupSchema.statics = {
 		  	Post
 		  	.find()
 		  	.where('forum').in(forums_id)
-		  	.populate("user")
 		  	.populate({
 		      path: 'message',
 		      match: criteria,
