@@ -477,7 +477,8 @@ exports.allForums = function(req, res, next) {
         return;
 
       criteria[key] = new RegExp('.*' + req.query[key] + '.*', "i");
-  	});
+    });
+	criteria["root"] = false;
   Forum.find(criteria,"_id date title owner group suspend")
     .sort([['title', 'ascending']])
     .populate('owner')
