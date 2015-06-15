@@ -14,6 +14,7 @@ module.exports = function (app, passport) {
   // FOR FRONT
 
   app.get('/api/groups', groups.all);
+  app.get('/api/posts', groups.postsall);
   app.get('/api/forums', groups.allForums);
   app.get('/api/forums/:id', groups.showForum);
   app.get('/api/users/:id', users.show);

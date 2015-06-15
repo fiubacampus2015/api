@@ -496,6 +496,13 @@ exports.show = function(req, res, next) {
   	});
 }
 
+exports.postsall = function(req, res, next) {
+	Post.find({}).exec(function(err, response){
+		if(err) return next(err);
+		return res.status(200).json(response);		
+	});
+};
+
 exports.showForum = function(req, res, next) {
   Forum.findOne({_id:req.params.id}, "_id date title owner group suspend")
 	.populate("owner")
