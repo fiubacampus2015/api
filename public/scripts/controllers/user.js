@@ -17,11 +17,13 @@ angular.module('sbAdminApp')
   	$scope.password = 'b'
 
 
+  	
     //if(localStorage.getItem('login')) return $location.path("/");
 
   	$scope.authenticate = function() {
       User.authenticate({email:$scope.user.email, password: $scope.user.password}, function(respo){
-        localStorage.setItem('login', true)
+        localStorage.setItem('login', true);
+        $location.path("/");
         
       }, function(err){
         localStorage.removeItem('login')
