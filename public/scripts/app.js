@@ -120,7 +120,7 @@ angular
     })
       .state('dashboard.chart_topten',{
         templateUrl:'views/chart.html',
-        url:'/chart',
+        url:'/chart/:to/:from',
         controller:'ChartCtrl',
         resolve: {
           loadMyFile:function($ocLazyLoad) {

@@ -7,12 +7,16 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-    .controller('ChartCtrl', function ($scope, $timeout, Chart, $window) {
+    .controller('ChartCtrl', function ($scope,$location,$stateParams, $timeout, Chart, $window) {
     
     $scope.filter = {
         to: '',
         from: ''
     };
+
+//$location.path('dashboard/statistics');
+if ($stateParams)
+    console.log($stateParams);
 
     $scope.bar = {
         labels : [],
@@ -20,7 +24,19 @@ angular.module('sbAdminApp')
     };
 
     $scope.doCall = function() {
-        $scope.bar = Chart.get({id:'active_user', to:$scope.filter.to, from:$scope.filter.from});
+
+        if ($stateParams.to != null && $stateParams.to != '' && $stateParams.to != '0')
+        {
+            $scope.filter.to = $stateParams.to;
+            $scope.filter.from = $stateParams.from;
+        }
+
+        $scope.bar = Chart.get({id:'active_user', to: decodeURIComponent($scope.filter.to), from: decodeURIComponent($scope.filter.from)});
+    }
+
+    $scope.doCallRefresh = function() {
+    
+        $location.path('/dashboard/chart/' +encodeURIComponent($scope.filter.to)+ '/' +encodeURIComponent($scope.filter.from) );
     }
 
     /*
