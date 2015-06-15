@@ -48,7 +48,7 @@ GroupSchema.statics = {
 		  	.populate({
 		      path: 'message',
 		      match: criteria,
-		      select: '_id typeOf content',
+		      select: '_id typeOf content originalName path',
 		      options: { sort: 'date' }
 		    })
 		    .exec(function(err, todos) {

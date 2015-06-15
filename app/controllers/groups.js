@@ -71,7 +71,7 @@ exports.files = function(req, res, next) {
 		undefined,
 		function(err, files){
 			if(err) return next(err);
-			return res.status(200).json(files);
+			return res.status(200).json({filesMessages: files});
 	});
 }
 
@@ -122,7 +122,7 @@ exports.members = function(req, res, next) {
 			memberships.forEach(function(membership) {
 				users.push(membership.user);
 			});
-			res.status(200).json(users);
+			res.status(200).json({members: users});
 		});
 	});
 }
