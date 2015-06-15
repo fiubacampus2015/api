@@ -70,13 +70,13 @@ exports.doTheMagic = function(req, res, next ) {
 				});*/
 			});
 
-			var from = req.query.from ? new Date(req.query.from).getTime() : 1391223600000,
-				to = req.query.to ? new Date(req.query.to).getTime() : 1434331950000;
+			var from = req.query.from ? new Date(req.query.from).getTime() : 1291223600000,
+				to = req.query.to ? new Date(req.query.to).getTime() : 1834314500000;
 
-			
+			console.log(from, to)
 
 			Post.aggregate([
-				{ $match : { 'last_updated': { $gte: from || 1391223600000, $lt: to || 1434331450000} } },
+				{ $match : { last_updated: { $gte: from, $lt: to} } },
         {
         	$group: {
             _id: '$forum',  //$region is the column name in collection
