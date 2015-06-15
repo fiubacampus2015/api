@@ -9,6 +9,10 @@
 angular.module('sbAdminApp')
     .controller('ChartCtrl', function ($scope, $timeout, Chart) {
     
+    $scope.filter = {
+        to:'',
+        from:''
+    };
 
     $scope.bar = {
         labels : [],
@@ -16,7 +20,7 @@ angular.module('sbAdminApp')
     };
 
     $scope.doCall = function() {
-        $scope.bar = Chart.get({id:'active_user', to:'0101', from:'0202'}); 
+        $scope.bar = Chart.get({id:'active_user', to:$scope.filter.to, from:$scope.filter.from}); 
     }
 
     /*
@@ -63,6 +67,30 @@ angular.module('sbAdminApp')
 		}
     };*/
 })
+.controller('ChartUsersCtrl', function ($scope, $timeout, Chart) {
+
+    $scope.line = {
+        labels : [],
+        data : []
+    };
+
+    $scope.doCall = function() {
+        $scope.line = Chart.get({id:'topten'});
+        $scope.line.onClick = function (points, evt) {
+          console.log(points, evt);
+        }
+    }
+
+    /*
+    setInterval(function(){
+        $scope.doCall();
+    }, 10000);
+    */
+    $scope.doCall();
+
+
+
+})
 .controller('ChartCareersCtrl', function ($scope, $timeout, Chart) {
 
 
@@ -81,5 +109,15 @@ angular.module('sbAdminApp')
 
     $scope.doCall();
 })
+.directive('jqdatepicker', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+         link: function (scope, element, attrs, ngModelCtrl) {
+
+        }
+    };
+})
 ;
+
 

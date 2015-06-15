@@ -148,10 +148,10 @@ angular
           }
         }
     })
-      .state('dashboard.statistics',{
-        templateUrl:'views/statistics.html',
+      .state('dashboard.chart_user',{
+        templateUrl:'views/chart_users.html',
         url:'/statistics',
-        controller:'ChartCtrl',
+        controller:'ChartUsersCtrl',
         resolve: {
           loadMyFile:function($ocLazyLoad) {
             return $ocLazyLoad.load({

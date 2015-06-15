@@ -16,6 +16,8 @@ var ForumSchema = new Schema({
 
 var PostSchema = new Schema({
 	forum: { type: Schema.Types.ObjectId, ref:'Forum' },
+	last_activity: {type:Date, default: Date.now},
+	last_updated: { type: Number  },
 	user: { type: Schema.Types.ObjectId, ref:'User' },
 	date: { type:Date, default: Date.now },
 	message: { type: Schema.Types.ObjectId, ref:'Message' }
@@ -27,6 +29,11 @@ ForumSchema.pre('save', function(next) {
   return next();
 });
 
+PostSchema.pre('save', function(next) {
+  now = new Date().getTime();
+  this.last_updated = now;
+  return next();
+});
 
 mongoose.model('Forum', ForumSchema);
 
