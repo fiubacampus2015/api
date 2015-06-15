@@ -122,7 +122,7 @@ exports.members = function(req, res, next) {
 			memberships.forEach(function(membership) {
 				users.push(membership.user);
 			});
-			res.status(200).json(users);
+			res.status(200).json({members: users});
 		});
 	});
 }
