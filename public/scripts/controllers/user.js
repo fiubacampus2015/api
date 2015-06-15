@@ -16,7 +16,7 @@ angular.module('sbAdminApp')
   	$scope.puto = 'a'
   	$scope.password = 'b'
 
-
+    $scope.showErrors = '';
   	
     //if(localStorage.getItem('login')) return $location.path("/");
 
@@ -24,8 +24,9 @@ angular.module('sbAdminApp')
       User.authenticate({email:$scope.user.email, password: $scope.user.password}, function(respo){
         localStorage.setItem('login', true);
         $location.path("/");
-        
+        $scope.showErrors = '';
       }, function(err){
+        $scope.showErrors = true;
         localStorage.removeItem('login')
       });
   	}
