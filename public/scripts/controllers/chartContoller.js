@@ -10,8 +10,8 @@ angular.module('sbAdminApp')
     .controller('ChartCtrl', function ($scope, $timeout, Chart) {
     
     $scope.filter = {
-        to:'',
-        from:''
+        to: '',
+        from: ''
     };
 
     $scope.bar = {

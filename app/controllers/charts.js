@@ -56,19 +56,25 @@ exports.doTheMagic = function(req, res, next ) {
 			
 		},
 		active_user: function(req, res, cb){
-			/*
-			Post.find().limit(1).exec(function(err, rest){
+
+
+			
+			Post.find().limit(2).exec(function(err, rest){
 				console.log(rest)
-			})
+				/*rest.forEach(function(r) {
+					r.last_updated = new Date(2014, 01, 01).getTime();
+					r.save(function(err){
+						console.log("ERRORRRR ", err)
+					});
+				});*/
+			});
 
 			var from = new Date(req.query.from).getTime(),
 				to = new Date(req.query.to).getTime();
-*/
-	//			console.log(from, to)
+
+			console.log(from, to)
 			Post.aggregate([
-
-
-//				{ $match : { 'last_updated': {"$gte": from, "$lt": to} } },
+				{ $match : { 'last_updated': {"$gte": from || 1391223600000, "$lt": to || 1434331450000} } },
         {
         	$group: {
             _id: '$forum',  //$region is the column name in collection

@@ -30,8 +30,10 @@ ForumSchema.pre('save', function(next) {
 });
 
 PostSchema.pre('save', function(next) {
-  now = new Date().getTime();
-  this.last_updated = now;
+  if(!this.last_updated) {
+  	now = new Date().getTime();
+  	this.last_updated = now;	
+  }
   return next();
 });
 
