@@ -74,7 +74,7 @@ exports.doTheMagic = function(req, res, next ) {
 
 			console.log(from, to)
 			Post.aggregate([
-				{ $match : { 'last_updated': {"$gte": from || 1391223600000, "$lt": to || 1434331450000} } },
+				{ $match : { 'last_updated': { $gte: from || 1391223600000, $lt: to || 1434331450000} } },
         {
         	$group: {
             _id: '$forum',  //$region is the column name in collection
@@ -89,6 +89,11 @@ exports.doTheMagic = function(req, res, next ) {
         			if (err) return cb(err);
 			        response.labels = [];
 			        var data = [];
+			        if(result.length == 0) {
+			        	data.push(0);
+			        	response.labels.push("0");
+			        }
+
 			        result.forEach(function(r) {
 			        	response.labels.push(r._id);
 			        	data.push(r.count);
