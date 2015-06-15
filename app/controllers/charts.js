@@ -75,7 +75,7 @@ exports.doTheMagic = function(req, res, next ) {
 
 			console.log(from, to)
 			Post.aggregate([
-				{ $match : { 'last_updated': { $gte: from || 1391223600000, $lt: to || 1434331450000} } },
+				//{ $match : { 'last_updated': { $gte: from || 1391223600000, $lt: to || 1434331450000} } },
         {
         	$group: {
             _id: '$forum',  //$region is the column name in collection
