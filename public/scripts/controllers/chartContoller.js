@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-    .controller('ChartCtrl', function ($scope, $timeout, Chart) {
+    .controller('ChartCtrl', function ($scope, $timeout, Chart, $window) {
     
     $scope.filter = {
         to: '',
@@ -41,6 +41,10 @@ angular.module('sbAdminApp')
     }, 10000);
     */
     $scope.doCall();
+
+    $scope.imprimir = function() {
+        $window.print();
+    }
 
 
     /*
@@ -79,7 +83,7 @@ angular.module('sbAdminApp')
 		}
     };*/
 })
-.controller('ChartUsersCtrl', function ($scope, $timeout, Chart) {
+.controller('ChartUsersCtrl', function ($scope, $timeout, Chart, $window) {
 
     $scope.line = {
         labels : [],
@@ -100,10 +104,12 @@ angular.module('sbAdminApp')
     */
     $scope.doCall();
 
-
+    $scope.imprimir = function() {
+        $window.print();
+    }
 
 })
-.controller('ChartCareersCtrl', function ($scope, $timeout, Chart) {
+.controller('ChartCareersCtrl', function ($scope, $timeout, Chart, $window) {
 
 
     $scope.pie = {
@@ -118,6 +124,12 @@ angular.module('sbAdminApp')
     setInterval(function(){
         $scope.doCall();
     }, 30000);
+
+
+    $scope.imprimir = function() {
+        $window.print();
+    }
+
 
     $scope.doCall();
 })

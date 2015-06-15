@@ -1,17 +1,30 @@
-<div class="row">
-    <div class="col-lg-12">
-        <h1 class="page-header">Usuarios activos</h1>
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Usuarios activos</h1>
+        </div>
+        <!-- /.col-lg-12 -->
     </div>
-    <!-- /.col-lg-12 -->
-</div>
-<div class="row">
-    <div class="col-lg-10 col-sm-12" id="line-chart" ng-controller="ChartUsersCtrl">
-        <div class="panel panel-default">
-            <div class="panel-heading"></div>
-            <div class="panel-body">
-                <canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" legend="true"
-                click="line.onClick" series="line.series"></canvas>
+    <div class="row">
+        <div class="col-lg-10 col-sm-12" id="line-chart" ng-controller="ChartUsersCtrl">
+            <div class="panel panel-default">
+                <div class="panel-heading"></div>
+                <div class="panel-body">
+                    <canvas id="line" class="chart chart-line chart-xl" data="line.data" labels="line.labels" legend="true"
+                    click="line.onClick" series="line.series"></canvas>
+                </div>
             </div>
         </div>
     </div>
+
+<div class="row" id="parte1">
+    <div class="col-lg-12">
+        <h1 class="page-footer"><button type="button" class="btn btn-warning pull-right" style="margin-right: 10px;" ng-click="imprimir()" ><span class="fa fa-print"></span> Imprimir</button></h1>
+    </div>
+    <!-- /.col-lg-12 -->
 </div>
+
+<style type="text/css" media="print">
+    @media print {
+    #parte1 {display:none;}
+    }
+</style>

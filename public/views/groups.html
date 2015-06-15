@@ -42,14 +42,14 @@
                                 <td class="center">{{group.members}}</td>
                                 <td class="center">{{group.msgs}}</td>
                                 <td>{{group.owner.name}} ({{group.owner.email}})</td>
-                                <td>{{group.suspend ? 'suspendido' : 'activo'}}</td>
+                                <td>{{group.suspend ? 'SUSPENDIDO' : 'ACTIVO'}}</td>
                                 <td style="text-align: center;">
-                                    <button ng-show="!group.suspend" type="button" class="btn btn-success btn-circle" title="activo" 
+                                    <button ng-show="!group.suspend" type="button" class="btn btn-danger btn-circle" title="Suspender" 
                                         ng-click="entity_suspend(group)">
-                                        <i class="fa fa-check" title="activar"></i>
+                                        <i class="fa fa-times" title="Suspender"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger btn-circle" ng-show="group.suspend" ng-click="entity_active(group)">
-                                        <i class="fa fa-times"></i>
+                                    <button type="button" class="btn btn-success btn-circle" ng-show="group.suspend" ng-click="entity_active(group)" title="Activar">
+                                        <i class="fa fa-check"></i>
                                     </button>
                                 </td>
                             </tr>
@@ -98,22 +98,21 @@
                                 <th>Administrador</th>
                                 <th># Mensajes</th>
                                 <th>Estado</th>
-                                <th>Acciones</th>
+                                <th style="text-align:center;">Acciones</th>
                             </tr>
                         </thead>
                         <tbody >
                              <tr ng-repeat="forum in forums | filter:forums_search.group._id" >
-                                <td>{{forum.title}}</td>
+                                <td style="font-weight:bold">{{forum.title}}</td>
                                 <td>{{forum.owner.name}}</td>
                                 <td class="center">{{forum.posts}}</td>
-                                <td>{{forum.suspend ? 'suspendido' : 'activo'}}</td>
+                                <td>{{forum.suspend ? 'SUSPENDIDO' : 'ACTIVO'}}</td>
                                 <td style="text-align: center;">
-                                    <button ng-show="!forum.suspend" type="button" class="btn btn-success btn-circle" title="activo" 
-                                        ng-click="entity_suspend(forum)">
-                                        <i class="fa fa-check" title="activar"></i>
+                                    <button ng-show="!forum.suspend" type="button" class="btn btn-danger btn-circle" title="Suspender" ng-click="entity_suspend(forum)">
+                                        <i class="fa fa-times" title="Suspender"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger btn-circle" ng-show="forum.suspend" ng-click="entity_active(forum)">
-                                        <i class="fa fa-times"></i>
+                                    <button type="button" class="btn btn-success btn-circle" ng-show="forum.suspend" ng-click="entity_active(forum)">
+                                        <i class="fa fa-check" title="Activar"></i>
                                     </button>
                                 </td>
                             </tr>

@@ -39,14 +39,14 @@
                                 <td style="font-weight: bold;">{{user.username}}</td>
                                 <td>{{user.name}}</td>
                                 <td>{{user.email}}</td>
-                                <td>{{user.status}}</td>
+                                <td>{{user.suspend ? 'SUSPENDIDO' : 'ACTIVO'}}</td>
                                 <td style="text-align: center;">
-                                    <button ng-show="!user.suspend" type="button" class="btn btn-danger btn-circle" title="suspended" 
+                                    <button ng-show="!user.suspend" type="button" class="btn btn-danger btn-circle" title="Suspender" 
                                         ng-click="entity_suspend(user)">
                                         <i class="fa fa-times"></i>
                                     </button>
                                     <button type="button" class="btn btn-success btn-circle" ng-show="user.suspend" ng-click="entity_active(user)">
-                                        <i class="fa fa-check" title="activar"></i>
+                                        <i class="fa fa-check" title="Activar"></i>
                                     </button>
                                 </td>
                             </tr>

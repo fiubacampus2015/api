@@ -1,11 +1,11 @@
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">10 foros mas activos</h1>
+        <h1 class="page-header">10 foros m&aacute;s activos</h1>
     </div>
     <!-- /.col-lg-12 -->
 </div>
-<div class="row">
-    <div class="container">
+<div class="row" >
+    <div class="container" id="parte2">
         <div class='col-lg-4'>
             <div class="form-group">
                 <div class='input-group date' id='datetimepicker6'>
@@ -27,7 +27,7 @@
             </div>
         </div>
         <div class='col-lg-3'>
-            <button type="button" class="btn btn-primary pull-right" ng-click="doCall()">Draw</button>
+            <button type="button" class="btn btn-primary pull-right" ng-click="doCall()" ><span class="fa fa-refresh"></span> Refrescar</button>
         <div/>
     </div>
     
@@ -64,3 +64,17 @@
         </div>
     </div>
 </div>
+<div class="row" id="parte1">
+    <div class="col-lg-12">
+        <h1 class="page-footer"><button type="button" class="btn btn-warning pull-right" style="margin-right: 10px;" ng-click="imprimir()" ><span class="fa fa-print"></span> Imprimir</button></h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+
+<style type="text/css" media="print">
+    @media print {
+        #parte1 {display:none;}
+        #parte2 {display:none;}
+    }
+</style>
