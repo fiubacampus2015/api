@@ -15,14 +15,24 @@ angular.module('sbAdminApp')
     };
 
     $scope.bar = {
-        labels : [],
-        data : []
+        labels : ['','','','','','','','','',''],
+        data : [[0,0,0,0,0,0,0,0,0,0]],
+        toggle : function () 
+        {
+            var self = this;
+            Chart.get({id:'active_user', to:$scope.filter.to, from:$scope.filter.from}, 
+            function(result) {
+                for (var i = 10 - 1; i >= 0; i--) {
+                    self.labels[i] = result.labels[i] || ''
+                    self.data[0][i] = result.data[0][i] || 0;
+                    console.log(self.data[0], self.labels)
+                };
+            });
+        }
     };
 
     $scope.doCall = function() {
-        $scope.bar = Chart.get({id:'active_user', to:$scope.filter.to, from:$scope.filter.from}); 
-
-        
+        $scope.bar.toggle();
     }
 
     /*

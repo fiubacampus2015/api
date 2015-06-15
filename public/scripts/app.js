@@ -16,7 +16,7 @@ angular
     'ngResource',
     'ngRoute'
   ])
-  .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider', '$resourceProvider' ,function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider, $resourceProvider) {
+  .config(['$stateProvider','$urlRouterProvider','$ocLazyLoadProvider', '$resourceProvider',function ($stateProvider,$urlRouterProvider,$ocLazyLoadProvider, $resourceProvider) {
     
     $ocLazyLoadProvider.config({
       debug:false,
@@ -24,6 +24,8 @@ angular
     });
 
     $urlRouterProvider.otherwise('/dashboard/home');
+
+    
 
     $stateProvider
       .state('dashboard', {
@@ -106,7 +108,15 @@ angular
       .state('login',{
         controller: 'UserCtrl',
         templateUrl:'views/pages/login.html',
-        url:'/login'
+        url:'/login',
+        resolve: {
+          loadMyFile:function($ocLazyLoad) {
+            return $ocLazyLoad.load({
+                name:'sbAdminApp',
+                files:['scripts/controllers/user.js']
+            })
+          }
+        }
     })
       .state('dashboard.chart_topten',{
         templateUrl:'views/chart.html',
@@ -205,7 +215,32 @@ angular
        url:'/grid'
    })
   }])
-  .factory('User', ['$resource', function($resource) { return  $resource('/api/users/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
+  .run(['$rootScope', '$state', '$stateParams','$location',
+    function($rootScope, $state, $stateParams, $location) {
+      $rootScope.$on('$stateChangeStart', function(event, toState, toStateParams) {
+        var login = localStorage.getItem('login');
+        console.log("login", login)
+        if(!login) {
+          return $location.path("login"); 
+        };
+        
+
+        // track the state the user wants to go to; authorization service needs this
+        $rootScope.toState = toState;
+        $rootScope.toStateParams = toStateParams;
+        // if the principal is resolved, do an authorization check immediately. otherwise,
+        // it'll be done when the state it resolved.
+        //if (principal.isIdentityResolved()) authorization.authorize();
+      });
+    }
+  ])
+  .factory('User', ['$resource', function($resource) { return  $resource('/api/users/:id', {id:'@_id'}, {
+      'update': { method:'PUT' } ,
+      'authenticate': {
+            method: 'POST', url: '/api/users/:id/authenticate'
+        },
+    });  
+  }])
   .factory('Group', ['$resource', function($resource) { return  $resource('/api/groups/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
   .factory('Forum', ['$resource', function($resource) { return  $resource('/api/forums/:id', {id:'@_id'}, {'update': { method:'PUT' } });  }])
   .factory('Chart', ['$resource', function($resource) { return  $resource('/api/charts/:id', {id:'@_id'});  }])

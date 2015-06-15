@@ -7,7 +7,7 @@
  * Controller of the sbAdminApp
  */
 angular.module('sbAdminApp')
-  .controller('UserCtrl',function($scope,$position, User, $http) {
+  .controller('UserCtrl',function($scope,$position, User, $http, $location) {
   	$scope.user = {
   		email: '',
   		password:''
@@ -17,10 +17,14 @@ angular.module('sbAdminApp')
   	$scope.password = 'b'
 
 
-  	console.log("USER")
+    //if(localStorage.getItem('login')) return $location.path("/");
 
   	$scope.authenticate = function() {
-  		console.log("VAMOOOO")
-  		console.log($scope.user);
+      User.authenticate({email:$scope.user.email, password: $scope.user.password}, function(respo){
+        localStorage.setItem('login', true)
+        
+      }, function(err){
+        localStorage.removeItem('login')
+      });
   	}
   });
