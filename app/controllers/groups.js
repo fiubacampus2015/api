@@ -512,3 +512,15 @@ exports.showForum = function(req, res, next) {
 		return res.status(200).json(group);
   	});
 }
+
+
+exports.putForum = function(req, res, next){
+	Forum.findOne(req.params.id, function(err, group) {
+	  group.suspend = req.body.suspend
+	  console.log(group.suspend)
+		group.save(function(err) {
+			if(err) return next(err)
+			return res.status(200).json(group)
+		})
+	})
+}
