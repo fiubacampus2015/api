@@ -108,11 +108,11 @@
                                 <td class="center">{{forum.posts}}</td>
                                 <td>{{forum.suspend ? 'SUSPENDIDO' : 'ACTIVO'}}</td>
                                 <td style="text-align: center;">
-                                    <button ng-show="!forum.suspend" type="button" class="btn btn-success btn-circle" title="Suspender" ng-click="entity_suspend(forum)">
-                                        <i class="fa fa-check" title="Suspender"></i>
+                                    <button ng-show="!forum.suspend" type="button" class="btn btn-danger btn-circle" title="Suspender" ng-click="entity_suspend(forum)">
+                                        <i class="fa fa-times" title="Suspender"></i>
                                     </button>
-                                    <button type="button" class="btn btn-danger btn-circle" ng-show="forum.suspend" ng-click="entity_active(forum)">
-                                        <i class="fa fa-times" title="Activar"></i>
+                                    <button type="button" class="btn btn-success btn-circle" ng-show="forum.suspend" ng-click="entity_active(forum)">
+                                        <i class="fa fa-check" title="Activar"></i>
                                     </button>
                                 </td>
                             </tr>
