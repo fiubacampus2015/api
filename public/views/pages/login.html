@@ -32,13 +32,18 @@
                 <div class="panel-body">
                     <form role="form" style="width: 75%;margin-left: 13%;">
                         <fieldset>
+                            <div ng-show="showError">
+                            <span>Par&aacute;metros inv&aacute;lidos.</span>
+                            </div>
+                            
                             <div class="form-group">
-                                <input class="form-control" placeholder="Usuario" ng-model="user.email" value="">
+                                <input class="form-control" ng-class="{'has-error': showErrors}"  placeholder="Usuario" ng-model="user.email" value="">
                             </div>
                             <div class="form-group">
-                                <input class="form-control" placeholder="Contraseña" ng-model="user.password" name="password" type="password" value="">
+                                <input class="form-control" ng-class="{'has-error': showErrors}"  placeholder="Contraseña" ng-model="user.password" name="password" type="password" value="">                             
                             </div>
                             <div class="form-group">
+                                
                             </div>
                             <!-- Change this to a button or input when using this as a form -->
                             <button type="button" ng-click="authenticate()" class="btn btn-success btn-block">Inici&aacute; Sesi&oacute;n</button>
@@ -51,6 +56,12 @@
 </div>
 
 <style>
+        .has-error{
+          border-color: #F71515;
+          -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+        }
+
         .body,#bodyTable{
             /*@editable*/background-color:#f2f2f2;
         }
