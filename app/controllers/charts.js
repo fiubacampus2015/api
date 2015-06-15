@@ -2,6 +2,7 @@ var mongoose = require('mongoose'),
 	Group = mongoose.model('Group'),
 	Message = mongoose.model('Message'),
 	Post = mongoose.model('Post'),
+	async = require('async'),
 	User = mongoose.model('User'),
 	Membership = mongoose.model('Membership'),
 	Forum = mongoose.model('Forum');
@@ -84,7 +85,8 @@ exports.doTheMagic = function(req, res, next ) {
         	$sort : { count : -1 } 
         },{ 
         	$limit : 10 
-        }], function (err, result) {
+        }
+        ], function (err, result) {
         		//Forum.find(result).select("title").exec(function(err, postforum) {
         			if (err) return cb(err);
 			        response.labels = [];
@@ -94,14 +96,26 @@ exports.doTheMagic = function(req, res, next ) {
 			        	response.labels.push("0");
 			        }
 
-			        result.forEach(function(r) {
-			        	response.labels.push(r._id);
-			        	data.push(r.count);
-			        }); 
-			        response.data = [
-								data
-							];  
-          		cb(undefined, response)
+			        	async.forEach(result, function (rs, callback) {
+
+			      			Forum.findOne(rs._id).exec(function(err, fo){
+			      				if(err || !fo) return callback();
+			      				console.log("fo: ", fo)
+			      				rs["title"] = fo.title;
+			      				callback();
+			      			});
+						   	}, function (err) {
+						      if(err) cb(err, undefined);
+						      result.forEach(function(r) {
+					        	console.log(r)
+					        	response.labels.push(r.title || "sin titulo");
+					        	data.push(r.count);
+					        }); 
+					        response.data = [
+										data
+									];  
+		          		cb(undefined, response)
+						   	});
         		});
 		        
 		    //});
