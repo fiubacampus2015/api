@@ -515,12 +515,8 @@ exports.showForum = function(req, res, next) {
 
 
 exports.putForum = function(req, res, next){
-	Forum.findOne(req.params.id, function(err, group) {
-	  group.suspend = req.body.suspend
-	  console.log(group.suspend)
-		group.save(function(err) {
+	Forum.update({ _id: req.params.id }, { $set: {suspend:req.body.suspend} }, { safe: true }, function (err, result) {
 			if(err) return next(err)
-			return res.status(200).json(group)
-		})
-	})
+			return res.status(200).json(result)
+	});
 }
