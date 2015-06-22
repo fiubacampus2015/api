@@ -517,6 +517,11 @@ exports.showForum = function(req, res, next) {
 exports.putForum = function(req, res, next){
 	Forum.update({ _id: req.params.id }, { $set: {suspend:req.body.suspend} }, { safe: true }, function (err, result) {
 			if(err) return next(err)
-			return res.status(200).json(result)
+			Forum.findOne({_id:req.params.id}, "_id date title owner group suspend")
+			.populate("owner")
+  		.exec(function(err, forum) {
+				if (err) return next(err);
+				return res.status(200).json(forum);
+  	});			
 	});
 }
