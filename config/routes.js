@@ -17,6 +17,7 @@ module.exports = function (app, passport) {
   app.get('/api/posts', groups.postsall);
   app.get('/api/forums', groups.allForums);
   app.get('/api/forums/:id', groups.showForum);
+  app.put('/api/forums/:id', groups.putForum);
   app.get('/api/users/:id', users.show);
   app.put('/api/users/:userId', users.put);
   app.get('/api/users', users.all);
@@ -38,6 +39,7 @@ module.exports = function (app, passport) {
   // USERS
 
   app.post('/api/users/authenticate', function(req, res, next) {
+    console.log("AUTOOOOOOOOO", req.body);
     if(req.body.email == 'admin' && req.body.password == 'admin123')
       return res.status(200).json({})
     else
